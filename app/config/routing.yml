@@ -1,0 +1,4 @@
+joconde_lab:
+    resource: "@JocondeLabBundle/Resources/config/routing.yml"
+    prefix:   /
+

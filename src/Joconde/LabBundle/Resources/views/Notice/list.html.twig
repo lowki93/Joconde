@@ -1,0 +1,29 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <form method="POST">
+        {{form_widget(form)}}
+        {{form_rest(form)}}
+        <input type="submit" value="Search"/>
+    </form>
+ 
+    LIST : {{notices | length}} <br />
+    <ul>
+        {% for notice in notices %}
+        <li>
+            {% for image in notice.noticeImage|slice(0,1) %}
+                <img src="http://www.culture.gouv.fr/Wave/image/joconde{{image.relativeUrl}}" />
+            {% endfor %}
+            <div>
+            id : {{notice.id}}<br />
+            ref : {{notice.ref}}<br />
+            auteur : {{notice.autr}}<br />
+            titre : {{notice.titr}}<br />
+            <a href="{{path('notice_id', {'id': notice.id}) }}">Go to notice {{notice.id}}</a>
+            </div>
+        </li>
+        {% else %}
+            il n'y a pas de notices
+        {% endfor %}
+    </ul>  
+{% endblock %}

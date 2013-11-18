@@ -1,0 +1,7 @@
+joconde_lab_homepage:
+    pattern:  /
+    defaults: { _controller: JocondeLabBundle:Notice:index }
+
+notice_id:
+    pattern:   /notice/{id}
+    defaults:  { _controller: JocondeLabBundle:Notice:notice }

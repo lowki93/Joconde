@@ -1,0 +1,58 @@
+{% extends '::base.html.twig' %}
+
+{% block title %} notice {% endblock %}
+
+{% block body %}
+
+    ref : {{notice.ref}} <br /><br />
+
+    <h1>Terms</h1> 
+    <br />
+    {% for term in notice.terms %}
+        {{term.id}} : {{term.label}}, thesaurus : {{term.thesaurus.label}}, {{term.thesaurus.id}}<br />
+    {% else %}
+        il n'y a pas de terms
+    {% endfor %}
+
+    <br /><br />
+    <h1>Images</h1>
+    <br />
+    {% for image in notice.noticeImage|slice(0,1) %}
+        <img src="http://www.culture.gouv.fr/Wave/image/joconde{{image.relativeUrl}}" />
+    {% else %}
+        il n'y a pas d'images
+    {% endfor %}
+    <div>
+        <ul class="autr">
+
+        </ul>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        {% for term in notice.terms %}
+
+            if (1 === {{term.thesaurus.id}}) {
+                if("anonyme" !== '{{term.label}}'){
+                    console.log("{{term.dbpediaUri}}");
+                    $.getJSON( "http://fr.dbpedia.org/sparql?default-graph-uri=&query=select distinct ?abstract where {<{{term.dbpediaUri}}> dbpedia-owl:abstract ?abstract.filter(lang(?abstract) = 'fr').} LIMIT 100&format=json&timeout=0&debug=on", function( data ) {
+                        //console.log(data.results.bindings[0].abstract);
+                        var items = [];
+                        $.each( data.results.bindings[0].abstract, function( key, val ) {
+                            if(key == "value") {
+                                console.log(""+val+"")
+                                items.push( ""+val+"" );
+                            }
+                        });
+                         
+                        $( "<li/>", {
+                            "class": "my-new-list",
+                            html: items.join( "" )
+                        }).appendTo( ".autr" );
+                    });
+                }
+            }
+        {% endfor %}
+    </script>
+{% endblock %}
