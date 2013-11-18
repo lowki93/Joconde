@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * CoreNotice
  *
  * @ORM\Table(name="core_notice")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Joconde\LabBundle\Entity\CoreNoticeRepository")
  */
 class CoreNotice
 {
