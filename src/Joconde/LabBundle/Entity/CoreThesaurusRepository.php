@@ -9,14 +9,14 @@ class CoreThesaurusRepository extends EntityRepository {
 
     public function findByTerm($search) {
         $qb = $this->createQueryBuilder('cth');
-        return $qb->select('cth.label')
-            ->leftJoin('JocondeLabBundle:CoreTerm', 'ct')
-            ->where($qb->expr()->like("lower(ct.label)", ':s'))
-            ->andWhere('ct.thesaurus = cth')
+        $qb->select('DISTINCT cth.label')
+            ->join('JocondeLabBundle:CoreTerm', 'ct')
+            ->where('ct.thesaurus = cth')
+            ->andWhere($qb->expr()->like("lower(ct.label)", ':s'))
             ->setParameter('s' , '%'.$search.'%')
-            ->groupBy('cth.label')
-            ->getQuery()
-            ->getResult();
+            ->groupBy('cth.label');
+
+        return $noticeTerm = $qb->getQuery()->getResult();
     }  
 
 }
