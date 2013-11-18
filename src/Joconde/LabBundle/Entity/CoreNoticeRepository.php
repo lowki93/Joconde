@@ -8,30 +8,39 @@ use Doctrine\ORM\QueryBuilder;
 class CoreNoticeRepository extends EntityRepository {
 
     public function findByNotice($search, $terms, $nbTerm) {
+        $max = 5;
+        $noticeArray = array();
         $qb = $this->createQueryBuilder('cn');
 
         if(0 === $nbTerm) {
-            $qb->Where($qb->expr()->like("lower(cn.titr)", "'%$search%'"));
+            $qb->where($qb->expr()->like("lower(cn.titr)", ':s'))
+                ->setParameter("s", '%'.$search.'%')
+                ->andWhere("cn.image = 'true'");
+            return $noticeArray = $qb->getQuery()->getResult();
         }
         else {
-            
-            $qb->where($qb->expr()->like("lower(cn.titr)", "'%$search%'"));
 
             for ($i=0; $i < $nbTerm; $i++) {
                 $thesaurusLabel = $terms[$i]['label'];
                 $thesaurusLabel = strtolower($thesaurusLabel);
                 $thesaurusLabel = "cn.".$thesaurusLabel;
 
-                $qb->orWhere($qb->expr()->like("lower($thesaurusLabel)", ":search{$i}"));
-                $qb->setParameter(":search{$i}", "%$search%");
+                if( 0 === $i )
+                    $qb->where($qb->expr()->like("lower(cn.titr)", ':s'));
+                else
+                    $qb->where($qb->expr()->like("lower($thesaurusLabel)", ':s'));
+
+                $qb->andWhere("cn.image = 'true'")
+                    ->setMaxResults($max)
+                    ->setParameter("s", '%'.$search.'%');
+                    
+                $notice = $qb->getQuery()->getResult();
+                $noticeArray = array_merge($noticeArray, $notice);
+
             }
         }
 
-        return $qb->andWhere("cn.image = 'true'")
-                ->setMaxResults(25)
-                ->getQuery()
-                ->getResult();
-
+        return $noticeArray;
 
     }  
 
