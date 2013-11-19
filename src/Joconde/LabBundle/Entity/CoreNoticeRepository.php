@@ -28,6 +28,7 @@ class CoreNoticeRepository extends EntityRepository {
             $qb->where($qb->expr()->like("lower(cn.titr)", ':s'))
                 ->setParameter("s", '%'.$search.'%')
                 ->andWhere("cn.image = 'true'");
+
             return $noticeArray = $qb->getQuery()->getResult();
         }
         else {

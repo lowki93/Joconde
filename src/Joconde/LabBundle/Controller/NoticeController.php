@@ -4,6 +4,8 @@ namespace Joconde\LabBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Joconde\LabBundle\Form\SearchType;
 
 class NoticeController extends Controller
@@ -18,8 +20,8 @@ class NoticeController extends Controller
             if($form -> isValid()){
                 $term = $form->getData();
                 $search = $term['search'];
-                
-                $terms = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByTerm($search);
+                $search = strtolower($search);
+                $terms = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus($search);
 
                 $nbTerm = count($terms);
 
@@ -34,6 +36,24 @@ class NoticeController extends Controller
         return $this->render('JocondeLabBundle:Notice:index.html.twig', array(
             'form' => $form->createView()
         ));
+    }
+
+    public function autocompleteAjaxAction()
+    {
+        $request = $this->container->get('request');
+ 
+        if($request->isXmlHttpRequest())
+        {
+            // get title sent ($_GET)
+            $term = $request->query->get('term');
+ 
+            $repository = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreTerm')->findByTerm($term);
+            return new JsonResponse($repository);
+        }
+        $term = $request->query->get('term');
+ 
+            $repository = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreTerm')->findByTerm($term);
+            return new JsonResponse($repository);
     }
 
     public function noticeAction($id)

@@ -2,6 +2,12 @@ joconde_lab_homepage:
     pattern:  /
     defaults: { _controller: JocondeLabBundle:Notice:index }
 
+search_autocomplete_ajax:
+    pattern: /search_ajax
+    defaults: { _controller: JocondeLabBundle:Notice:autocompleteAjax }
+    requirements:
+        _method: GET
+
 notice_id:
     pattern:   /notice/{id}
     defaults:  { _controller: JocondeLabBundle:Notice:notice }

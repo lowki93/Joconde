@@ -4,12 +4,13 @@ namespace Joconde\LabBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping\Index;
 
 /**
  * CoreTerm
  *
- * @ORM\Table(name="core_term")
- * @ORM\Entity
+ * @ORM\Table(name="core_term",indexes={@ORM\index(name="search_idx", columns={"label", "dbpedia_uri"})})
+ * @ORM\Entity(repositoryClass="Joconde\LabBundle\Entity\CoreTermRepository")
  */
 class CoreTerm
 {

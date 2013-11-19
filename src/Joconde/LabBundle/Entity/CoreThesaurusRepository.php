@@ -7,7 +7,7 @@ use Doctrine\ORM\QueryBuilder;
 
 class CoreThesaurusRepository extends EntityRepository {
 
-    public function findByTerm($search) {
+    public function findByThesaurus($search) {
         $qb = $this->createQueryBuilder('cth');
         $qb->select('DISTINCT cth.label')
             ->join('JocondeLabBundle:CoreTerm', 'ct')
