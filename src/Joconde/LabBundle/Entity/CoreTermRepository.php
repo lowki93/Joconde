@@ -11,6 +11,7 @@ class CoreTermRepository extends EntityRepository {
         $qb = $this->createQueryBuilder('ct');
         $qb->select('ct.label')
             ->where($qb->expr()->like("lower(ct.label)", ':s'))
+            ->setMaxResults(5)
             ->setParameter('s' , '%'.$search.'%');
 
         return $noticeTerm = $qb->getQuery()->getResult();

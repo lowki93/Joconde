@@ -1,0 +1,12 @@
+<form method="POST">
+    <!-- form errors -->
+    {{ form_errors(form) }}
+
+    {{ form_errors(form.search) }}
+    {{ form_label(form.search) }}
+    {{ form_widget(form.search, { 'attr': { 'data-url': path('search_autocomplete_ajax'), 'class': 'input-medium search-query search' } } ) }}
+
+    {{ form_rest(form) }}
+
+    <input type="submit" value="Search" />
+</form>

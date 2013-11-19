@@ -9,6 +9,11 @@
                 filter="sass,cssrewrite" output='css/list.css' %}
                    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
             {% endstylesheets %}
+            {% stylesheets
+                '@JocondeLabBundle/Resources/public/css/jquery-ui.css'
+            %}
+                <script src="{{ asset_url }}"></script>
+            {% endstylesheets %}
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         <meta charset="UTF-8">

@@ -50,10 +50,6 @@ class NoticeController extends Controller
             $repository = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreTerm')->findByTerm($term);
             return new JsonResponse($repository);
         }
-        $term = $request->query->get('term');
- 
-            $repository = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreTerm')->findByTerm($term);
-            return new JsonResponse($repository);
     }
 
     public function noticeAction($id)
