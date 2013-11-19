@@ -18,9 +18,9 @@ class CoreNoticeRepository extends EntityRepository {
             case '5': $max = 6; break;
             case '6': $max = 5; break;
             case '7': $max = 5; break;
-            case '8': $max = 5; break;
+            case '8': $max = 4; break;
         }
-        echo $nbTerm;
+
         $noticeArray = array();
         $qb = $this->createQueryBuilder('cn');
 
@@ -37,19 +37,24 @@ class CoreNoticeRepository extends EntityRepository {
                 $thesaurusLabel = strtolower($thesaurusLabel);
                 $thesaurusLabel = "cn.".$thesaurusLabel;
 
-                if( 0 === $i )
-                    $qb->where($qb->expr()->like("lower(cn.titr)", ':s'));
-                else
-                    $qb->where($qb->expr()->like("lower($thesaurusLabel)", ':s'));
-
-                $qb->andWhere("cn.image = 'true'")
+                $qb->where($qb->expr()->like("lower($thesaurusLabel)", ':s'))
+                    ->andWhere("cn.image = 'true'")
                     ->setMaxResults($max)
                     ->setParameter("s", '%'.$search.'%');
-                    
+
                 $notice = $qb->getQuery()->getResult();
                 $noticeArray = array_merge($noticeArray, $notice);
 
             }
+
+            $qb->where($qb->expr()->like("lower(cn.titr)", ':s'))
+                ->andWhere("cn.image = 'true'")
+                ->setMaxResults($max)
+                ->setParameter("s", '%'.$search.'%');
+
+            $notice = $qb->getQuery()->getResult();
+            $noticeArray = array_merge($noticeArray, $notice);
+
         }
 
         return $noticeArray;
