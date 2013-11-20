@@ -45,10 +45,10 @@ class NoticeController extends Controller
         if($request->isXmlHttpRequest())
         {
             // get title sent ($_GET)
-            $term = $request->query->get('term');
+            $term = $request->query->get('param');
  
-            $repository = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreTerm')->findByTerm($term);
-            return new JsonResponse($repository);
+            $autocompleteTerms = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreTerm')->findByTerm($term);
+            return new JsonResponse($autocompleteTerms);
         }
     }
 
