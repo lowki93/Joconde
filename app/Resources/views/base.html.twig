@@ -5,14 +5,14 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}
             {% stylesheets
-                'bundles/jocondelab/css/list.sass'
-                filter="sass,cssrewrite" output='css/style.css' %}
-                   <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
-            {% endstylesheets %}
-            {% stylesheets
                 '@JocondeLabBundle/Resources/public/css/jquery-ui.css'
             %}
                 <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+            {% endstylesheets %}
+            {% stylesheets
+                'bundles/jocondelab/css/list.sass'
+                filter="sass,cssrewrite" output='css/style.css' %}
+                   <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
             {% endstylesheets %}
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
@@ -21,7 +21,7 @@
     <body>
         {% block body %}{% endblock %}
         {% javascripts
-            '@JocondeLabBundle/Resources/public/js/jquery.js'
+            'jquery/jquery.js'
             '@JocondeLabBundle/Resources/public/js/jquery-ui.js'
         %}
             <script src="{{ asset_url }}"></script>

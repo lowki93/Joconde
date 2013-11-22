@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    $(".search").focus();
+
     $(".search").autocomplete({
         minLength: 3,
         source: function(request, response) {
