@@ -62,4 +62,15 @@ class CoreNoticeRepository extends EntityRepository {
 
     }  
 
+    public function findByTitle($search) {
+        $qb = $this->createQueryBuilder('cn');
+        $qb->select('cn.titr')
+            ->where($qb->expr()->like("lower(cn.titr)", ':s'))
+            ->andWhere("cn.image = 'true'")
+            ->setMaxResults(4)
+            ->setParameter("s", '%'.$search.'%');
+
+        return $qb->getQuery()->getResult();
+    }
+
 }

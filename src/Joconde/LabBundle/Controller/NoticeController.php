@@ -21,6 +21,7 @@ class NoticeController extends Controller
                 $term = $form->getData();
                 $search = $term['search'];
                 $search = strtolower($search);
+
                 $terms = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus($search);
 
                 $nbTerm = count($terms);
@@ -48,6 +49,10 @@ class NoticeController extends Controller
             $term = $request->query->get('param');
  
             $autocompleteTerms = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreTerm')->findByTerm($term);
+            $autocompleteTitle = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByTitle($term);
+
+            $autocompleteTerms = array_merge($autocompleteTerms, $autocompleteTitle);
+
             return new JsonResponse($autocompleteTerms);
         }
     }

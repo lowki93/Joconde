@@ -9,19 +9,28 @@ $(document).ready(function() {
                     param:  $('.search').val()
                 },
                 success: function(data){
+                    console.log(data);
                     response( $.map( data, function( object ) {
-                        return {
-                            label: object.label,
-                            value: object.label
+                        if(object.label != null){
+                            return {
+                                label: object.label,
+                                value: object.label
+                            }
+                        }
+                        else{
+                            return {
+                                label: object.titr,
+                                value: object.titr
+                            }   
                         }
                     }));
                 },
                 open: function() {
-                $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
-              },
-              close: function() {
-                $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
-              }
+                    $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+                },
+                close: function() {
+                    $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+                }
             });
         }
     });
