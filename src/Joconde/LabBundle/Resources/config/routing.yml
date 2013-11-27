@@ -8,6 +8,10 @@ search_autocomplete_ajax:
     requirements:
         _method: GET
 
+add_favorite_notice:
+    pattern:   /add-notice-favorite/{id}
+    defaults:  { _controller: JocondeLabBundle:Notice:addfavorite }
+
 notice_id:
     pattern:   /notice/{id}
     defaults:  { _controller: JocondeLabBundle:Notice:notice }

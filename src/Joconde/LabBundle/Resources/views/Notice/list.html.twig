@@ -12,11 +12,12 @@
                 <img src="http://www.culture.gouv.fr/Wave/image/joconde{{image.relativeUrl}}" />
             {% endfor %}
             <div>
-            id : {{notice.id}}<br />
-            ref : {{notice.ref}}<br />
-            auteur : {{notice.autr}}<br />
-            titre : {{notice.titr}}<br />
-            <a href="{{path('notice_id', {'id': notice.id}) }}">Go to notice {{notice.id}}</a>
+                id : {{notice.id}}<br />
+                ref : {{notice.ref}}<br />
+                auteur : {{notice.autr}}<br />
+                titre : {{notice.titr}}<br />
+                <a href="{{path('notice_id', {'id': notice.id}) }}">Go to notice {{notice.id}}</a><br /><br />
+                <button><a href="{{path('add_favorite_notice', {'id': notice.id}) }}">Add to favorite</a></button>
             </div>
         </li>
         {% else %}

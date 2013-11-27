@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Joconde\LabBundle\Form\SearchType;
+use Joconde\LabBundle\FlashSessionNotice;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class NoticeController extends Controller
 {
@@ -55,6 +57,12 @@ class NoticeController extends Controller
 
             return new JsonResponse($autocompleteTerms);
         }
+    }
+
+    public function addfavoriteAction($id)
+    {
+        $this->get('flash.session_notice_manager')->setFavoris($id);
+        return $this->redirect($this->generateUrl('joconde_lab_homepage'));
     }
 
     public function noticeAction($id)
