@@ -2,7 +2,7 @@
 
     {{ form_errors(form.search) }}
     {{ form_label(form.search) }}
-    {{ form_widget(form.search, { 'attr': { 'data-url': path('search_autocomplete_ajax'), 'class': 'input-medium search-query search', 'placeholder' : 'Votre Recherche' } } ) }}
+    {{ form_widget(form.search, { 'attr': {'class': 'input-medium search-query search', 'placeholder' : 'Votre Recherche' } } ) }}
 
     {{ form_rest(form) }}
 
