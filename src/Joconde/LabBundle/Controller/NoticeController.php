@@ -61,8 +61,14 @@ class NoticeController extends Controller
 
     public function addfavoriteAction($id)
     {
-        $this->get('flash.session_notice_manager')->setFavoris($id);
-        return $this->redirect($this->generateUrl('joconde_lab_homepage'));
+        try {
+            $this->get('flash.session_notice_manager')->setFavoris($id);
+            return $this->redirect($this->generateUrl('joconde_lab_homepage'));
+        } catch (\Exception $e){
+            die('deja en session');
+            $e = "deja en session";
+            //return $this->redirect($this->generateUrl('joconde_lab_homepage'));
+        }
     }
 
     public function noticeAction($id)

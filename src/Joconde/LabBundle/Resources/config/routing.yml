@@ -17,3 +17,7 @@ add_favorite_notice:
 notice_id:
     pattern:   /notice/{id}
     defaults:  { _controller: JocondeLabBundle:Notice:notice }
+
+notice_id:
+    pattern:   /notice/{id}
+    defaults:  { _controller: JocondeLabBundle:Notice:notice }

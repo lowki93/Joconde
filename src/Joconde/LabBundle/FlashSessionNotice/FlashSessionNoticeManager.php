@@ -18,8 +18,8 @@ class FlashSessionNoticeManager
     public function setFavoris($id)
     {
         $favoris = $this->session->get('favoris');
-        if (in_array($id, $favoris)) {
-            die("deja en session");
+        if (in_array($id, (array)$favoris)) {
+            throw new \Exception("Already in session", 1);
         } else {
             $favoris[] = $id;
             $favoris = $this->session->set('favoris', $favoris);
