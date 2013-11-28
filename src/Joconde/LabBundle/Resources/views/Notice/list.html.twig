@@ -1,9 +1,6 @@
 {% extends '::base.html.twig' %}
 
 {% block body %}
-
-    {% include 'JocondeLabBundle:Search:view.html.twig' %}
- 
     LIST : {{notices | length}} <br />
     <ul>
         {% for notice in notices %}
@@ -17,7 +14,7 @@
                 auteur : {{notice.autr}}<br />
                 titre : {{notice.titr}}<br />
                 <a href="{{path('notice_id', {'id': notice.id}) }}">Go to notice {{notice.id}}</a><br /><br />
-                <button><a href="{{path('add_favorite_notice', {'id': notice.id}) }}">Add to favorite</a></button>
+                <button class="btn-favorite" value="{{notice.id}}">Add to favorite</button>
             </div>
         </li>
         {% else %}
@@ -28,7 +25,7 @@
 
 {% block javascripts %}
         {% javascripts
-            '@JocondeLabBundle/Resources/public/js/extends-autocomplete.js'
+            '@JocondeLabBundle/Resources/public/js/session-favorite.js'
         %}
             <script src="{{ asset_url }}"></script>
         {% endjavascripts %}

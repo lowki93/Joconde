@@ -11,7 +11,6 @@ $(document).ready(function() {
                     param:  $('.search').val()
                 },
                 success: function(data){
-                    console.log(data);
                     response( $.map( data, function( object ) {
                         if(object.label != null){
                             return {

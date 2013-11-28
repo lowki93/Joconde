@@ -59,15 +59,22 @@ class NoticeController extends Controller
         }
     }
 
-    public function addfavoriteAction($id)
+    public function addfavoriteAction()
     {
-        try {
-            $this->get('flash.session_notice_manager')->setFavoris($id);
-            return $this->redirect($this->generateUrl('joconde_lab_homepage'));
-        } catch (\Exception $e){
-            die('deja en session');
-            $e = "deja en session";
-            //return $this->redirect($this->generateUrl('joconde_lab_homepage'));
+        $request = $this->container->get('request');
+ 
+        if($request->isXmlHttpRequest())
+        {
+            // get title sent ($_GET)
+            $id = $request->query->get('param');
+            try {
+                $this->get('flash.session_notice_manager')->setFavoris($id);
+                $result["message"]="good";
+                return new JsonResponse($result);
+            } catch (\Exception $e){
+                $result["message"]="deja en session";
+                return new JsonResponse($result);
+            }
         }
     }
 

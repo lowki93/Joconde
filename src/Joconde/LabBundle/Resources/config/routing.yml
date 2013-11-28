@@ -11,12 +11,12 @@ search_autocomplete:
         expose: true
 
 add_favorite_notice:
-    pattern:   /add-notice-favorite/{id}
+    pattern:   /add-notice-favorite
     defaults:  { _controller: JocondeLabBundle:Notice:addfavorite }
-
-notice_id:
-    pattern:   /notice/{id}
-    defaults:  { _controller: JocondeLabBundle:Notice:notice }
+    requirements:
+        _method: GET
+    options:
+        expose: true
 
 notice_id:
     pattern:   /notice/{id}
