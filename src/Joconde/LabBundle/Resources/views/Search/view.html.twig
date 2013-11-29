@@ -1,10 +1,11 @@
 <form method="POST">
-
     {{ form_errors(form.search) }}
     {{ form_label(form.search) }}
+    
     {{ form_widget(form.search, { 'attr': {'class': 'input-medium search-query search', 'placeholder' : 'Votre Recherche' } } ) }}
 
     {{ form_rest(form) }}
 
     <input type="submit" value="Search" />
+    <span class="glyphicon glyphicon-search"></span>
 </form>
