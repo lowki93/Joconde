@@ -3,31 +3,49 @@
     <head>
         <meta charset="UTF-8" />
         <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        {% stylesheets
+            '@JocondeLabBundle/Resources/public/css/jquery-ui.css'
+            '@JocondeLabBundle/Resources/public/css/component.css'
+        %}
+            <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+        {% endstylesheets %}
+
         {% block stylesheets %}
             {% stylesheets
-                '@JocondeLabBundle/Resources/public/css/jquery-ui.css'
-            %}
-                <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
-            {% endstylesheets %}
-            {% stylesheets
-                'bundles/jocondelab/css/list.sass'
+                'bundles/jocondelab/css/style.sass'
                 filter="cssrewrite,sass" output='css/style.css' %}
                    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
             {% endstylesheets %}
         {% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-        <meta charset="UTF-8">
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <div class="container">
+            <div class="mp-pusher" id="mp-pusher">
+                <nav id="mp-menu" class="mp-menu">
+                    <div class="mp-level">
+                    </div>
+                </nav>
+                <div class="scroller">
+                     <a href="#" id="trigger" class="menu-trigger">Open/Close Menu</a>
+                     {% block body %}{% endblock %}
+                </div>
+            </div>
+        </div>
         <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
         <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
         {% javascripts
             'jquery/jquery.js'
             '@JocondeLabBundle/Resources/public/js/jquery-ui.js'
+            '@JocondeLabBundle/Resources/public/js/modernizr.custom.js'
+            '@JocondeLabBundle/Resources/public/js/classie.js'
+            '@JocondeLabBundle/Resources/public/js/mlpushmenu.js'
         %}
             <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
+        <script>
+            new mlPushMenu( document.getElementById( 'mp-menu' ), document.getElementById( 'trigger' ) );
+        </script>
         {% block javascripts %}{% endblock %}
     </body>
 </html>
