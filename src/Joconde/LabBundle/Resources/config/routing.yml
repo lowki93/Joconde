@@ -21,3 +21,7 @@ add_favorite_notice:
 notice_id:
     pattern:   /notice/{id}
     defaults:  { _controller: JocondeLabBundle:Notice:notice }
+
+favorite_notice:
+    pattern:  /a-voir-plus-tard
+    defaults: { _controller: JocondeLabBundle:Notice:favorite }

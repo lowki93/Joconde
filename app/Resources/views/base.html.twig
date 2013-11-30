@@ -24,11 +24,21 @@
             <div class="mp-pusher" id="mp-pusher">
                 <nav id="mp-menu" class="mp-menu">
                     <div class="mp-level">
+                        <p>MENU</p>
+                        <ul>
+                            <li><a href="{{path('joconde_lab_homepage')}}"><i class="glyphicon glyphicon-search"></i>NOUVELLE RECHERCHE</a></li>
+                            <li><a href="{{path('favorite_notice')}}"><i class="glyphicon glyphicon-eye-open"></i>A VOIR PLUS TARD</a></li>
+                            <li><a href="#"><i class="glyphicon glyphicon-exclamation-sign"></i>A PROPOS</a></li>
+                        </ul>
                     </div>
                 </nav>
                 <div class="scroller">
-                     <a href="#" id="trigger" class="menu-trigger">Open/Close Menu</a>
-                     {% block body %}{% endblock %}
+                    <div class="header">
+                        <a href="#" id="trigger"><i class="glyphicon glyphicon-align-justify myGlyphicon"></i></a>
+                    </div>
+                    <div class="page">
+                        {% block body %}{% endblock %}
+                    </div>
                 </div>
             </div>
         </div>

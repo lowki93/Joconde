@@ -30,10 +30,7 @@ class NoticeController extends Controller
 
                 $notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($search, $terms, $nbTerm);
 
-                return $this->render('JocondeLabBundle:Notice:list.html.twig', array(
-                        'form' => $form->createView(),
-                        'notices' => $notices
-                    ));
+                return $this->render('JocondeLabBundle:Notice:list.html.twig', array('notices' => $notices));
             } 
         }
         return $this->render('JocondeLabBundle:Notice:index.html.twig', array(
@@ -83,5 +80,15 @@ class NoticeController extends Controller
         $em = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice');
         $notice = $em->find($id);
         return $this->render('JocondeLabBundle:Notice:view.html.twig', array("notice" => $notice));
+    }
+
+    public function favoriteAction()
+    {
+        $favorite = $this->get('flash.session_notice_manager')->getFavoris();
+
+        $em = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice');
+        $notices = $em->findById($favorite);
+
+        return $this->render('JocondeLabBundle:Notice:favorite.html.twig', array("notices" => $notices));
     }
 }

@@ -10,9 +10,9 @@
 
 {% block body %}
     LIST : {{notices | length}} <br />
-    {# <ul> #}
+    <ul>
         {% for notice in notices %}
-        {# <li>
+        <li>
             {% for image in notice.noticeImage|slice(0,1) %}
                 <img src="http://www.culture.gouv.fr/Wave/image/joconde{{image.relativeUrl}}" />
             {% endfor %}
@@ -22,22 +22,10 @@
                 auteur : {{notice.autr}}<br />
                 titre : {{notice.titr}}<br />
                 <a href="{{path('notice_id', {'id': notice.id}) }}">Go to notice {{notice.id}}</a><br /><br />
-                <button class="btn-favorite" value="{{notice.id}}">Add to favorite</button>
             </div>
         </li>
         {% else %}
-            il n'y a pas de notices #}
-            {% for image in notice.noticeImage|slice(0,1) %}
-                <img src="http://www.culture.gouv.fr/Wave/image/joconde{{image.relativeUrl}}" />
-            {% endfor %}
+            il n'y a pas de notices
         {% endfor %}
-    {# </ul>   #}
-{% endblock %}
-
-{% block javascripts %}
-        {% javascripts
-            '@JocondeLabBundle/Resources/public/js/session-favorite.js'
-        %}
-            <script src="{{ asset_url }}"></script>
-        {% endjavascripts %}
+    </ul>  
 {% endblock %}

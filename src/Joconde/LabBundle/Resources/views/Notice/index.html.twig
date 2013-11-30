@@ -1,10 +1,26 @@
 {% extends '::base.html.twig' %}
 
-{% block body %}
-
-{# {% include 'JocondeLabBundle:Search:view.html.twig' %} #}
-
+{% block stylesheets %}
+    {% stylesheets
+        'bundles/jocondelab/css/search.sass'
+        filter="cssrewrite,sass" output='css/search.css' %}
+           <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+    {% endstylesheets %}
 {% endblock %}
+
+{% block body %}
+    <form method="POST">
+        {{ form_errors(form.search) }}
+        
+        {{ form_widget(form.search, { 'attr': {'class': 'input-medium search-query search', 'placeholder' : 'VOTRE RECHERCHE' } } ) }}
+
+        {{ form_rest(form) }}
+
+        <button type="submit"><i class="glyphicon glyphicon-search"></i></button>
+        
+    </form>
+{% endblock %}
+
 {% block javascripts %}
     {% javascripts
         '@JocondeLabBundle/Resources/public/js/extends-autocomplete.js'
