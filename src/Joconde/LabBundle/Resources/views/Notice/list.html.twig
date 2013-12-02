@@ -9,14 +9,15 @@
 {% endblock %}
 
 {% block body %}
+<div class="page-list">
     LIST : {{notices | length}} <br />
     {# <ul> #}
         {% for notice in notices %}
-        {# <li>
+        {# <li> #}
             {% for image in notice.noticeImage|slice(0,1) %}
-                <img src="http://www.culture.gouv.fr/Wave/image/joconde{{image.relativeUrl}}" />
+                <img src="http://www.culture.gouv.fr/Wave/image/joconde{{image.relativeUrl}}" alt="{{notice.id}}" />
             {% endfor %}
-            <div>
+{#             <div>
                 id : {{notice.id}}<br />
                 ref : {{notice.ref}}<br />
                 auteur : {{notice.autr}}<br />
@@ -24,14 +25,14 @@
                 <a href="{{path('notice_id', {'id': notice.id}) }}">Go to notice {{notice.id}}</a><br /><br />
                 <button class="btn-favorite" value="{{notice.id}}">Add to favorite</button>
             </div>
-        </li>
+        </li> #}
         {% else %}
-            il n'y a pas de notices #}
-            {% for image in notice.noticeImage|slice(0,1) %}
-                <img src="http://www.culture.gouv.fr/Wave/image/joconde{{image.relativeUrl}}" />
-            {% endfor %}
+            il n'y a pas de notices
         {% endfor %}
     {# </ul>   #}
+</div>
+<div class="notice-hover">
+</div>
 {% endblock %}
 
 {% block javascripts %}
@@ -41,3 +42,5 @@
             <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
 {% endblock %}
+
+//http://masonry.desandro.com/

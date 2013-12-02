@@ -73,4 +73,14 @@ class CoreNoticeRepository extends EntityRepository {
         return $qb->getQuery()->getResult();
     }
 
+    public function findByNoticeId($id) {
+        $qb = $this->createQueryBuilder('cn');
+        $qb->select("cn.titr, cn.autr, cn.video")
+            ->where("cn.id = :s ")
+            ->andWhere("cn.image = 'true'")
+            ->setParameter("s", $id);
+
+        return $qb->getQuery()->getResult();
+    }
+
 }

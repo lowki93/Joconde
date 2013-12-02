@@ -1,5 +1,7 @@
 {% extends '::base.html.twig' %}
 
+{% block title %}{% endblock %}
+
 {% block stylesheets %}
     {% stylesheets
         'bundles/jocondelab/css/list.sass'
@@ -25,7 +27,7 @@
             </div>
         </li>
         {% else %}
-            il n'y a pas de notices
+            il n'y a pas de notices en favoris
         {% endfor %}
     </ul>  
 {% endblock %}

@@ -18,6 +18,14 @@ add_favorite_notice:
     options:
         expose: true
 
+notice_hover:
+    pattern:   /ajax_view
+    defaults:  { _controller: JocondeLabBundle:Notice:noticeHover }
+    requirements:
+        _method: GET
+    options:
+        expose: true
+
 notice_id:
     pattern:   /notice/{id}
     defaults:  { _controller: JocondeLabBundle:Notice:notice }

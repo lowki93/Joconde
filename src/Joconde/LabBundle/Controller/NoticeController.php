@@ -56,6 +56,22 @@ class NoticeController extends Controller
         }
     }
 
+    public function noticeHoverAction()
+    {
+        $request = $this->container->get('request');
+ 
+        if($request->isXmlHttpRequest())
+        {
+            // get title sent ($_GET)
+            $id = $request->query->get('id');
+
+            $em = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice');
+            $notice = $em->findByNoticeId($id);
+
+            return new JsonResponse($notice);
+        }
+    }
+
     public function addfavoriteAction()
     {
         $request = $this->container->get('request');
