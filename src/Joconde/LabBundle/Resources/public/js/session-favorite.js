@@ -33,3 +33,16 @@ $("img").hover(function() {
     console.log('out');
     $('.notice-hover').text("");
 })
+
+$("img").each(function(){
+    if(  $(this).height() > $(this).width() ){
+        $(this).addClass("imgHeight");
+    } else {
+        $(this).addClass("imgWidth");
+    }
+});
+
+var $container = $('.page-list');
+$container.masonry({
+  itemSelector: '.item'
+});

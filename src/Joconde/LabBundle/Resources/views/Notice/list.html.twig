@@ -10,9 +10,9 @@
 
 {% block body %}
 <div class="page-list">
-    LIST : {{notices | length}} <br />
     {# <ul> #}
         {% for notice in notices %}
+        <div class="item">
         {# <li> #}
             {% for image in notice.noticeImage|slice(0,1) %}
                 <img src="http://www.culture.gouv.fr/Wave/image/joconde{{image.relativeUrl}}" alt="{{notice.id}}" />
@@ -26,6 +26,7 @@
                 <button class="btn-favorite" value="{{notice.id}}">Add to favorite</button>
             </div>
         </li> #}
+        </div>
         {% else %}
             il n'y a pas de notices
         {% endfor %}
@@ -42,5 +43,3 @@
             <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
 {% endblock %}
-
-//http://masonry.desandro.com/
