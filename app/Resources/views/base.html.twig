@@ -10,7 +10,6 @@
         %}
             <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
         {% endstylesheets %}
-
         {% block stylesheets %}
             {% stylesheets
                 'bundles/jocondelab/css/style.sass'
@@ -19,7 +18,7 @@
             {% endstylesheets %}
         {% endblock %}
     </head>
-    <body>
+    <body {% block onload %}{% endblock %} >
         <div class="container">
             <div class="mp-pusher" id="mp-pusher">
                 <nav id="mp-menu" class="mp-menu">
@@ -39,6 +38,7 @@
                     <div class="page">
                         {% block body %}{% endblock %}
                     </div>
+                    {% block hoverNotice %}{% endblock %}
                 </div>
             </div>
         </div>
@@ -51,12 +51,13 @@
             '@JocondeLabBundle/Resources/public/js/classie.js'
             '@JocondeLabBundle/Resources/public/js/mlpushmenu.js'
             '@JocondeLabBundle/Resources/public/js/masonry.js'
+            '@JocondeLabBundle/Resources/public/js/imageLoad.js'
         %}
             <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
+        {% block javascripts %}{% endblock %}
         <script>
             new mlPushMenu( document.getElementById( 'mp-menu' ), document.getElementById( 'trigger' ) );
         </script>
-        {% block javascripts %}{% endblock %}
     </body>
 </html>

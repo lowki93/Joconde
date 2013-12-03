@@ -6,34 +6,47 @@
         filter="cssrewrite,sass" output='css/list.css' %}
            <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
     {% endstylesheets %}
+    <script>
+        
+    </script>
 {% endblock %}
+
+{% block onload %}{% endblock %}
 
 {% block body %}
 <div class="page-list">
     {# <ul> #}
-        {% for notice in notices %}
-        <div class="item">
-        {# <li> #}
+    <div class="item question">
+        <p>EST-CE UNE PEIN-TURE ?</p>
+    </div>
+    {% for notice in notices %}
+    <div class="item">
+        <a href="{{path('notice_id', {'id': notice.id}) }}">
             {% for image in notice.noticeImage|slice(0,1) %}
                 <img src="http://www.culture.gouv.fr/Wave/image/joconde{{image.relativeUrl}}" alt="{{notice.id}}" />
             {% endfor %}
-{#             <div>
-                id : {{notice.id}}<br />
-                ref : {{notice.ref}}<br />
-                auteur : {{notice.autr}}<br />
-                titre : {{notice.titr}}<br />
-                <a href="{{path('notice_id', {'id': notice.id}) }}">Go to notice {{notice.id}}</a><br /><br />
-                <button class="btn-favorite" value="{{notice.id}}">Add to favorite</button>
-            </div>
-        </li> #}
+        </a>
+{#         <div class="item-hover">
+
+        </div> #}
+        {# <div>
+            id : {{notice.id}}<br />
+            ref : {{notice.ref}}<br />
+            auteur : {{notice.autr}}<br />
+            titre : {{notice.titr}}<br />
+            <a href="{{path('notice_id', {'id': notice.id}) }}">Go to notice {{notice.id}}</a><br /><br />
+            <button class="btn-favorite" value="{{notice.id}}">Add to favorite</button>
+        </div> #}
         </div>
-        {% else %}
-            il n'y a pas de notices
-        {% endfor %}
-    {# </ul>   #}
+    {% else %}
+        il n'y a pas de notices
+    {% endfor %}
 </div>
-<div class="notice-hover">
-</div>
+{% endblock %}
+
+{% block hoverNotice %}
+    <div class="notice-hover">
+    </div>
 {% endblock %}
 
 {% block javascripts %}
