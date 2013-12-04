@@ -12,6 +12,13 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 class NoticeController extends Controller
 {
+
+    public function getQuestion($i)
+    {
+        $question = array("est-ce une pein-ture", "est-ce un ta-bleau,tableau");
+        return $question[$i];
+    }
+
     public function indexAction(Request $request)
     {
         $form = $this->createForm(new SearchType());
@@ -69,6 +76,21 @@ class NoticeController extends Controller
             $notice = $em->findByNoticeId($id);
 
             return new JsonResponse($notice);
+        }
+    }
+
+    
+    public function newQuestionAction()
+    {
+        $request = $this->container->get('request');
+ 
+        if($request->isXmlHttpRequest())
+        {
+            // get title sent ($_GET)
+            // $answer = $request->query->get('answer');
+            $result["question"] = $this->getQuestion(1);
+
+            return new JsonResponse($result);
         }
     }
 

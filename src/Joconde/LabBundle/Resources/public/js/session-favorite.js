@@ -6,19 +6,14 @@ jQuery(function($){
         } else {
             $(this).addClass("imgWidth");
         }
-        // $('img').bind('load', function() {
-        //     var $container = $('.page-list');
-        //     $container.masonry({
-        //       itemSelector: '.item'
-        //     });
-        // });
         var $container = $('.page-list');
         // initialize Masonry after all images have loaded  
         $container.imagesLoaded( function() {
             $container.masonry({
+                isAnimated: true,
                 gutter: 10,
                 columnWidth: 10,
-                itemSelector: '.item'
+                itemSelector: '.item',
             });
         });
     });
@@ -57,3 +52,31 @@ $("img").hover(function() {
     console.log('out');
     $('.notice-hover').text("");
 })
+
+$(".btn-question").click(function(){
+    var result = $(this).val();
+    if(result == "none" || result == "no" ) {
+        $.ajax({
+            url: Routing.generate('change_question'),
+            dataType: "json",
+            data: {
+                answer: $(this).val()
+            },
+            complete: function(question){
+
+                $('.question').fadeOut(500,function(){
+                    var responseQuestion = question.responseJSON.question;
+                    var splitResponse = responseQuestion.split(",");
+                    var newQuestion = splitResponse[0];
+                    var typeQuestion = splitResponse[1];
+                    var response = '<p>'+newQuestion+' ?</p><button class="btn-question" value="'+typeQuestion+',yes">oui</button><button class="btn-question" value="no">non</button><button class="btn-question" value="none">ne sais pas</button>'
+                    $('.question').html(response);
+                    $('.question').fadeIn(500);
+                });
+            }
+        });
+    } else {
+        console.log("yes");
+    }
+
+});

@@ -26,6 +26,14 @@ notice_hover:
     options:
         expose: true
 
+change_question:
+    pattern:   /change_question
+    defaults:  { _controller: JocondeLabBundle:Notice:newQuestion }
+    requirements:
+        _method: GET
+    options:
+        expose: true
+
 notice_id:
     pattern:   /notice/{id}
     defaults:  { _controller: JocondeLabBundle:Notice:notice }

@@ -17,7 +17,8 @@
 <div class="page-list">
     {# <ul> #}
     <div class="item question">
-        <p>EST-CE UNE PEIN-TURE ?</p>
+        <p>est-ce une pein-ture ?</p>
+        <button class="btn-question" value="peinture,yes">oui</button><button class="btn-question" value="no">non</button><button class="btn-question" value="none">ne sais pas</button>
     </div>
     {% for notice in notices %}
     <div class="item">
@@ -26,17 +27,24 @@
                 <img src="http://www.culture.gouv.fr/Wave/image/joconde{{image.relativeUrl}}" alt="{{notice.id}}" />
             {% endfor %}
         </a>
-{#         <div class="item-hover">
-
-        </div> #}
-        {# <div>
-            id : {{notice.id}}<br />
-            ref : {{notice.ref}}<br />
-            auteur : {{notice.autr}}<br />
-            titre : {{notice.titr}}<br />
-            <a href="{{path('notice_id', {'id': notice.id}) }}">Go to notice {{notice.id}}</a><br /><br />
-            <button class="btn-favorite" value="{{notice.id}}">Add to favorite</button>
-        </div> #}
+        <div class="item-hover">
+            <p>{{notice.titr | lower | truncate(10, true, ' ...') }}</p>
+            {% set authors = notice.autr | split(';') %}
+            {% for author in authors | slice(0,1)%}
+                {% set aut = author | split('(') %}
+                {% for autdef in aut | slice(0,1)%}
+                    <p>{{ autdef }}</p>
+                {% endfor %}
+            {% endfor %}
+            <button class="btn-favorite" value="{{notice.id}}"><i class="glyphicon glyphicon-eye-open"></i></button>
+            {% set domns = notice.domn | split(';') %}
+            {% for domn in domns | slice(0,1)%}
+                {% set dom = domn | split('(') %}
+                {% for domdomdef in dom | slice(0,1)%}
+                    <p>{{ domdomdef }}</p>
+                {% endfor %}
+            {% endfor %}
+        </div>
         </div>
     {% else %}
         il n'y a pas de notices
