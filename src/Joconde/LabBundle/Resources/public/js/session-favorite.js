@@ -1,20 +1,21 @@
 jQuery(function($){
     $("img").each(function(){
-        console.log("dans fonction")
         if(  $(this).height() > $(this).width() ){
+            console.log("height : "+$(this).height()+" ; width : "+$(this).width()+" ; imgHeight");
             $(this).addClass("imgHeight");
         } else {
+            console.log("height : "+$(this).height()+" ; width : "+$(this).width()+" ; imgWidth");
             $(this).addClass("imgWidth");
         }
-        var $container = $('.page-list');
-        // initialize Masonry after all images have loaded  
-        $container.imagesLoaded( function() {
-            $container.masonry({
-                isAnimated: true,
-                gutter: 10,
-                columnWidth: 10,
-                itemSelector: '.item',
-            });
+    });
+    var $container = $('.page-list');
+    // initialize Masonry after all images have loaded
+    $container.imagesLoaded( function() {
+        $container.masonry({
+            isAnimated: true,
+            gutter: 10,
+            columnWidth: 10,
+            itemSelector: '.item',
         });
     });
 });
