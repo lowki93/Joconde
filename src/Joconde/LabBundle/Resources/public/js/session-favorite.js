@@ -20,6 +20,7 @@ jQuery(function($){
     });
 });
 
+// add to favorite
 $(".btn-favorite").click(function(){
     $.ajax({
         url: Routing.generate('add_favorite_notice'),
@@ -33,6 +34,7 @@ $(".btn-favorite").click(function(){
     });
 });
 
+// image hover
 $("img").hover(function() {
     $img = $(this);
     $.ajax({
@@ -54,6 +56,7 @@ $("img").hover(function() {
     $('.notice-hover').text("");
 })
 
+// change question
 $(".btn-question").click(function(){
     var result = $(this).val();
     if(result == "none" || result == "no" ) {
