@@ -1,21 +1,23 @@
 jQuery(function($){
-    $("img").each(function(){
-        if(  $(this).height() > $(this).width() ){
-            console.log("height : "+$(this).height()+" ; width : "+$(this).width()+" ; imgHeight");
-            $(this).addClass("imgHeight");
-        } else {
-            console.log("height : "+$(this).height()+" ; width : "+$(this).width()+" ; imgWidth");
-            $(this).addClass("imgWidth");
-        }
-    });
-    var $container = $('.page-list');
-    // initialize Masonry after all images have loaded
-    $container.imagesLoaded( function() {
-        $container.masonry({
-            isAnimated: true,
-            gutter: 10,
-            columnWidth: 10,
-            itemSelector: '.item',
+    $(window).load(function(){
+        var $container = $('.page-list');
+        $("img").each(function(){
+            if(  $(this).height() > $(this).width() ){
+                console.log("height : "+$(this).height()+" ; width : "+$(this).width()+" ; imgHeight");
+                $(this).addClass("imgHeight");
+            } else {
+                console.log("height : "+$(this).height()+" ; width : "+$(this).width()+" ; imgWidth");
+                $(this).addClass("imgWidth");
+            }
+        });
+        // initialize Masonry after all images have loaded
+        $container.imagesLoaded( function() {
+            $container.masonry({
+                isAnimated: true,
+                gutter: 10,
+                columnWidth: 10,
+                itemSelector: '.item',
+            });
         });
     });
 });
@@ -84,3 +86,9 @@ $(".btn-question").click(function(){
     }
 
 });
+
+
+    private var anim : Animation;
+    anim = transform.FindChild("humanizr2").gameObject.GetComponent.<Animation>();
+    anim.CrossFade("jumpLeft", 0.1);
+    anim.PlayQueued("run");
