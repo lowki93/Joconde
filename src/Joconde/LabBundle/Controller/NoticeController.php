@@ -5,6 +5,7 @@ namespace Joconde\LabBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Joconde\LabBundle\Form\SearchType;
 use Joconde\LabBundle\FlashSessionNotice;
@@ -15,7 +16,7 @@ class NoticeController extends Controller
 
     public function getQuestion($i)
     {
-        $question = array("est-ce une pein-ture", "est-ce un ta-bleau,tableau");
+        $question = array("est-ce une pein-ture", "est-ce un tableau,tableau");
         return $question[$i];
     }
 
@@ -37,7 +38,9 @@ class NoticeController extends Controller
 
                 $notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($search, $terms, $nbTerm);
 
-                return $this->render('JocondeLabBundle:Notice:list.html.twig', array('notices' => $notices));
+                return $this->render('JocondeLabBundle:Notice:list.html.twig',
+                    array('notices' => $notices,
+                        'search' => $search));
             } 
         }
         return $this->render('JocondeLabBundle:Notice:index.html.twig', array(
@@ -91,6 +94,30 @@ class NoticeController extends Controller
             $result["question"] = $this->getQuestion(1);
 
             return new JsonResponse($result);
+        }
+    }
+
+    public function goodQuestionAction()
+    {
+        $request = $this->container->get('request');
+ 
+        if($request->isXmlHttpRequest())
+        {
+            //get title sent ($_GET)
+            $answer = $request->query->get('answer');
+
+            $result = explode(',', $answer);
+            $term = $result[0];
+
+            $terms = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus($term);
+
+            $nbTerm = count($terms);
+            $notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($term, $terms, $nbTerm);
+            $response['content'] = $this->renderView('JocondeLabBundle:Notice:ajax.list.html.twig',
+                                    array('notices' => $notices,
+                                        'search' => $term));
+
+            return new JsonResponse($response);
         }
     }
 

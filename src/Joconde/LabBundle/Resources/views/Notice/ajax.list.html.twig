@@ -1,0 +1,38 @@
+<div class="item question">
+    <p>est-ce une pein-ture ?</p>
+    <div class="question-button">
+        <button class="btn-question" value="peinture,yes">oui</button><button class="btn-question" value="no">non</button><button class="btn-question" value="none">ne sais pas</button>
+    </div>
+</div>
+{% for notice in notices %}
+    <div class="item">
+        <a href="{{path('notice_id', {'id': notice.id}) }}">
+            {% for image in notice.noticeImage|slice(0,1) %}
+                <img src="http://www.culture.gouv.fr/Wave/image/joconde{{image.relativeUrl}}" alt="{{notice.id}}" />
+            {% endfor %}
+        </a>
+        <div class="item-hover">
+            <p>{{notice.titr | lower | truncate(10, true, ' ...') }}</p>
+            {% set authors = notice.autr | split(';') %}
+            {% for author in authors | slice(0,1)%}
+                {% set aut = author | split('(') %}
+                {% for autdef in aut | slice(0,1)%}
+                    <p>{{ autdef | lower }}</p>
+                {% endfor %}
+            {% endfor %}
+            <hr />
+            <div class="item-hover-bottom">
+                <button class="btn-favorite" value="{{notice.id}}"><i class="glyphicon glyphicon-eye-open"></i></button>
+                {% set domns = notice.domn | split(';') %}
+                {% for domn in domns | slice(0,1)%}
+                    {% set dom = domn | split('(') %}
+                    {% for domdomdef in dom | slice(0,1)%}
+                        <span class="item-domain">{{ domdomdef }}</span>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% else %}
+    il n'y a pas de notices
+{% endfor %}

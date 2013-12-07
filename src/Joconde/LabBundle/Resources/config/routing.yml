@@ -34,6 +34,14 @@ change_question:
     options:
         expose: true
 
+change_question_good:
+    pattern:   /change_question_good
+    defaults:  { _controller: JocondeLabBundle:Notice:goodQuestion }
+    requirements:
+        _method: GET
+    options:
+        expose: true
+
 notice_id:
     pattern:   /notice/{id}
     defaults:  { _controller: JocondeLabBundle:Notice:notice }

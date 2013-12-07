@@ -8,7 +8,6 @@ use Doctrine\ORM\QueryBuilder;
 class CoreNoticeRepository extends EntityRepository {
 
     public function findByNotice($search, $terms, $nbTerm) {
-        
         switch ($nbTerm) {
             case '0': $max = 30; break;
             case '1': $max = 30; break;

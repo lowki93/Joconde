@@ -10,15 +10,21 @@ button
     width: 1000px
 
 .question
+    color: $pink
     min-width: 100px
-    width: 190px
+    width: 180px
     text-transform: uppercase
     p
-        font-size: 3em
+        font-family: 'BebasNeue'
+        font-size: 4em
     button
+        text-transform: uppercase
         margin-left: 5px
         &:hover
-            color: red
+            color: $pink
+
+.question-button
+    margin-top: 5px
 
 .item
     margin:
@@ -36,13 +42,42 @@ button
     height: auto
     position: absolute
     bottom: 3px
+    padding: 5px
     right: 0
-    background-color: red
+    text-align: right
+    background-color: rgba(255, 255, 255, 0.5)
     p
+        font-style: italic
         text-align: right
         text-transform: capitalize
+    hr
+        width: 40px
+        margin:
+            top: 0
+            right: 0
+            bottom: 0
+        height: 10px
+        border: 0
+        background-color: $blue
     button
-        position: absolute
+        float: left
+        display: inline-block
+        font-size: 1.5em
+        color: #fff
+        &:hover
+            color: $pink
+
+.item-domain
+    display: inline-block
+    font-family: 'BebasNeue'
+    color: $blue
+    font-size: 1.5em
+    font-style: none
+    float: right
+
+.item-hover-bottom
+    width: 100%
+    position: relative
 
 .notice-hover
     width: 400px
@@ -53,3 +88,7 @@ button
     top: 0
     img
         width: 60%
+
+@media screen and (max-width: 1600px )
+    .notice-hover
+        display: none
