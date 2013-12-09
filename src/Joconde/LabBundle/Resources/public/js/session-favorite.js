@@ -2,7 +2,7 @@ $(document).ready(function(){
     $(window).load(function(){
         var $container = $('.page-list');
         $("img").each(function(){
-            if(  $(this).height() > $(this).width() ){
+            if(  $(this)[0].naturalHeight > $(this)[0].naturalWidth ){
                 $(this).addClass("imgHeight");
             } else {
                 $(this).addClass("imgWidth");
@@ -88,19 +88,32 @@ $(document).on("click", ".btn-question", function(){
             complete: function(content){
                 var $container = $(".page-list");
                 var response = content.responseJSON.content;
-                // $container.html(response).
-                // $("img").each(function(){
-                //     if(  $(this).height() > $(this).width() ){
-                //         console.log("height : "+$(this).height()+" ; width : "+$(this).width()+" ; imgHeight");
-                //         $(this).addClass("imgHeight");
-                //     } else {
-                //         console.log("height : "+$(this).height()+" ; width : "+$(this).width()+" ; imgWidth");
-                //         $(this).addClass("imgWidth");
-                //     }
-                // });
-                // $container.imagesLoaded(function(){
-                //     $container.masonry('reloadItems');
-                // });            }
+
+                $container.html(response);
+
+                $container.masonry( 'destroy' );
+
+                $("img").imagesLoaded(function(){
+                    $("img").each(function(){
+                        if( $(this)[0].naturalHeight > $(this)[0].naturalWidth ){
+                            $(this).addClass("imgHeight");
+                        } else {
+                            $(this).addClass("imgWidth");
+                        }
+                        console.log("toto");
+                    });
+
+                    $container.imagesLoaded( function() {
+                        console.log("masonry");
+                        $container.masonry({
+                            isAnimated: true,
+                            gutter: 10,
+                            columnWidth: 10,
+                            itemSelector: '.item',
+                        });
+                    });
+                });
+            }
         });
     }
 });
