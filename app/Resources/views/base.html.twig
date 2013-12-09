@@ -18,22 +18,37 @@
             {% endstylesheets %}
         {% endblock %}
     </head>
-    <body {% block onload %}{% endblock %} >
+    <body>
         <div class="container">
             <div class="mp-pusher" id="mp-pusher">
                 <nav id="mp-menu" class="mp-menu">
                     <div class="mp-level">
                         <p>MENU</p>
                         <ul>
-                            <li><a href="{{path('joconde_lab_homepage')}}"><i class="glyphicon glyphicon-search"></i>NOUVELLE RECHERCHE</a></li>
-                            <li><a href="{{path('favorite_notice')}}"><i class="glyphicon glyphicon-eye-open"></i>A VOIR PLUS TARD</a></li>
-                            <li><a href="#"><i class="glyphicon glyphicon-exclamation-sign"></i>A PROPOS</a></li>
+                            <li>
+                                <a href="{{path('joconde_lab_homepage')}}">
+                                    <i class="picto_newrecherche"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{path('favorite_notice')}}">
+                                    <i class="picto_selection"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="picto_apropos"></i>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </nav>
                 <div class="scroller">
                     <div class="header">
-                        <a href="#" id="trigger"><i class="glyphicon glyphicon-align-justify myGlyphicon"></i></a>
+                        <a href="#" id="trigger">
+                            <i class="picto_menu"></i>
+                            {# <img src="/images/picto_menu.png" width="32px" height="32px"/> #}
+                        </a>
                         <p class="title-page">{% block search %}{% endblock %}</p>
                     </div>
                     <div class="page">

@@ -1,7 +1,7 @@
 $(document).ready(function(){ 
-    $(window).load(function(){
-        var $container = $('.page-list');
-        $("img").each(function(){
+    var $container = $('.page-list');
+    $container.imagesLoaded(function(){
+        $container.find("img").each(function(){
             if(  $(this)[0].naturalHeight > $(this)[0].naturalWidth ){
                 $(this).addClass("imgHeight");
             } else {
@@ -18,44 +18,84 @@ $(document).ready(function(){
             });
         });
     });
+});
 
-    // add to favorite
-    $(".btn-favorite").click(function(){
-        $.ajax({
-            url: Routing.generate('add_favorite_notice'),
-            dataType: "json",
-            data: {
-                param: $(this).val()
-            },
-            success: function(message){
-                console.log(message);
-            }
-        });
-    });
-
-    // image hover
-    $("img").hover(function() {
-        $img = $(this);
-        $.ajax({
-            url: Routing.generate('notice_hover'),
-            dataType: "json",
-            data: {
-                id: $img.attr("alt")
-            },
-            complete: function(data){
-                var image = /^[^;]*/i.exec(data.responseJSON[0].video);
-                var response = " auteur : "+data.responseJSON[0].autr+"<br />"
-                    +'<img src="http://www.culture.gouv.fr/Wave/image/joconde'+image[0]+'"/>';
-                $('.notice-hover').html(response);
-            }
-        });
-    }
-    , function() {
-        $('.notice-hover').text("");
+// add to favorite
+$(".session").click(function(){
+    $.ajax({
+        url: Routing.generate('add_favorite_notice'),
+        dataType: "json",
+        data: {
+            param: $(this).val()
+        },
+        success: function(message){
+            console.log(message);
+        }
     });
 });
 
-    
+// image hover
+$("img").hover(function() {
+    $img = $(this);
+    $.ajax({
+        url: Routing.generate('notice_hover'),
+        dataType: "json",
+        data: {
+            id: $img.attr("alt")
+        },
+        complete: function(data){
+            var image = /^[^;]*/i.exec(data.responseJSON[0].video);
+            var response = " auteur : "+data.responseJSON[0].autr+"<br />"
+                +'<img src="http://www.culture.gouv.fr/Wave/image/joconde'+image[0]+'"/>';
+            $('.notice-hover').html(response);
+        }
+    });
+}
+, function() {
+    $('.notice-hover').text("");
+});
+
+// Bouton see
+$('.see').hover(function() {
+    var $button = $(this).find('i');
+    $button.removeClass("picto_oeil");
+    $button.addClass("picto_oeil_hover");
+}
+, function() {
+    var $button = $(this).find('i');
+    $button.removeClass("picto_oeil_hover");
+    $button.addClass("picto_oeil");
+});
+
+// Bouton session
+$('.session').hover(function() {
+    var $button = $(this).find('i');
+    $button.removeClass("picto_ajouter");
+    $button.addClass("picto_ajouter_hover");
+}
+, function() {
+    var $button = $(this).find('i');
+    $button.removeClass("picto_ajouter_hover");
+    $button.addClass("picto_ajouter");
+});
+   
+// BUTTON SEE NOTICE
+$(document).on("click", ".see", function(){
+    var result = $(this).val();
+    $.ajax({
+        url: Routing.generate('notice_id'),
+        dataType: "json",
+        data: {
+            param: result
+        },
+        complete: function(content){
+            console.log(content.responseJSON.content);
+        }
+    });
+
+});
+
+// NEW QUESTION 
 $(document).on("click", ".btn-question", function(){
     // change question
     var result = $(this).val();
@@ -79,32 +119,40 @@ $(document).on("click", ".btn-question", function(){
             }
         });
     } else {
+        var newSearch = $(this).val();
         $.ajax({
             url: Routing.generate('change_question_good'),
             dataType: "json",
             data: {
-                answer: $(this).val()
+                answer: newSearch
             },
             complete: function(content){
                 var $container = $(".page-list");
                 var response = content.responseJSON.content;
+                var search = $(".title-page").text();
+
+                var splitResponse = newSearch.split(",");
+                var newQuestion = splitResponse[0];
+
+                search += " "+newQuestion;
+                console.log(search);
+
+                $(".title-page").html(search);
 
                 $container.html(response);
 
                 $container.masonry( 'destroy' );
 
-                $("img").imagesLoaded(function(){
-                    $("img").each(function(){
+                $container.imagesLoaded(function(){
+                    $container.find("img").each(function(){
                         if( $(this)[0].naturalHeight > $(this)[0].naturalWidth ){
                             $(this).addClass("imgHeight");
                         } else {
                             $(this).addClass("imgWidth");
                         }
-                        console.log("toto");
                     });
 
                     $container.imagesLoaded( function() {
-                        console.log("masonry");
                         $container.masonry({
                             isAnimated: true,
                             gutter: 10,

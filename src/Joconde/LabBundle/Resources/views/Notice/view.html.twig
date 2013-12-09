@@ -3,30 +3,17 @@
 {% block title %} notice {% endblock %}
 
 {% block body %}
-
-    ref : {{notice.ref}} <br /><br />
-
-    <h1>Terms</h1> 
-    <br />
-    {% for term in notice.terms %}
-        {{term.id}} : {{term.label}}, thesaurus : {{term.thesaurus.label}}, {{term.thesaurus.id}}<br />
-    {% else %}
-        il n'y a pas de terms
-    {% endfor %}
-
-    <br /><br />
-    <h1>Images</h1>
-    <br />
-    {% for image in notice.noticeImage|slice(0,1) %}
-        <img src="http://www.culture.gouv.fr/Wave/image/joconde{{image.relativeUrl}}" />
-    {% else %}
-        il n'y a pas d'images
-    {% endfor %}
+    <p>{{notice.titr}}</p>
     <div>
         <ul class="autr">
 
         </ul>
     </div>
+     {% for image in notice.noticeImage|slice(0,1) %}
+        <img src="http://www.culture.gouv.fr/Wave/image/joconde{{image.relativeUrl}}" />
+    {% else %}
+        il n'y a pas d'images
+    {% endfor %}
 {% endblock %}
 
 {% block javascripts %}

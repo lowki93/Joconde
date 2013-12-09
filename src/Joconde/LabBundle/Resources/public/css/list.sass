@@ -10,14 +10,16 @@ button
     width: 1000px
 
 .question
-    color: $pink
     min-width: 100px
     width: 180px
     text-transform: uppercase
     p
+        color: $blue
         font-family: 'BebasNeue'
         font-size: 4em
     button
+        font-size: 1.5em
+        font-family: 'BebasNeue'
         text-transform: uppercase
         margin-left: 5px
         &:hover
@@ -38,7 +40,7 @@ button
     width: 390px
 
 .item-hover
-    width: auto
+    width: 100%
     height: auto
     position: absolute
     bottom: 3px
@@ -47,30 +49,31 @@ button
     text-align: right
     background-color: rgba(255, 255, 255, 0.5)
     p
+        font-size: 1.4em
+        color: $black
         font-style: italic
         text-align: right
         text-transform: capitalize
+        &:nth-child(1)
+            font-family: 'AGaramondProRegular'
+        &:nth-child(2)
+            font-family: 'AGaramondProItalic'
     hr
-        width: 40px
+        width: 30px
         margin:
-            top: 0
+            top: 2px
             right: 0
-            bottom: 0
-        height: 10px
+            bottom: 2px
+        height: 5px
         border: 0
         background-color: $blue
     button
         float: left
-        display: inline-block
-        font-size: 1.5em
-        color: #fff
-        &:hover
-            color: $pink
-
+        
 .item-domain
     display: inline-block
     font-family: 'BebasNeue'
-    color: $blue
+    color: $pink
     font-size: 1.5em
     font-style: none
     float: right

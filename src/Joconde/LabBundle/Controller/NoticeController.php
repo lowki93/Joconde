@@ -142,6 +142,19 @@ class NoticeController extends Controller
 
     public function noticeAction($id)
     {
+        // $request = $this->container->get('request');
+ 
+        // if($request->isXmlHttpRequest())
+        // {
+        //     // get title sent ($_GET)
+        //     $id = $request->query->get('param');
+        //     $em = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice');
+        //     $notice = $em->find($id);
+
+        //     $response['content'] = $this->renderView('JocondeLabBundle:Notice:view.html.twig', array("notice" => $notice));
+
+        //     return new JsonResponse($response);
+        // }
         $em = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice');
         $notice = $em->find($id);
         return $this->render('JocondeLabBundle:Notice:view.html.twig', array("notice" => $notice));

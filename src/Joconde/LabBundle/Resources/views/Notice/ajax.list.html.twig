@@ -22,7 +22,12 @@
             {% endfor %}
             <hr />
             <div class="item-hover-bottom">
-                <button class="btn-favorite" value="{{notice.id}}"><i class="glyphicon glyphicon-eye-open"></i></button>
+                <button class="btn-favorite see" value="{{notice.id}}">
+                    <i class="picto_oeil"></i>
+                </button>
+                <button class="btn-favorite session" value="{{notice.id}}">
+                    <i class="picto_ajouter"></i>
+                </button>
                 {% set domns = notice.domn | split(';') %}
                 {% for domn in domns | slice(0,1)%}
                     {% set dom = domn | split('(') %}
