@@ -1,11 +1,21 @@
-{% if Favoris is defined %}{% else %}
-    <div class="item question">
-        <p>est-ce une pein-ture ?</p>
-        <div class="question-button">
-            <button class="btn-question" value="peinture,yes">oui</button><button class="btn-question" value="no">non</button><button class="btn-question" value="none">ne sais pas</button>
+{% if notices %}
+    {% if Favoris is defined %}{% else %}
+        <div class="item question">
+            {% set newQuestion = question | split(',') %}
+            {% for simpleQuestion in newQuestion | slice(0,1)%}
+                <p>{{simpleQuestion}} ?</p>
+            {% endfor %}
+            <div class="question-button">
+            {% for simpleQuestion in newQuestion | slice(1,2)%}
+                <button class="btn-question" value="{{simpleQuestion}},yes">oui</button>
+            {% endfor %}
+                <button class="btn-question" value="no">non</button>
+                <button class="btn-question" value="none">ne sais pas</button>
+            </div>
         </div>
-    </div>
+    {% endif %}
 {% endif %}
+
 {% for notice in notices %}
     <div class="item">
         <div>
@@ -43,5 +53,11 @@
         </div>
     </div>
 {% else %}
-    il n'y a pas de notices
+    <p class="nothing">
+        {% if Favoris is defined %}
+            aucune notice en favoris
+        {% else %}
+            aucun résultat
+        {% endif %}
+    </p>
 {% endfor %}

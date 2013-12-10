@@ -141,7 +141,7 @@ $(document).on("click", ".btn-question", function(){
                 var splitResponse = newSearch.split(",");
                 var newQuestion = splitResponse[0];
 
-                search += " "+newQuestion;
+                search += "."+newQuestion;
                 console.log(search);
 
                 $(".title-page").html(search);

@@ -16,7 +16,7 @@ class NoticeController extends Controller
 
     public function getQuestion($i)
     {
-        $question = array("est-ce une pein-ture", "est-ce un tableau,tableau");
+        $question = array("est-ce une pein-ture,tableau", "est-ce un tableau,tableau", "ce tableau a t-il été réalisé par de vinci,leonard de vinci");
         return $question[$i];
     }
 
@@ -38,8 +38,11 @@ class NoticeController extends Controller
 
                 $notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($search, $terms, $nbTerm);
 
+                $question = $this->getQuestion(0);
+
                 return $this->render('JocondeLabBundle:Notice:list.html.twig',
-                    array('notices' => $notices,
+                    array('question' => $question,
+                        'notices' => $notices,
                         'search' => $search));
             } 
         }
@@ -112,9 +115,14 @@ class NoticeController extends Controller
             $terms = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus($term);
 
             $nbTerm = count($terms);
+
             $notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($term, $terms, $nbTerm);
+
+            $question = $this->getQuestion(2);
+
             $response['content'] = $this->renderView('JocondeLabBundle:Notice:ajax.list.html.twig',
-                                    array('notices' => $notices,
+                                    array('question' => $question,
+                                        'notices' => $notices,
                                         'search' => $term));
 
             return new JsonResponse($response);
