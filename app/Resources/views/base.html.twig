@@ -26,17 +26,17 @@
                         <p>MENU</p>
                         <ul>
                             <li>
-                                <a href="{{path('joconde_lab_homepage')}}">
+                                <a href="{{path('joconde_lab_homepage')}}" class="menu-newsearch">
                                     <i class="picto_newrecherche"></i>
                                 </a>
                             </li>
                             <li>
-                                <a href="{{path('favorite_notice')}}">
+                                <a href="{{path('favorite_notice')}}" class="menu-selection">
                                     <i class="picto_selection"></i>
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="#" class="menu-apropos">
                                     <i class="picto_apropos"></i>
                                 </a>
                             </li>
@@ -68,12 +68,10 @@
             '@JocondeLabBundle/Resources/public/js/mlpushmenu.js'
             '@JocondeLabBundle/Resources/public/js/masonry.js'
             '@JocondeLabBundle/Resources/public/js/imageLoad.js'
+            '@JocondeLabBundle/Resources/public/js/main.js'
         %}
             <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
         {% block javascripts %}{% endblock %}
-        <script>
-            new mlPushMenu( document.getElementById( 'mp-menu' ), document.getElementById( 'trigger' ) );
-        </script>
     </body>
 </html>
