@@ -1,16 +1,18 @@
-<div class="item question">
-    <p>est-ce une pein-ture ?</p>
-    <div class="question-button">
-        <button class="btn-question" value="peinture,yes">oui</button><button class="btn-question" value="no">non</button><button class="btn-question" value="none">ne sais pas</button>
+{% if Favoris is defined %}{% else %}
+    <div class="item question">
+        <p>est-ce une pein-ture ?</p>
+        <div class="question-button">
+            <button class="btn-question" value="peinture,yes">oui</button><button class="btn-question" value="no">non</button><button class="btn-question" value="none">ne sais pas</button>
+        </div>
     </div>
-</div>
+{% endif %}
 {% for notice in notices %}
     <div class="item">
-        <a href="{{path('notice_id', {'id': notice.id}) }}">
+        <div>
             {% for image in notice.noticeImage|slice(0,1) %}
                 <img src="http://www.culture.gouv.fr/Wave/image/joconde{{image.relativeUrl}}" alt="{{notice.id}}" />
             {% endfor %}
-        </a>
+        </div>
         <div class="item-hover">
             <p>{{notice.titr | lower | truncate(10, true, ' ...') }}</p>
             {% set authors = notice.autr | split(';') %}
@@ -25,9 +27,11 @@
                 <button class="btn-favorite see" value="{{notice.id}}">
                     <i class="picto_oeil"></i>
                 </button>
-                <button class="btn-favorite session" value="{{notice.id}}">
-                    <i class="picto_ajouter"></i>
-                </button>
+                {% if Favoris is defined %}{% else %}
+                    <button class="btn-favorite session" value="{{notice.id}}">
+                        <i class="picto_ajouter"></i>
+                    </button>
+                {% endif %}
                 {% set domns = notice.domn | split(';') %}
                 {% for domn in domns | slice(0,1)%}
                     {% set dom = domn | split('(') %}

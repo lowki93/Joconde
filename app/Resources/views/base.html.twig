@@ -47,9 +47,9 @@
                     <div class="header">
                         <a href="#" id="trigger">
                             <i class="picto_menu"></i>
-                            {# <img src="/images/picto_menu.png" width="32px" height="32px"/> #}
                         </a>
                         <p class="title-page">{% block search %}{% endblock %}</p>
+                        {% block logo %}<img src="/images/logo1.png" alt="logo" height="50px"/>{% endblock %}
                     </div>
                     <div class="page">
                         {% block body %}{% endblock %}

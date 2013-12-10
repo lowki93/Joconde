@@ -21,7 +21,7 @@ $(document).ready(function(){
 });
 
 // add to favorite
-$(".session").click(function(){
+$(document).on("click", ".session", function(){
     $.ajax({
         url: Routing.generate('add_favorite_notice'),
         dataType: "json",
@@ -32,52 +32,59 @@ $(".session").click(function(){
             console.log(message);
         }
     });
+
 });
 
 // image hover
-$("img").hover(function() {
-    $img = $(this);
-    $.ajax({
-        url: Routing.generate('notice_hover'),
-        dataType: "json",
-        data: {
-            id: $img.attr("alt")
-        },
-        complete: function(data){
-            var image = /^[^;]*/i.exec(data.responseJSON[0].video);
-            var response = " auteur : "+data.responseJSON[0].autr+"<br />"
-                +'<img src="http://www.culture.gouv.fr/Wave/image/joconde'+image[0]+'"/>';
-            $('.notice-hover').html(response);
-        }
-    });
-}
-, function() {
-    $('.notice-hover').text("");
-});
+$(document).on({
+    mouseenter: function() {
+        $img = $(this);
+        $.ajax({
+            url: Routing.generate('notice_hover'),
+            dataType: "json",
+            data: {
+                id: $img.attr("alt")
+            },
+            complete: function(data){
+                var image = /^[^;]*/i.exec(data.responseJSON[0].video);
+                var response = " auteur : "+data.responseJSON[0].autr+"<br />"
+                    +'<img src="http://www.culture.gouv.fr/Wave/image/joconde'+image[0]+'"/>';
+                $('.notice-hover').html(response);
+            }
+        });
+    },
+    mouseleave: function() {
+        $('.notice-hover').text("");
+    }
+}, '.page-list img');
 
 // Bouton see
-$('.see').hover(function() {
-    var $button = $(this).find('i');
-    $button.removeClass("picto_oeil");
-    $button.addClass("picto_oeil_hover");
-}
-, function() {
-    var $button = $(this).find('i');
-    $button.removeClass("picto_oeil_hover");
-    $button.addClass("picto_oeil");
-});
+$(document).on({
+    mouseenter: function() {
+        var $button = $(this).find('i');
+        $button.removeClass("picto_oeil");
+        $button.addClass("picto_oeil_hover");
+    },
+    mouseleave: function() {
+        var $button = $(this).find('i');
+        $button.removeClass("picto_oeil_hover");
+        $button.addClass("picto_oeil");
+    }
+}, '.see');
 
 // Bouton session
-$('.session').hover(function() {
-    var $button = $(this).find('i');
-    $button.removeClass("picto_ajouter");
-    $button.addClass("picto_ajouter_hover");
-}
-, function() {
-    var $button = $(this).find('i');
-    $button.removeClass("picto_ajouter_hover");
-    $button.addClass("picto_ajouter");
-});
+$(document).on({
+    mouseenter: function() {
+        var $button = $(this).find('i');
+        $button.removeClass("picto_ajouter");
+        $button.addClass("picto_ajouter_hover");
+    },
+    mouseleave: function() {
+        var $button = $(this).find('i');
+        $button.removeClass("picto_ajouter_hover");
+        $button.addClass("picto_ajouter");
+    }
+}, '.session');
    
 // BUTTON SEE NOTICE
 $(document).on("click", ".see", function(){

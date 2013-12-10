@@ -11,25 +11,43 @@
     </script>
 {% endblock %}
 
-{% block search %}
-    {{search}}
+ {% block search %}
+    {% if Favoris is defined %}
+    {% else %}
+        {{search}}
+    {% endif %}
+{% endblock %}
+
+{% block logo %}
+    {% if Favoris is defined %}
+         <img src="/images/logo1.png" alt="logo" height="50px"/>
+    {% else %}
+        <img src="/images/logo2.png" alt="logo" height="50px"/>
+    {% endif %}
 {% endblock %}
 
 {% block body %}
+    {% if Favoris is defined %}
+        <div class="page-title">
+            <h3>votre sélection</h3>
+        </div>
+    {% else %}
+    {% endif %}
     <div class="page-list">
         {% include 'JocondeLabBundle:Notice:ajax.list.html.twig' %}
     </div>
 {% endblock %}
 
 {% block hoverNotice %}
-    <div class="notice-hover">
-    </div>
+    {% if Favoris is defined %}{% else %}
+        <div class="notice-hover"></div>
+    {% endif %}
 {% endblock %}
 
 {% block javascripts %}
-        {% javascripts
-            '@JocondeLabBundle/Resources/public/js/session-favorite.js'
-        %}
-            <script src="{{ asset_url }}"></script>
-        {% endjavascripts %}
+    {% javascripts
+        '@JocondeLabBundle/Resources/public/js/session-favorite.js'
+    %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}
