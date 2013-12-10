@@ -6,9 +6,6 @@
         filter="cssrewrite,sass" output='css/list.css' %}
            <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
     {% endstylesheets %}
-    <script>
-        
-    </script>
 {% endblock %}
 
  {% block search %}
@@ -33,9 +30,13 @@
         </div>
     {% else %}
     {% endif %}
-    <div class="page-list">
-        {% include 'JocondeLabBundle:Notice:ajax.list.html.twig' %}
-    </div>
+        <div class="margin-container">
+            <div class="page-container">
+                <div class="page-list">
+                    {% include 'JocondeLabBundle:Notice:ajax.list.html.twig' %}
+                </div>
+            </div>
+        </div>
 {% endblock %}
 
 {% block hoverNotice %}

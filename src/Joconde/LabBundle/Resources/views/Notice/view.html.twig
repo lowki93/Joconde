@@ -1,9 +1,24 @@
 {% extends '::base.html.twig' %}
 
+{% block stylesheets %}
+    {% stylesheets
+        '@JocondeLabBundle/Resources/Public/css/list.sass'
+        filter="cssrewrite,sass" output='css/list.css' %}
+           <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+    {% endstylesheets %}
+{% endblock %}
+
 {% block title %} notice {% endblock %}
 
 {% block body %}
-    <p>{{notice.titr}}</p>
+    <p>titre : {{notice.titr}}</p><br />
+    {% set authors = notice.autr | split(';') %}
+    {% for author in authors | slice(0,1)%}
+        {% set aut = author | split('(') %}
+        {% for autdef in aut | slice(0,1)%}
+            <p>auteur : {{ autdef | lower }}</p><br />
+        {% endfor %}
+    {% endfor %}
     <div>
         <ul class="autr">
 
