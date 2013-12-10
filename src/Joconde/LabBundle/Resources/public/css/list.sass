@@ -28,8 +28,12 @@ button
     margin-right: 50px
     display: inline-block
     min-height: 200px
-    background-color: red
+    opacity: 0
     vertical-align: top
+    &.active
+        .question
+            button:hover
+                color: $pink
 
 .question
     min-width: 100px
@@ -44,8 +48,7 @@ button
         font-family: 'BebasNeue'
         text-transform: uppercase
         margin-left: 5px
-        &:hover
-            color: $pink
+
 
 .question-button
     margin-top: 5px

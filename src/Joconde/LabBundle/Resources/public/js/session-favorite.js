@@ -1,5 +1,12 @@
+var $page = $(".page-container");
+var simpleWidth = $page.width();
+
+// for retour
+var i=0;
+
 $(document).ready(function(){
     var $container = $('.page-list');
+    $container.addClass("active");
     $container.imagesLoaded(function(){
         $container.find("img").each(function(){
             if(  $(this)[0].naturalHeight > $(this)[0].naturalWidth ){
@@ -17,11 +24,15 @@ $(document).ready(function(){
                 itemSelector: '.item',
             });
         });
+
+        $container.animate({
+            opacity: 1,
+        }, 1000);
     });
 });
 
 // add to favorite
-$(document).on("click", ".session", function(){
+$(document).on("click", ".page-list.active .session", function(){
     $.ajax({
         url: Routing.generate('add_favorite_notice'),
         dataType: "json",
@@ -56,7 +67,7 @@ $(document).on({
     mouseleave: function() {
         $('.notice-hover').text("");
     }
-}, '.page-list img');
+}, '.page-list.active img');
 
 // Bouton see
 $(document).on({
@@ -70,7 +81,7 @@ $(document).on({
         $button.removeClass("picto_oeil_hover");
         $button.addClass("picto_oeil");
     }
-}, '.see');
+}, '.page-list.active .see');
 
 // Bouton session
 $(document).on({
@@ -84,10 +95,10 @@ $(document).on({
         $button.removeClass("picto_ajouter_hover");
         $button.addClass("picto_ajouter");
     }
-}, '.session');
+}, '.page-list.active .session');
    
 // BUTTON SEE NOTICE
-$(document).on("click", ".see", function(){
+$(document).on("click", ".page-list.active .see", function(){
     var result = $(this).val();
     $.ajax({
         url: Routing.generate('notice_id'),
@@ -103,7 +114,7 @@ $(document).on("click", ".see", function(){
 });
 
 // NEW QUESTION 
-$(document).on("click", ".btn-question", function(){
+$(document).on("click", ".page-list.active .btn-question", function(){
     // change question
     var result = $(this).val();
     if(result == "none" || result == "no" ) {
@@ -114,21 +125,21 @@ $(document).on("click", ".btn-question", function(){
                 answer: $(this).val()
             },
             complete: function(question){
-                $('.question').fadeOut(500,function(){
+                $('.page-list.active .question').fadeOut(500,function(){
                     var responseQuestion = question.responseJSON.question;
                     var splitResponse = responseQuestion.split(",");
                     var newQuestion = splitResponse[0];
                     var typeQuestion = splitResponse[1];
                     var response = '<p>'+newQuestion+' ?</p><button class="btn-question" value="'+typeQuestion+',yes">oui</button><button class="btn-question" value="no">non</button><button class="btn-question" value="none">ne sais pas</button>'
-                    $('.question').html(response);
-                    $('.question').fadeIn(500);
+                    $('.page-list.active .question').html(response);
+                    $('.page-list.active .question').fadeIn(500);
                 });
             }
         });
     } else {
         var newSearch = $(this).val();
         var $page = $(".page-container");
-        newWidth = $page.width() + 1055;
+        newWidth = $page.width()+simpleWidth+5;
         $page.css("width", newWidth);
         var div = $('<div class="page-list"></div>');
 
@@ -141,22 +152,24 @@ $(document).on("click", ".btn-question", function(){
                 answer: newSearch
             },
             complete: function(content){
-                var $container = $(".page-list:last-child");
+                i++;
                 
+                $('.page-list').removeClass('active');
+
+                var $container = $(".page-list:last-child");
+                $container.addClass('active');
                 var response = content.responseJSON.content;
 
-                var search = $(".title-page").text();
+                var search = $(".title-page").html();
 
                 var splitResponse = newSearch.split(",");
                 var newQuestion = splitResponse[0];
 
-                search += "."+newQuestion;
+                search += ".<a href='#' value='-"+i*simpleWidth+"'>"+newQuestion+"</a>";
 
                 $(".title-page").html(search);
 
                 $container.html(response);
-
-                //$container.masonry( 'destroy' );
 
                 $container.imagesLoaded(function(){
                     $container.find("img").each(function(){
@@ -177,17 +190,40 @@ $(document).on("click", ".btn-question", function(){
                     });
                 });
 
-                var newLeft = $page.position().left-1050;
+                var newLeft = $page.position().left-simpleWidth;
                 
                 $page.animate({
                     left: newLeft,
+                }, 1000);
+
+                $container.animate({
                     opacity: 1,
-                }, 2000, function() {
+                }, 1000);
 
-                });
-
-                $page.css("left", newLeft);
+                $(".page-list:nth-last-child(2)").animate({
+                    opacity: 0.5,
+                }, 1000);
             }
         });
     }
+});
+
+$(document).on("click", ".title-page a", function(){
+    var transition = $(this).attr("value");
+    $page.animate({
+        left: transition,
+    }, 1000);
+
+    $(".page-list.active").animate({
+        opacity: 0.5,
+    }, 1000);
+
+    $('.page-list').removeClass('active');
+
+    var aIdx = $('.title-page a').index($(this));
+    $('.page-list').eq(aIdx).addClass('active');
+
+    $(".page-list.active").animate({
+        opacity: 1,
+    }, 1000);
 });
