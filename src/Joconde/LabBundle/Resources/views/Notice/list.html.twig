@@ -17,9 +17,9 @@
 
 {% block logo %}
     {% if Favoris is defined %}
-         <img src="/images/logo1.png" alt="logo" height="50px"/>
+         <img src="{{ asset('bundles/jocondelab/images/logo1.png') }}" alt="logo" height="50px"/>
     {% else %}
-        <img src="/images/logo2.png" alt="logo" height="50px"/>
+        <img src="{{ asset('bundles/jocondelab/images/logo2.png') }}" alt="logo" height="50px"/>
     {% endif %}
 {% endblock %}
 

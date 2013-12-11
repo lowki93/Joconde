@@ -137,10 +137,18 @@ $(document).on("click", ".page-list.active .btn-question", function(){
                     var response = '<p>'+newQuestion+' ?</p><button class="btn-question" value="'+typeQuestion+',yes">oui</button><button class="btn-question" value="no">non</button><button class="btn-question" value="none">ne sais pas</button>'
                     $('.page-list.active .question').html(response);
                     $('.page-list.active .question').fadeIn(500);
+                    $('.page-list.active .question').css('display', 'inline')
+                    $('.page-list.active').masonry({
+                        isAnimated: true,
+                        gutter: 10,
+                        columnWidth: 10,
+                        itemSelector: '.item',
+                    });
                 });
             }
         });
     } else {
+        $('.loader').css("display", "-webkit-flex");
         var nbDiv = $('.page-list').length;
         var index = $('.page-list').index($('.page-list.active'))
 
@@ -211,6 +219,8 @@ $(document).on("click", ".page-list.active .btn-question", function(){
                 });
 
                 var newLeft = $page.position().left-simpleWidth;
+
+                $('.loader').css("display", "none");
 
                 $(".page-list.active").animate({
                     opacity: 0.5,

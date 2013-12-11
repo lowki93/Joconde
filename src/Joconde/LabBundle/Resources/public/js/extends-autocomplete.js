@@ -36,3 +36,7 @@ $(document).ready(function() {
         }
     });
 });
+
+$("form").submit(function(){
+    $('.loader').css("display", "-webkit-flex");
+})
