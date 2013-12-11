@@ -23,21 +23,51 @@ class CoreNoticeRepository extends EntityRepository {
         $noticeArray = array();
         $qb = $this->createQueryBuilder('cn');
 
-        if(0 === $nbTerm) {
-            $qb->where($qb->expr()->like("lower(cn.titr)", ':s'))
-                ->setParameter("s", '%'.$search.'%')
-                ->andWhere("cn.image = 'true'");
+        if(is_array($search)) {
+            foreach ($search as $word) {
+                $or = $qb->expr()->orX();
+                foreach ($terms as $term) {
+                    $thesaurusLabel = $term['label'];
+                    $thesaurusLabel = strtolower($thesaurusLabel);
+                    $thesaurusLabel = "cn.".$thesaurusLabel;
+                    
+                    $or->add($qb->expr()->like("lower($thesaurusLabel)", '\'%'.$word.'%\''));
+                }
+                $qb->andWhere($or);
+            }
 
-            return $noticeArray = $qb->getQuery()->getResult();
-        }
-        else {
+            $qb->andWhere("cn.image = 'true'")
+                    ->setMaxResults(30);
+            
+            // var_dump($qb->getQuery()->getDql());
+            
+            $noticeArray = $qb->getQuery()->getResult();
+        } else {
+            if(0 === $nbTerm) {
+                $qb->where($qb->expr()->like("lower(cn.titr)", ':s'))
+                    ->setParameter("s", '%'.$search.'%')
+                    ->andWhere("cn.image = 'true'");
 
-            for ($i=0; $i < $nbTerm; $i++) {
-                $thesaurusLabel = $terms[$i]['label'];
-                $thesaurusLabel = strtolower($thesaurusLabel);
-                $thesaurusLabel = "cn.".$thesaurusLabel;
+                return $noticeArray = $qb->getQuery()->getResult();
+            }
+            else {
 
-                $qb->where($qb->expr()->like("lower($thesaurusLabel)", ':s'))
+                for ($i=0; $i < $nbTerm; $i++) {
+                    $thesaurusLabel = $terms[$i]['label'];
+                    $thesaurusLabel = strtolower($thesaurusLabel);
+                    $thesaurusLabel = "cn.".$thesaurusLabel;
+
+                    $qb->where($qb->expr()->like("lower($thesaurusLabel)", ':s'))
+                        ->andWhere("cn.image = 'true'")
+                        ->setMaxResults($max)
+                        ->setParameter("s", '%'.$search.'%');
+
+                    $notice = $qb->getQuery()->getResult();
+                    $noticeArray = array_merge($noticeArray, $notice);
+
+                }
+
+                $qb->where($qb->expr()->like("lower(cn.titr)", ':s'))
                     ->andWhere("cn.image = 'true'")
                     ->setMaxResults($max)
                     ->setParameter("s", '%'.$search.'%');
@@ -46,17 +76,8 @@ class CoreNoticeRepository extends EntityRepository {
                 $noticeArray = array_merge($noticeArray, $notice);
 
             }
-
-            $qb->where($qb->expr()->like("lower(cn.titr)", ':s'))
-                ->andWhere("cn.image = 'true'")
-                ->setMaxResults($max)
-                ->setParameter("s", '%'.$search.'%');
-
-            $notice = $qb->getQuery()->getResult();
-            $noticeArray = array_merge($noticeArray, $notice);
-
         }
-
+        
         return $noticeArray;
 
     }  

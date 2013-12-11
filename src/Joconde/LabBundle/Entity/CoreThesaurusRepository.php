@@ -20,3 +20,15 @@ class CoreThesaurusRepository extends EntityRepository {
     }  
 
 }
+
+// if(is_array($search)) {
+//     foreach ($search as $key=>$term) { 
+//         $qb ->where('ct.thesaurus = cth')
+//             ->orWhere($qb->expr()->like("lower(ct.label)", ':s'.$key))
+//             ->setParameter('s'.$key , '%'.$term.'%');
+//     }
+// } else {
+//     $qb ->where('ct.thesaurus = cth')
+//         ->andWhere($qb->expr()->like("lower(ct.label)", ':s'))
+//         ->setParameter('s' , '%'.$search.'%');
+// }

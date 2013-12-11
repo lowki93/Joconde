@@ -3,8 +3,12 @@ var simpleWidth = $page.width();
 
 // for retour
 var i=0;
+var search = [];
 
 $(document).ready(function(){
+    var fisrtSearch = $(".title-page a").text();
+    search.push(fisrtSearch);
+
     var $container = $('.page-list');
     $container.addClass("active");
     $container.imagesLoaded(function(){
@@ -47,27 +51,27 @@ $(document).on("click", ".page-list.active .session", function(){
 });
 
 // image hover
-$(document).on({
-    mouseenter: function() {
-        $img = $(this);
-        $.ajax({
-            url: Routing.generate('notice_hover'),
-            dataType: "json",
-            data: {
-                id: $img.attr("alt")
-            },
-            complete: function(data){
-                var image = /^[^;]*/i.exec(data.responseJSON[0].video);
-                var response = " auteur : "+data.responseJSON[0].autr+"<br />"
-                    +'<img src="http://www.culture.gouv.fr/Wave/image/joconde'+image[0]+'"/>';
-                $('.notice-hover').html(response);
-            }
-        });
-    },
-    mouseleave: function() {
-        $('.notice-hover').text("");
-    }
-}, '.page-list.active img');
+// $(document).on({
+//     mouseenter: function() {
+//         $img = $(this);
+//         $.ajax({
+//             url: Routing.generate('notice_hover'),
+//             dataType: "json",
+//             data: {
+//                 id: $img.attr("alt")
+//             },
+//             complete: function(data){
+//                 var image = /^[^;]*/i.exec(data.responseJSON[0].video);
+//                 var response = " auteur : "+data.responseJSON[0].autr+"<br />"
+//                     +'<img src="http://www.culture.gouv.fr/Wave/image/joconde'+image[0]+'"/>';
+//                 $('.notice-hover').html(response);
+//             }
+//         });
+//     },
+//     mouseleave: function() {
+//         $('.notice-hover').text("");
+//     }
+// }, '.page-list.active img');
 
 // Bouton see
 $(document).on({
@@ -137,37 +141,53 @@ $(document).on("click", ".page-list.active .btn-question", function(){
             }
         });
     } else {
-        var newSearch = $(this).val();
-        var $page = $(".page-container");
-        newWidth = $page.width()+simpleWidth+5;
-        $page.css("width", newWidth);
-        var div = $('<div class="page-list"></div>');
+        var nbDiv = $('.page-list').length;
+        var index = $('.page-list').index($('.page-list.active'))
 
-        $page.append(div);
+        var newSearch = $(this).val();
+        var splitResponse = newSearch.split(",");
+        var newQuestion = splitResponse[0];
+        
+        if(nbDiv-index !== 1) {
+            $('.page-list.active').nextAll('div').remove();
+            i = index;
+            search = search.slice(0,index+1);
+        }
+
+        search.push(newQuestion);
+        console.log(search);
 
         $.ajax({
             url: Routing.generate('change_question_good'),
             dataType: "json",
             data: {
-                answer: newSearch
+                answer: search
             },
             complete: function(content){
+                var $page = $(".page-container");
+                newWidth = $page.width()+simpleWidth+5;
+                $page.css("width", newWidth);
+                var div = $('<div class="page-list"></div>');
+                $page.append(div);
+
                 i++;
                 
-                $('.page-list').removeClass('active');
-
                 var $container = $(".page-list:last-child");
-                $container.addClass('active');
+                
                 var response = content.responseJSON.content;
 
-                var search = $(".title-page").html();
+                var searchTitle = $(".title-page").html();
+                var splitsearch = searchTitle.split(".");
+                console.log(splitsearch);
+                var newSearchTitle = "";
+                for (var i = 0; i < search.length-1; i++) {
+                    if(i!==0) newSearchTitle +="."
+                    newSearchTitle += splitsearch[i];
+                };
 
-                var splitResponse = newSearch.split(",");
-                var newQuestion = splitResponse[0];
+                newSearchTitle += ".<a href='#' value='-"+i*simpleWidth+"'>"+newQuestion+"</a>";
 
-                search += ".<a href='#' value='-"+i*simpleWidth+"'>"+newQuestion+"</a>";
-
-                $(".title-page").html(search);
+                $(".title-page").html(newSearchTitle);
 
                 $container.html(response);
 
@@ -191,7 +211,14 @@ $(document).on("click", ".page-list.active .btn-question", function(){
                 });
 
                 var newLeft = $page.position().left-simpleWidth;
-                
+
+                $(".page-list.active").animate({
+                    opacity: 0.5,
+                }, 1000);
+
+                $('.page-list').removeClass('active');
+                $container.addClass('active');
+
                 $page.animate({
                     left: newLeft,
                 }, 1000);

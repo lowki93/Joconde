@@ -16,7 +16,7 @@ class NoticeController extends Controller
 
     public function getQuestion($i)
     {
-        $question = array("est-ce une pein-ture,tableau", "est-ce un tableau,tableau", "ce tableau a t-il été réalisé par de vinci,leonard de vinci");
+        $question = array("est-ce une pein-ture,peinture", "est-ce un tableau,tableau", "ce tableau a t-il été réalisé par de vinci,leonard de vinci");
         return $question[$i];
     }
 
@@ -108,22 +108,24 @@ class NoticeController extends Controller
         {
             //get title sent ($_GET)
             $answer = $request->query->get('answer');
-
-            $result = explode(',', $answer);
-            $term = $result[0];
-
-            $terms = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus($term);
-
+            $terms=[];
+            foreach ($answer as $search) {
+                $result = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus($search);
+                $terms = array_replace_recursive($terms,$result);
+            }
+            //var_dump($terms);
             $nbTerm = count($terms);
+            //var_dump($terms[1]['label']);
 
-            $notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($term, $terms, $nbTerm);
+            $notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($answer, $terms, $nbTerm);
 
             $question = $this->getQuestion(2);
 
             $response['content'] = $this->renderView('JocondeLabBundle:Notice:ajax.list.html.twig',
                                     array('question' => $question,
                                         'notices' => $notices,
-                                        'search' => $term));
+                                        'search' => ''));
+
 
             return new JsonResponse($response);
         }
