@@ -11,6 +11,12 @@
 {% block title %} notice {% endblock %}
 
 {% block body %}
+
+    <h1>TERMS</h1>
+    {% for term in notice.terms %}
+        label : {{term.label}} ------>
+        thesaurus : {{term.thesaurus.label}} <br />
+    {% endfor %}
     <p>titre : {{notice.titr}}</p><br />
     {% set authors = notice.autr | split(';') %}
     {% for author in authors | slice(0,1)%}

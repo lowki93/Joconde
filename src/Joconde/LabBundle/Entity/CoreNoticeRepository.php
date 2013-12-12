@@ -24,22 +24,23 @@ class CoreNoticeRepository extends EntityRepository {
         $qb = $this->createQueryBuilder('cn');
 
         if(is_array($search)) {
-            foreach ($search as $word) {
-                $or = $qb->expr()->orX();
-                foreach ($terms as $term) {
-                    $thesaurusLabel = $term['label'];
-                    $thesaurusLabel = strtolower($thesaurusLabel);
-                    $thesaurusLabel = "cn.".$thesaurusLabel;
-                    
-                    $or->add($qb->expr()->like("lower($thesaurusLabel)", '\'%'.$word.'%\''));
-                }
-                $qb->andWhere($or);
+            foreach ($search as $key=>$word) {
+                    $or = $qb->expr()->orX();
+                    foreach ($terms[$key] as $term){ 
+                        $thesaurusLabel = $term['label'];
+                        $thesaurusLabel = strtolower($thesaurusLabel);
+                        $thesaurusLabel = "cn.".$thesaurusLabel;
+                        
+                        $or->add($qb->expr()->like("lower($thesaurusLabel)", '\'%'.$word.'%\''));
+                    }
+                    $qb->andWhere($or);
             }
+
 
             $qb->andWhere("cn.image = 'true'")
                     ->setMaxResults(30);
             
-            // var_dump($qb->getQuery()->getDql());
+            // echo $qb->getQuery()->getDql();
             
             $noticeArray = $qb->getQuery()->getResult();
         } else {

@@ -16,7 +16,7 @@ class NoticeController extends Controller
 
     public function getQuestion($i)
     {
-        $question = array("est-ce une pein-ture,peinture", "est-ce un tableau,tableau", "ce tableau a t-il été réalisé par de vinci,leonard de vinci");
+        $question = array("est-ce une peinture,peinture", "est-ce un tableau,tableau", "ce tableau a t-il été réalisé par de vinci,leonard de vinci");
         return $question[$i];
     }
 
@@ -108,12 +108,14 @@ class NoticeController extends Controller
         {
             //get title sent ($_GET)
             $answer = $request->query->get('answer');
+            
             $terms=[];
             foreach ($answer as $search) {
                 $result = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus($search);
-                $terms = array_replace_recursive($terms,$result);
+                $newResult = array_merge($result,array(array('label' => "titr")));
+                array_push($terms,$newResult);
             }
-            //var_dump($terms);
+
             $nbTerm = count($terms);
             //var_dump($terms[1]['label']);
 
