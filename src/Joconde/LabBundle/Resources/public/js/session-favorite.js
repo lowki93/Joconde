@@ -4,8 +4,10 @@ var simpleWidth = $page.width();
 // for retour
 var i=0;
 var search = [];
+var numQuestion = 0;
 
 $(document).ready(function(){
+    $('.loader').css("display", "-webkit-flex");
     var fisrtSearch = $(".title-page a").text();
     search.push(fisrtSearch);
 
@@ -28,7 +30,7 @@ $(document).ready(function(){
                 itemSelector: '.item',
             });
         });
-
+        $('.loader').css("display", "none");
         $container.animate({
             opacity: 1,
         }, 1000);

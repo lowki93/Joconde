@@ -17,8 +17,44 @@
                    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
             {% endstylesheets %}
         {% endblock %}
+        {% javascripts
+            'jquery/jquery.js'
+        %}
+            <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+        <script type="text/javascript">
+            function resize_canvas(){
+                var $canvas = $('.myCanvas');
+                var loaderImg = $('.loaderImg');
+
+                var width = window.innerWidth;
+                var height = window.innerHeight;
+
+                var left = (window.innerWidth/2)-(loaderImg.width()/2);
+                var top = (window.innerHeight/2)-(loaderImg.height()/2);
+
+                $canvas.css("width", width+"px");
+                $canvas.css("height", height+"px");
+
+                loaderImg.css("left", left+"px");
+                loaderImg.css("top", top+"px");
+
+                var drop = document.querySelector(".myCanvas" );
+                var context = drop.getContext('2d');
+
+                drop.width = width;
+                drop.height = height;
+
+                context.beginPath();
+                context.arc((window.innerWidth/2),(window.innerHeight/2),150 ,0,Math.PI*2,false);
+                context.strokeStyle = "#ff5572";
+                context.fillStyle = "#FFF";
+                context.fill();
+                context.stroke();
+            }
+        </script>
     </head>
-    <body>
+    <body onresize="resize_canvas()" >
         <div class="container">
             <div class="mp-pusher" id="mp-pusher">
                 <nav id="mp-menu" class="mp-menu">
@@ -59,13 +95,16 @@
             </div>
         </div>
         <div class="loader">
-            <img src="{{ asset('bundles/jocondelab/images/loader.gif') }}" alt="loader"/>
-            <p>Chargement en cours</p>
+            <canvas class="myCanvas">
+            </canvas>
+            <div class="loaderImg">
+                <img src="{{ asset('bundles/jocondelab/images/loader.gif') }}" alt="loader"/>
+                <p>Chargement en cours</p>
+            </div>
         </div>
         <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
         <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
         {% javascripts
-            'jquery/jquery.js'
             '@JocondeLabBundle/Resources/public/js/jquery-ui.js'
             '@JocondeLabBundle/Resources/public/js/modernizr.custom.js'
             '@JocondeLabBundle/Resources/public/js/classie.js'
