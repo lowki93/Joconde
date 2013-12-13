@@ -121,12 +121,19 @@ $(document).on("click", ".page-list.active .see", function(){
 $(document).on("click", ".page-list.active .btn-question", function(){
     // change question
     var result = $(this).val();
-    if(result == "none" || result == "no" ) {
+    var splitResponse = result.split(",");
+    var newQuestion = splitResponse[0];
+    var none = splitResponse[1];
+
+    var index = $('.page-list').index($('.page-list.active'))
+    //numQuestion++;
+    console.log(numQuestion);
+    if( none == "none" || none == "no") {        
         $.ajax({
             url: Routing.generate('change_question'),
             dataType: "json",
             data: {
-                answer: $(this).val()
+                numQuestion: newQuestion
             },
             complete: function(question){
                 $('.page-list.active .question').fadeOut(500,function(){
@@ -134,7 +141,9 @@ $(document).on("click", ".page-list.active .btn-question", function(){
                     var splitResponse = responseQuestion.split(",");
                     var newQuestion = splitResponse[0];
                     var typeQuestion = splitResponse[1];
-                    var response = '<p>'+newQuestion+' ?</p><button class="btn-question" value="'+typeQuestion+',yes">oui</button><button class="btn-question" value="no">non</button><button class="btn-question" value="none">ne sais pas</button>'
+                    var nbQuestion = splitResponse[2];
+                    var response = '<p>'+newQuestion+' ?</p><button class="btn-question" value="'+typeQuestion+','+nbQuestion+',yes">oui</button><button class="btn-question" value="'+nbQuestion+',no">non</button><button class="btn-question" value="'+nbQuestion+',none">ne sais pas</button>'
+                    if(nbQuestion > (index+1)) response += '<button class="btn-question" value="'+(nbQuestion-2)+',no">question précendte</button>'
                     $('.page-list.active .question').html(response);
                     $('.page-list.active .question').fadeIn(500);
                     $('.page-list.active .question').css('display', 'inline')
@@ -150,11 +159,11 @@ $(document).on("click", ".page-list.active .btn-question", function(){
     } else {
         $('.loader').css("display", "-webkit-flex");
         var nbDiv = $('.page-list').length;
-        var index = $('.page-list').index($('.page-list.active'))
 
         var newSearch = $(this).val();
         var splitResponse = newSearch.split(",");
         var newQuestion = splitResponse[0];
+        var nbQuestion = splitResponse[1];
         
         if(nbDiv-index !== 1) {
             $('.page-list.active').nextAll('div').remove();
@@ -163,13 +172,13 @@ $(document).on("click", ".page-list.active .btn-question", function(){
         }
 
         search.push(newQuestion);
-        console.log(search);
 
         $.ajax({
             url: Routing.generate('change_question_good'),
             dataType: "json",
             data: {
-                answer: search
+                answer: search,
+                nb: nbQuestion
             },
             complete: function(content){
                 var $page = $(".page-container");
@@ -186,7 +195,7 @@ $(document).on("click", ".page-list.active .btn-question", function(){
 
                 var searchTitle = $(".title-page").html();
                 var splitsearch = searchTitle.split(".");
-                console.log(splitsearch);
+
                 var newSearchTitle = "";
                 for (var i = 0; i < search.length-1; i++) {
                     if(i!==0) newSearchTitle +="."

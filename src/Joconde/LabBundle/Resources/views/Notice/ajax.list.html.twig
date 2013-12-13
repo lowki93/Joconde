@@ -6,11 +6,9 @@
                 <p>{{simpleQuestion}} ?</p>
             {% endfor %}
             <div class="question-button">
-            {% for simpleQuestion in newQuestion | slice(1,2)%}
-                <button class="btn-question" value="{{simpleQuestion}},yes">oui</button>
-            {% endfor %}
-                <button class="btn-question" value="no">non</button>
-                <button class="btn-question" value="none">ne sais pas</button>
+                <button class="btn-question" value="{% for simpleQuestion in newQuestion | slice(1,2)%}{{simpleQuestion}},{% endfor %}yes">oui</button>
+                <button class="btn-question" value="{% for simpleQuestion in newQuestion | slice(2,3)%}{{simpleQuestion}},{% endfor %}no">non</button>
+                <button class="btn-question" value="{% for simpleQuestion in newQuestion | slice(2,3)%}{{simpleQuestion}},{% endfor %}none">ne sais pas</button>
             </div>
         </div>
     {% endif %}

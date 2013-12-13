@@ -16,7 +16,7 @@ class NoticeController extends Controller
 
     public function getQuestion($i)
     {
-        $question = array("est-ce une peinture,peinture", "est-ce un tableau,tableau", "ce tableau a t-il été réalisé par de vinci,leonard de vinci");
+        $question = array("est-ce une tableau,tableau", "est-ce un peinture,peinture", "ce tableau représente-t-il mona lisa,mona lisa");
         return $question[$i];
     }
 
@@ -38,7 +38,7 @@ class NoticeController extends Controller
 
                 $notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($search, $terms, $nbTerm);
 
-                $question = $this->getQuestion(0);
+                $question = $this->get('flash.session_notice_manager')->setQuestion($search);
 
                 return $this->render('JocondeLabBundle:Notice:list.html.twig',
                     array('question' => $question,
@@ -93,8 +93,8 @@ class NoticeController extends Controller
         if($request->isXmlHttpRequest())
         {
             // get title sent ($_GET)
-            // $answer = $request->query->get('answer');
-            $result["question"] = $this->getQuestion(1);
+            $numQuestion = $request->query->get('numQuestion');
+            $result["question"] = $this->get('flash.session_notice_manager')->getQuestion($numQuestion);
 
             return new JsonResponse($result);
         }
@@ -108,7 +108,8 @@ class NoticeController extends Controller
         {
             //get title sent ($_GET)
             $answer = $request->query->get('answer');
-            
+            $nbQuestion = $request->query->get('nb');
+
             $terms=[];
             foreach ($answer as $search) {
                 $result = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus($search);
@@ -121,7 +122,7 @@ class NoticeController extends Controller
 
             $notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($answer, $terms, $nbTerm);
 
-            $question = $this->getQuestion(2);
+            $question = $this->get('flash.session_notice_manager')->getQuestion($nbQuestion);
 
             $response['content'] = $this->renderView('JocondeLabBundle:Notice:ajax.list.html.twig',
                                     array('question' => $question,
