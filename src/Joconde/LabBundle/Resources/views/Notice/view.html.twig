@@ -11,30 +11,44 @@
 {% block title %} notice {% endblock %}
 
 {% block body %}
-
-    <h1>TERMS</h1>
-    {% for term in notice.terms %}
-        label : {{term.label}} ------>
-        thesaurus : {{term.thesaurus.label}} <br />
-    {% endfor %}
-    <p>titre : {{notice.titr}}</p><br />
-    {% set authors = notice.autr | split(';') %}
-    {% for author in authors | slice(0,1)%}
-        {% set aut = author | split('(') %}
-        {% for autdef in aut | slice(0,1)%}
-            <p>auteur : {{ autdef | lower }}</p><br />
-        {% endfor %}
-    {% endfor %}
-    <div>
-        <ul class="autr">
-
-        </ul>
-    </div>
+<div class="notice">
      {% for image in notice.noticeImage|slice(0,1) %}
         <img src="http://www.culture.gouv.fr/Wave/image/joconde{{image.relativeUrl}}" />
     {% else %}
         il n'y a pas d'images
     {% endfor %}
+    <p class="notice-title">
+         {% set lieu = notice.titr | lower | split(';') %}{{lieu | join(",")}}
+    </p>
+    {% set authors = notice.autr | split(';') %}
+    {% for author in authors | slice(0,1)%}
+        {% set aut = author | split('(') %}
+        {% for autdef in aut | slice(0,1)%}
+            <p class="notice-author">{{ autdef | lower }}</p>
+        {% endfor %}
+    {% endfor %}
+    <hr />
+    <p class="notice-other-info">technique : 
+        {% set technique = notice.tech | split(';') %}
+        {{technique | join(",")}}
+    </p>
+
+    <p class="notice-other-info" >lieu d'exposition : 
+    {% set lieu = notice.loca | split(';') %}{{lieu | join(",")}}
+    </p>
+
+    <p class="notice-other-info" >période : {{notice.peri}}</p>
+    <div>
+        <ul class="autr">
+
+        </ul>
+    </div>
+<div>
+
+<h1>terms</h1>
+{% for term in notice.terms %}
+    {{term.label}} ----> dbpedia : {{term.dbpediaUri}} <br /><br /><br />
+{% endfor %}
 {% endblock %}
 
 {% block javascripts %}
