@@ -89,6 +89,8 @@ $(document).on({
     }
 }, '.page-list.active .see');
 
+// Button Go to Notice
+
 // Bouton session
 $(document).on({
     mouseenter: function() {
@@ -113,10 +115,16 @@ $(document).on("click", ".page-list.active .see", function(){
             param: result
         },
         complete: function(content){
-            console.log(content.responseJSON.content);
+            var response = content.responseJSON.content;
+            $(".loader-notice").html(response);
+            $(".loader-notice").css("display", "-webkit-flex");
         }
     });
+});
 
+// CLOSE NOTICE
+$(document).on("click", ".notice-close", function(){
+    $(".loader-notice").css("display", "none");
 });
 
 // NEW QUESTION 
@@ -126,6 +134,8 @@ $(document).on("click", ".page-list.active .btn-question", function(){
     var splitResponse = result.split(",");
     var newQuestion = splitResponse[0];
     var none = splitResponse[1];
+
+    // add compte for question -------------
 
     var index = $('.page-list').index($('.page-list.active'))
     //numQuestion++;
@@ -275,3 +285,4 @@ $(document).on("click", ".title-page a", function(){
         opacity: 1,
     }, 1000);
 });
+

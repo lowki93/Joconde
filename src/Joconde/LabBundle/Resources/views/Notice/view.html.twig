@@ -1,80 +1,75 @@
-{% extends '::base.html.twig' %}
-
-{% block stylesheets %}
-    {% stylesheets
-        '@JocondeLabBundle/Resources/Public/css/list.sass'
-        filter="cssrewrite,sass" output='css/list.css' %}
-           <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
-    {% endstylesheets %}
-{% endblock %}
-
-{% block title %} notice {% endblock %}
-
-{% block body %}
 <div class="notice">
-     {% for image in notice.noticeImage|slice(0,1) %}
-        <img src="http://www.culture.gouv.fr/Wave/image/joconde{{image.relativeUrl}}" />
-    {% else %}
-        il n'y a pas d'images
-    {% endfor %}
-    <p class="notice-title">
-         {% set lieu = notice.titr | lower | split(';') %}{{lieu | join(",")}}
-    </p>
-    {% set authors = notice.autr | split(';') %}
-    {% for author in authors | slice(0,1)%}
-        {% set aut = author | split('(') %}
-        {% for autdef in aut | slice(0,1)%}
-            <p class="notice-author">{{ autdef | lower }}</p>
+    <div class="notice-image">
+        {% for image in notice.noticeImage|slice(0,1) %}
+            <img src="http://www.culture.gouv.fr/Wave/image/joconde{{image.relativeUrl}}" />
+        {% else %}
+            il n'y a pas d'images
         {% endfor %}
-    {% endfor %}
-    <hr />
-    <p class="notice-other-info">technique : 
-        {% set technique = notice.tech | split(';') %}
-        {{technique | join(",")}}
-    </p>
-
-    <p class="notice-other-info" >lieu d'exposition : 
-    {% set lieu = notice.loca | split(';') %}{{lieu | join(",")}}
-    </p>
-
-    <p class="notice-other-info" >période : {{notice.peri}}</p>
-    <div>
-        <ul class="autr">
-
-        </ul>
     </div>
-<div>
+    <div class="notice-info">
+        <div class="notice-info-titl">
+            <p class="notice-title">{% set lieu = notice.titr | lower | split(';') %}{{lieu | join(",")}}</p>
+            {% set authors = notice.autr | split(';') %}
+            {% for author in authors | slice(0,1)%}
+                {% set aut = author | split('(') %}
+                {% for autdef in aut | slice(0,1)%}
+                    <p class="notice-author">{{ autdef | lower }}</p>
+                {% endfor %}
+            {% endfor %}
+            <hr />
+            <p class="notice-other-info">technique : {% set technique = notice.tech | split(';') %}{{technique | join(",")}}</p>
+            <p class="notice-other-info" >lieu d'exposition : {% set lieu = notice.loca | split(';') %}{{lieu | join(",")}}</p>
+            <p class="notice-other-info" >période : {% set technique = notice.peri | split(';') %}{{technique | join(",")}}</p>
+        </div>
+        <div class="notice-ths-autr"><p></p></div>
+    </div>
+</div>
+<img src="{{ asset('bundles/jocondelab/images/picto_close.png') }}" width="20px" class="notice-close" />
 
-<h1>terms</h1>
-{% for term in notice.terms %}
-    {{term.label}} ----> dbpedia : {{term.dbpediaUri}} <br /><br /><br />
-{% endfor %}
-{% endblock %}
+{#     <h1>terms</h1>
+    {% for term in notice.terms %}
+        {{term.label}} ----> dbpedia : {{term.dbpediaUri}} <br /><br /><br />
+    {% endfor %} #}
+<script>
+    var $container = $(".notice");
+    var $containerImg = $(".notice .notice-image");
+    var $containerInfo = $(".notice .notice-info");
+    var $containerTitl = $(".notice .notice-info .notice-info-titl");
+    var $containerThs = $(".notice .notice-info .notice-ths-autr");
 
-{% block javascripts %}
-    <script>
-        {% for term in notice.terms %}
-
-            if (1 === {{term.thesaurus.id}}) {
-                if("anonyme" !== '{{term.label}}'){
-                    console.log("{{term.dbpediaUri}}");
-                    $.getJSON( "http://fr.dbpedia.org/sparql?default-graph-uri=&query=select distinct ?abstract where {<{{term.dbpediaUri}}> dbpedia-owl:abstract ?abstract.filter(lang(?abstract) = 'fr').} LIMIT 100&format=json&timeout=0&debug=on", function( data ) {
-                        //console.log(data.results.bindings[0].abstract);
-                        var items = [];
-                        $.each( data.results.bindings[0].abstract, function( key, val ) {
-                            if(key == "value") {
-                                console.log(""+val+"")
-                                items.push( ""+val+"" );
-                            }
-                        });
-                         
-                        $( "<li/>", {
-                            "class": "my-new-list",
-                            html: items.join( "" )
-                        }).appendTo( ".autr" );
-                    });
-                }
+    $container.imagesLoaded(function(){
+        $container.find("img").each(function(){
+            if( $(this)[0].naturalHeight > $(this)[0].naturalWidth ){ 
+                console.log("height");
+            } else {
+                console.log("width");
+                $container.addClass("notice-width");
+                var imgWidth = $container.width() - $containerInfo.width() - 20;
+                $containerImg.css("width", imgWidth);
             }
-        {% endfor %}
-    </script>
-{% endblock %}
+            var infoHeight = $(this)[0].height;
+            $containerInfo.css('height', infoHeight);
+            var $containerThsP = $(".notice .notice-info .notice-ths-autr p");
+            var thsHeight = $containerInfo.height() - $containerTitl.height();
+            $containerThs.css("height", thsHeight);
+            $containerThsP.css("height", thsHeight);
+        });
+    });
+    {% for term in notice.terms %}
+
+        if (1 === {{term.thesaurus.id}}) {
+            if("anonyme" !== '{{term.label}}'){
+                console.log("{{term.dbpediaUri}}");
+                $.getJSON( "http://fr.dbpedia.org/sparql?default-graph-uri=&query=select distinct ?abstract where {<{{term.dbpediaUri}}> dbpedia-owl:abstract ?abstract.filter(lang(?abstract) = 'fr').} LIMIT 100&format=json&timeout=0&debug=on", function(data) {
+                    var items = [];
+                    $.each( data.results.bindings[0].abstract, function( key, val ) {
+                        if(key == "value") {
+                            items.push( ""+val+"" );
+                        }
+                    });
+                    $(".notice-ths-autr p").html(items);
+                });
+            }
+        }
+    {% endfor %}
+</script>
