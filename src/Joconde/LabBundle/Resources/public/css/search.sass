@@ -1,8 +1,10 @@
 @import style
 
 input  
+    font-family: 'BebasNeue'
     outline: none
     color: $black
+    text-decoration: underline
 
 form
     margin: 0 auto
@@ -22,10 +24,12 @@ form
     border: none !important
     background-color: none !important
     padding: 0
+    font-family: 'BebasNeue'
+    color: grey !important
 
 .ui-menu-item
     a
-        color: #000
+        color: grey
         padding: 0 !important
         font-size: 2em
 
@@ -39,3 +43,21 @@ form
     border: none
     color: grey
     padding: 0 !important
+
+@media screen and (min-width: 800px)
+    .search
+        font-size: 4em
+    .ui-widget-content
+        padding-left: 15px
+    .ui-menu-item
+        a
+            font-size: 4em
+
+@media screen and (min-width: 1024px)
+    .search
+        font-size: 2em
+    .ui-widget-content
+        padding-left: 0
+    .ui-menu-item
+        a
+            font-size: 2em

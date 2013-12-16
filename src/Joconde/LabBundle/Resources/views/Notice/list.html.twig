@@ -11,7 +11,7 @@
 {% block search %}
     {% if Favoris is defined %}
     {% else %}
-        <a href="#" value="0">{{search}}</a>
+        <a href="#" value="0">{{search|join(" ")}}</a>
     {% endif %}
 {% endblock %}
 

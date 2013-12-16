@@ -1,3 +1,8 @@
+{#     <h1>terms</h1>
+    {% for term in notice.terms %}
+        {{term.label}} ----> {{term.thesaurus.label}} ----> dbpedia : {{term.dbpediaUri}} <br /><br /><br />
+    {% endfor %}
+ #}
 <div class="notice">
         <div class="notice-image">
             {% for image in notice.noticeImage|slice(0,1) %}
@@ -26,10 +31,6 @@
         <img src="{{ asset('bundles/jocondelab/images/picto_close.png') }}" width="20px" class="notice-close" />
 </div>
 
-{#     <h1>terms</h1>
-    {% for term in notice.terms %}
-        {{term.label}} ----> dbpedia : {{term.dbpediaUri}} <br /><br /><br />
-    {% endfor %} #}
 <script>
     var $container = $(".notice");
     var $containerImg = $(".notice .notice-image");

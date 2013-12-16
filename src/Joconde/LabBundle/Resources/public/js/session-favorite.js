@@ -108,6 +108,7 @@ $(document).on({
 // BUTTON SEE NOTICE
 $(document).on("click", ".page-list.active .see", function(){
     var result = $(this).val();
+    console.log(result);
     $.ajax({
         url: Routing.generate('notice_id'),
         dataType: "json",
@@ -130,7 +131,7 @@ $(document).on("click", ".notice-close", function(){
     $(".loader-notice").animate({
             opacity: 0,
             top: "-100%",
-    }, 2000);
+    }, 1000);
 });
 
 // NEW QUESTION 

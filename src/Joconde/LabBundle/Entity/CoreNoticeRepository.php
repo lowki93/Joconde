@@ -25,17 +25,16 @@ class CoreNoticeRepository extends EntityRepository {
 
         if(is_array($search)) {
             foreach ($search as $key=>$word) {
-                    $or = $qb->expr()->orX();
-                    foreach ($terms[$key] as $term){ 
-                        $thesaurusLabel = $term['label'];
-                        $thesaurusLabel = strtolower($thesaurusLabel);
-                        $thesaurusLabel = "cn.".$thesaurusLabel;
-                        
-                        $or->add($qb->expr()->like("lower($thesaurusLabel)", '\'%'.$word.'%\''));
-                    }
-                    $qb->andWhere($or);
+                $or = $qb->expr()->orX();
+                foreach ($terms[$key] as $term){ 
+                    $thesaurusLabel = $term['label'];
+                    $thesaurusLabel = strtolower($thesaurusLabel);
+                    $thesaurusLabel = "cn.".$thesaurusLabel;
+                    
+                    $or->add($qb->expr()->like("lower($thesaurusLabel)", '\'%'.strtolower($word).'%\''));
+                }
+                $qb->andWhere($or);
             }
-
 
             $qb->andWhere("cn.image = 'true'")
                     ->setMaxResults(30);

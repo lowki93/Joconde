@@ -30,20 +30,37 @@ class NoticeController extends Controller
             if($form -> isValid()){
                 $term = $form->getData();
                 $search = $term['search'];
-                $search = strtolower($search);
 
-                $terms = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus($search);
+                $pieces = explode(" ", $search);
+                if(count($pieces) > 1) {
+                    $terms = array();
+                    foreach ($pieces as $search) {
+                        $result = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus(strtolower($search));
+                        $newResult = array_merge($result,array(array('label' => "titr")));
+                        array_push($terms,$newResult);
+                    }
 
-                $nbTerm = count($terms);
+                    $nbTerm = count($terms);
 
-                $notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($search, $terms, $nbTerm);
+                    $notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($pieces, $terms, $nbTerm);
 
-                $question = $this->get('flash.session_notice_manager')->setQuestion($search);
+                     $question = $this->get('flash.session_notice_manager')->setQuestion($search);
+                } else {
+                    $search = strtolower($search);
+
+                    $terms = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus($search);
+
+                    $nbTerm = count($terms);
+
+                    $notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($search, $terms, $nbTerm);
+
+                    $question = $this->get('flash.session_notice_manager')->setQuestion($search);
+                }
 
                 return $this->render('JocondeLabBundle:Notice:list.html.twig',
                     array('question' => $question,
                         'notices' => $notices,
-                        'search' => $search));
+                        'search' => $pieces));
             } 
         }
         return $this->render('JocondeLabBundle:Notice:index.html.twig', array(
@@ -111,7 +128,7 @@ class NoticeController extends Controller
 
             $terms = array();
             foreach ($answer as $search) {
-                $result = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus($search);
+                $result = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus(strtolower($search));
                 $newResult = array_merge($result,array(array('label' => "titr")));
                 array_push($terms,$newResult);
             }
