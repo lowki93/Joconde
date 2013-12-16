@@ -106,11 +106,10 @@ class NoticeController extends Controller
  
         if($request->isXmlHttpRequest())
         {
-            //get title sent ($_GET)
             $answer = $request->query->get('answer');
             $nbQuestion = $request->query->get('nb');
 
-            $terms=[];
+            $terms = array();
             foreach ($answer as $search) {
                 $result = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus($search);
                 $newResult = array_merge($result,array(array('label' => "titr")));
@@ -118,7 +117,6 @@ class NoticeController extends Controller
             }
 
             $nbTerm = count($terms);
-            //var_dump($terms[1]['label']);
 
             $notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($answer, $terms, $nbTerm);
 
