@@ -1,30 +1,30 @@
 <div class="notice">
-    <div class="notice-image">
-        {% for image in notice.noticeImage|slice(0,1) %}
-            <img src="http://www.culture.gouv.fr/Wave/image/joconde{{image.relativeUrl}}" />
-        {% else %}
-            il n'y a pas d'images
-        {% endfor %}
-    </div>
-    <div class="notice-info">
-        <div class="notice-info-titl">
-            <p class="notice-title">{% set lieu = notice.titr | lower | split(';') %}{{lieu | join(",")}}</p>
-            {% set authors = notice.autr | split(';') %}
-            {% for author in authors | slice(0,1)%}
-                {% set aut = author | split('(') %}
-                {% for autdef in aut | slice(0,1)%}
-                    <p class="notice-author">{{ autdef | lower }}</p>
-                {% endfor %}
+        <div class="notice-image">
+            {% for image in notice.noticeImage|slice(0,1) %}
+                <img src="http://www.culture.gouv.fr/Wave/image/joconde{{image.relativeUrl}}" class="image-for-notice"/>
+            {% else %}
+                il n'y a pas d'images
             {% endfor %}
-            <hr />
-            <p class="notice-other-info">technique : {% set technique = notice.tech | split(';') %}{{technique | join(",")}}</p>
-            <p class="notice-other-info" >lieu d'exposition : {% set lieu = notice.loca | split(';') %}{{lieu | join(",")}}</p>
-            <p class="notice-other-info" >période : {% set technique = notice.peri | split(';') %}{{technique | join(",")}}</p>
         </div>
-        <div class="notice-ths-autr"><p></p></div>
-    </div>
+        <div class="notice-info">
+            <div class="notice-info-titl">
+                <p class="notice-title">{% set lieu = notice.titr | lower | split(';') %}{{lieu | join(",")}}</p>
+                {% set authors = notice.autr | split(';') %}
+                {% for author in authors | slice(0,1)%}
+                    {% set aut = author | split('(') %}
+                    {% for autdef in aut | slice(0,1)%}
+                        <p class="notice-author">{{ autdef | lower }}</p>
+                    {% endfor %}
+                {% endfor %}
+                <hr />
+                <p class="notice-other-info">technique : {% set technique = notice.tech | split(';') %}{{technique | join(",")}}</p>
+                <p class="notice-other-info" >lieu d'exposition : {% set lieu = notice.loca | split(';') %}{{lieu | join(",")}}</p>
+                <p class="notice-other-info" >période : {% set technique = notice.peri | split(';') %}{{technique | join(",")}}</p>
+            </div>
+            <div class="notice-ths-autr"><p></p></div>
+        </div>
+        <img src="{{ asset('bundles/jocondelab/images/picto_close.png') }}" width="20px" class="notice-close" />
 </div>
-<img src="{{ asset('bundles/jocondelab/images/picto_close.png') }}" width="20px" class="notice-close" />
 
 {#     <h1>terms</h1>
     {% for term in notice.terms %}
@@ -38,11 +38,10 @@
     var $containerThs = $(".notice .notice-info .notice-ths-autr");
 
     $container.imagesLoaded(function(){
-        $container.find("img").each(function(){
+        $container.find(".image-for-notice").each(function(){
+            console.log("height : "+$(this)[0].naturalHeight+" , width : "+$(this)[0].naturalWidth);
             if( $(this)[0].naturalHeight > $(this)[0].naturalWidth ){ 
-                console.log("height");
             } else {
-                console.log("width");
                 $container.addClass("notice-width");
                 var imgWidth = $container.width() - $containerInfo.width() - 20;
                 $containerImg.css("width", imgWidth);

@@ -117,14 +117,20 @@ $(document).on("click", ".page-list.active .see", function(){
         complete: function(content){
             var response = content.responseJSON.content;
             $(".loader-notice").html(response);
-            $(".loader-notice").css("display", "-webkit-flex");
+            $(".loader-notice").animate({
+                    opacity: 1,
+                    top: 0,
+            }, 1000);
         }
     });
 });
 
 // CLOSE NOTICE
 $(document).on("click", ".notice-close", function(){
-    $(".loader-notice").css("display", "none");
+    $(".loader-notice").animate({
+            opacity: 0,
+            top: "-100%",
+    }, 2000);
 });
 
 // NEW QUESTION 
@@ -268,6 +274,7 @@ $(document).on("click", ".page-list.active .btn-question", function(){
 
 $(document).on("click", ".title-page a", function(){
     var transition = $(this).attr("value");
+
     $page.animate({
         left: transition,
     }, 1000);
@@ -285,4 +292,3 @@ $(document).on("click", ".title-page a", function(){
         opacity: 1,
     }, 1000);
 });
-
