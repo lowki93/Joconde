@@ -1,323 +1,317 @@
+// INITIALISE VARIABLE
 var $page = $(".page-container");
+
 var simpleWidth = $page.width();
 var pageList = $(".page-list")[0].offsetWidth;
 
-// for retour
 var i=0;
 var search = [];
 var numQuestion = 0;
 
-
 jQuery(function($){
-	$('.loader').css("display", "-webkit-flex");
-	var fisrtSearch = $(".title-page a").text();
-	search.push(fisrtSearch);
 
-	var $container = $('.page-list');
-	$container
-		.addClass("active")
-		.imagesLoaded(function(){
+    loader.show();
 
-			setMasonry($container);
+    var fisrtSearch = $(".title-page a").text();
+    search.push(fisrtSearch);
 
-			$('.loader').css("display", "none");
+    var $container = $('.page-list');
+    $container
+        .addClass("active")
+        .imagesLoaded(function(){
 
-			$container.animate({
-				opacity: 1,
-			}, 1000);
+            setMasonry($container);
 
-		});
+            loader.hide();
+
+            $container.animate({
+                opacity: 1,
+            }, 1000);
+
+        });
 });
 
 $(document)
-	.on("click", ".page-list.active .session", function(){// ADD NOTICE IN FAVORIS
+    .on("click", ".page-list.active .session", function(){// ADD NOTICE IN FAVORIS
 
-		$.ajax({
-			url: Routing.generate('add_favorite_notice'),
-			dataType: "json",
-			data: {
-				param: $(this).val()
-			},
-			success: function(message){
-				console.log(message);
-			}
-		});
-		
-	})
-	.on({ // HOVER TOO CHANGE PICTO FOR SEE
-		mouseenter: function(){
+        $.ajax({
+            url: Routing.generate('add_favorite_notice'),
+            dataType: "json",
+            data: {
+                param: $(this).val()
+            },
+            success: function(message){
+                console.log(message);
+            }
+        });
+        
+    })
+    .on({ // HOVER TOO CHANGE PICTO FOR SEE
+        mouseenter: function(){
 
-			var $button = $(this).find('i');
-			$button
-				.removeClass("picto_oeil")
-				.addClass("picto_oeil_hover");
+            var $button = $(this).find('i');
+            $button
+                .removeClass("picto_oeil")
+                .addClass("picto_oeil_hover");
 
-		},
-		mouseleave: function(){
+        },
+        mouseleave: function(){
 
-			var $button = $(this).find('i');
-			$button
-				.removeClass("picto_oeil_hover")
-				.addClass("picto_oeil");
+            var $button = $(this).find('i');
+            $button
+                .removeClass("picto_oeil_hover")
+                .addClass("picto_oeil");
 
-		}
-	}, '.page-list.active .see')
-	.on({// HOVER TOO CHANGE PICTO FOR SESSION
-		mouseenter: function()
-		{
-			var $button = $(this).find('i');
-			$button
-				.removeClass("picto_ajouter")
-				.addClass("picto_ajouter_hover");
-		},
-		mouseleave: function() {
-			var $button = $(this).find('i');
-			$button
-				.removeClass("picto_ajouter_hover")
-				.addClass("picto_ajouter");
-		}
-	}, '.page-list.active .session')
-	.on("click", ".page-list.active .see", function(){// CLICK TO SEE NOTICE
+        }
+    }, '.page-list.active .see')
+    .on({// HOVER TOO CHANGE PICTO FOR SESSION
+        mouseenter: function()
+        {
+            var $button = $(this).find('i');
+            $button
+                .removeClass("picto_ajouter")
+                .addClass("picto_ajouter_hover");
+        },
+        mouseleave: function() {
+            var $button = $(this).find('i');
+            $button
+                .removeClass("picto_ajouter_hover")
+                .addClass("picto_ajouter");
+        }
+    }, '.page-list.active .session')
+    .on("click", ".page-list.active .see", function(){// CLICK TO SEE NOTICE
 
-		var result = $(this).val();
-		$('.loader').css("display", "-webkit-flex");
-		$.ajax({
-			url: Routing.generate('notice_id'),
-			dataType: "json",
-			data: {
-				param: result
-			},
-			complete: function(content){
-				var response = content.responseJSON.content;
-				$(".loader-notice").html(response);
-				$('.loader').css("display", "none");
-				$(".loader-notice").animate({
-						opacity: 1,
-						left: 0,
-				}, 1000);
-			}
-		});
+        var result = $(this).val();
 
-	})
-	.on("click", ".notice-close", function(){// CLICK TO CLOSE NOTICE
+        loader.show();
 
-		$(".loader-notice").animate({
-				opacity: 0,
-				left: "-100%",
-		}, 1000);
+        $.ajax({
+            url: Routing.generate('notice_id'),
+            dataType: "json",
+            data: {
+                param: result
+            },
+            complete: function(content){
+                var response = content.responseJSON.content;
+                $(".loader-notice").html(response);
 
-	})
-	.on("click", ".page-list.active .btn-question", function(){// CLICK TO CHANGE QUESTION
+                loader.hide();
 
-		//Get value for new question
-		var result = $(this).val();
-		var splitResponse = result.split(",");
-		var newQuestion = splitResponse[0];
-		var none = splitResponse[1];
+                $(".loader-notice").animate({
+                        opacity: 1,
+                        left: 0,
+                }, 1000);
+            }
+        });
 
-		// add compte for question -------------
+    })
+    .on("click", ".notice-close", function(){// CLICK TO CLOSE NOTICE
 
-		var index = $('.page-list').index($('.page-list.active'))
-		//numQuestion++;
-	
-		if( none == "none" || none == "no") {
+        $(".loader-notice").animate({
+                opacity: 0,
+                left: "-100%",
+        }, 1000);
 
-			$.ajax({
-				url: Routing.generate('change_question'),
-				dataType: "json",
-				data: {
-					numQuestion: newQuestion
-				},
-				complete: function(question){
+    })
+    .on("click", ".page-list.active .btn-question", function(){// CLICK TO CHANGE QUESTION
 
-					$('.page-list.active .question').fadeOut(500,function(){
-						var responseQuestion = question.responseJSON.question;
-						var splitResponse = responseQuestion.split(",");
-						var newQuestion = splitResponse[0];
-						var typeQuestion = splitResponse[1];
-						var nbQuestion = splitResponse[2];
-						var response = '<p>'+newQuestion+' ?</p><button class="btn-question" value="'+typeQuestion+','+nbQuestion+',yes">oui</button><button class="btn-question" value="'+nbQuestion+',no">non</button><button class="btn-question" value="'+nbQuestion+',none">ne sais pas</button>';
+        //Get value for new question
+        var result = $(this).val();
+        var splitResponse = result.split(",");
+        var newQuestion = splitResponse[0];
+        var none = splitResponse[1];
 
-						if(nbQuestion > (index+1)) response += '<button class="btn-question" value="'+(nbQuestion-2)+',no">question précendte</button>';
-						$('.page-list.active .question').html(response);
-						$('.page-list.active .question').fadeIn(500);
-						$('.page-list.active .question').css('display', 'inline');
+        // add compte for question -------------
 
-						$('.page-list.active').masonry({
-							isAnimated: true,
-							gutter: 10,
-							columnWidth: 10,
-							itemSelector: '.item',
-						});
+        var index = $('.page-list').index($('.page-list.active'))
+        //numQuestion++;
+    
+        if( none == "none" || none == "no") {
 
-					});
+            $.ajax({
+                url: Routing.generate('change_question'),
+                dataType: "json",
+                data: {
+                    numQuestion: newQuestion
+                },
+                complete: function(question){
 
-				}
-			});
-		} else {
+                    $('.page-list.active .question').fadeOut(500,function(){
+                        var responseQuestion = question.responseJSON.question;
+                        var splitResponse = responseQuestion.split(",");
+                        var newQuestion = splitResponse[0];
+                        var typeQuestion = splitResponse[1];
+                        var nbQuestion = splitResponse[2];
+                        var response = '<p>'+newQuestion+' ?</p><button class="btn-question" value="'+typeQuestion+','+nbQuestion+',yes">oui</button><button class="btn-question" value="'+nbQuestion+',no">non</button><button class="btn-question" value="'+nbQuestion+',none">ne sais pas</button>';
 
-			$('.loader').css("display", "-webkit-flex");
-			var nbDiv = $('.page-list').length;
+                        if(nbQuestion > (index+1)) response += '<button class="btn-question" value="'+(nbQuestion-2)+',no">question précendte</button>';
+                        $('.page-list.active .question').html(response);
+                        $('.page-list.active .question').fadeIn(500);
+                        $('.page-list.active .question').css('display', 'inline');
 
-			var newSearch = $(this).val();
-			var splitResponse = newSearch.split(",");
-			var newQuestion = splitResponse[0];
-			var nbQuestion = splitResponse[1];
-			
-			if( nbDiv-index !== 1 ) {
+                        $('.page-list.active').masonry({
+                            isAnimated: true,
+                            gutter: 10,
+                            columnWidth: 10,
+                            itemSelector: '.item',
+                        });
 
-				$('.page-list.active').nextAll('div').remove();
-				i = index;
-				search = search.slice(0,index+1);
+                    });
 
-			};
+                }
+            });
+        } else {
 
-			search.push(newQuestion);
+            loader.show();
 
-			$.ajax({
-				url: Routing.generate('change_question_good'),
-				dataType: "json",
-				data: {
-					answer: search,
-					nb: nbQuestion
-				},
-				complete: function(content){
+            var nbDiv = $('.page-list').length;
 
-					var $page = $(".page-container");
-					newWidth = $page.width()+simpleWidth+5+$('.page-list')[0].offsetLeft;
-					$page.css("width", newWidth);
-					var div = $('<div class="page-list"></div>');
-					$page.append(div);
+            var newSearch = $(this).val();
+            var splitResponse = newSearch.split(",");
+            var newQuestion = splitResponse[0];
+            var nbQuestion = splitResponse[1];
+            
+            if( nbDiv-index !== 1 ) {
 
-					i++;
-					
-					var $container = $(".page-list:last-child");
-					
-					var response = content.responseJSON.content;
+                $('.page-list.active').nextAll('div').remove();
+                i = index;
+                search = search.slice(0,index+1);
 
-					var searchTitle = $(".title-page").html();
-					var splitsearch = searchTitle.split(".");
+            };
 
-					var newSearchTitle = "";
+            search.push(newQuestion);
 
-					for ( var i = 0; i < search.length-1; i++ ) {
+            $.ajax({
+                url: Routing.generate('change_question_good'),
+                dataType: "json",
+                data: {
+                    answer: search,
+                    nb: nbQuestion
+                },
+                complete: function(content){
 
-						if(i!==0) newSearchTitle +=".";
-						newSearchTitle += splitsearch[i];
-					};
+                    var $page = $(".page-container");
+                    newWidth = $page.width()+simpleWidth+5+$('.page-list')[0].offsetLeft;
+                    $page.css("width", newWidth);
+                    var div = $('<div class="page-list"></div>');
+                    $page.append(div);
 
-					newSearchTitle += ".<a href='#' value='-"+i*simpleWidth+"'>"+newQuestion+"</a>";
+                    i++;
+                    
+                    var $container = $(".page-list:last-child");
+                    
+                    var response = content.responseJSON.content;
 
-					$(".title-page").html(newSearchTitle);
+                    var searchTitle = $(".title-page").html();
+                    var splitsearch = searchTitle.split(".");
 
-					$container.html(response);
+                    var newSearchTitle = "";
 
-					$container.imagesLoaded(function(){
+                    for ( var i = 0; i < search.length-1; i++ ) {
 
-						$container.find("img").each(function(){
+                        if(i!==0) newSearchTitle +=".";
+                        newSearchTitle += splitsearch[i];
 
-							if( $(this)[0].naturalHeight > $(this)[0].naturalWidth ){
+                    };
 
-								$(this).addClass("imgHeight");
+                    newSearchTitle += ".<a href='#' value='-"+i*simpleWidth+"'>"+newQuestion+"</a>";
 
-							} else {
+                    $(".title-page").html(newSearchTitle);
 
-								$(this).addClass("imgWidth");
+                    $container.html(response);
 
-							}
+                    setMasonry($container);
 
-						});
+                    var newLeft = $page.position().left-simpleWidth;
 
-						$container.imagesLoaded(function(){
+                    loader.hide();
 
-							$container.masonry({
-								isAnimated: true,
-								gutter: 10,
-								columnWidth: 10,
-								itemSelector: '.item',
-							});
+                    $(".page-list.active").animate({
+                        opacity: 0.5,
+                    }, 1000);
 
-						});
+                    $('.page-list').removeClass('active');
+                    $container.addClass('active');
 
-					});
+                    $page.animate({
+                        left: newLeft,
+                    }, 1000);
 
-					var newLeft = $page.position().left-simpleWidth;
+                    $container.animate({
+                        opacity: 1,
+                    }, 1000);
 
-					$('.loader').css("display", "none");
+                    $(".page-list:nth-last-child(2)").animate({
+                        opacity: 0.5,
+                    }, 1000);
 
-					$(".page-list.active").animate({
-						opacity: 0.5,
-					}, 1000);
+                    $('.page-list').css("width", pageList);
+                }
+            });
+        }
+    })
+    .on("click", ".title-page a", function(){
 
-					$('.page-list').removeClass('active');
-					$container.addClass('active');
+        var transition = $(this).attr("value");
 
-					$page.animate({
-						left: newLeft,
-					}, 1000);
+        $page.animate({
+            left: transition,
+        }, 1000);
 
-					$container.animate({
-						opacity: 1,
-					}, 1000);
+        $(".page-list.active").animate({
+            opacity: 0.5,
+        }, 1000);
 
-					$(".page-list:nth-last-child(2)").animate({
-						opacity: 0.5,
-					}, 1000);
+        $('.page-list').removeClass('active');
 
-					$('.page-list').css("width", pageList);
-				}
-			});
-		}
-	})
-	.on("click", ".title-page a", function(){
+        var aIdx = $('.title-page a').index($(this));
+        $('.page-list').eq(aIdx).addClass('active');
 
-		var transition = $(this).attr("value");
+        $(".page-list.active").animate({
+            opacity: 1,
+        }, 1000);
 
-		$page.animate({
-			left: transition,
-		}, 1000);
-
-		$(".page-list.active").animate({
-			opacity: 0.5,
-		}, 1000);
-
-		$('.page-list').removeClass('active');
-
-		var aIdx = $('.title-page a').index($(this));
-		$('.page-list').eq(aIdx).addClass('active');
-
-		$(".page-list.active").animate({
-			opacity: 1,
-		}, 1000);
-
-	});
+    });
 
 function setMasonry(className){
 
-	className
-		.find("img")
-		.each(function(){
+    className
+        .find("img")
+        .each(function(){
 
-			if( $(this)[0].naturalHeight > $(this)[0].naturalWidth ){
+            if( $(this)[0].naturalHeight > $(this)[0].naturalWidth ){
 
-				$(this).addClass("imgHeight");
-			
-			} else {
+                $(this).addClass("imgHeight");
+            
+            } else {
 
-				$(this).addClass("imgWidth");
-			
-			};
+                $(this).addClass("imgWidth");
+            
+            };
 
-		})
-		.imagesLoaded(function(){
-			
-			className.masonry({
-				isAnimated: true,
-				gutter: 10,
-				columnWidth: 10,
-				itemSelector: '.item',
-			});
+        })
+        .imagesLoaded(function(){
+            
+            className.masonry({
+                isAnimated: true,
+                gutter: 10,
+                columnWidth: 10,
+                itemSelector: '.item',
+            });
 
-		});
+        });
 
-}	
+}
+
+var loader = {
+    show: function(){
+
+        $('.loader').css("display", "-webkit-flex");
+
+    },
+    hide: function(){
+
+        $('.loader').css("display", "none");
+
+    }
+}
