@@ -1,7 +1,6 @@
 @import style
 
 /* ---------- LIST --------- */
-
 button
     border: none
     background: none
@@ -22,17 +21,13 @@ button
         margin-bottom: 10px
 
 .page-container
-    width: 1050px
+    width: 1000px
     position: absolute
 
 .page-list
     background: url("/bundles/jocondelab/images/fond_div.png")
-    width: 1010px
-    padding:
-        top: 10px
-        bottom: 10px
-        left: 10px
-    margin-right: 40px
+    width: 1000px
+    padding: 10px
     display: inline-block
     min-height: 200px
     opacity: 0
@@ -61,14 +56,14 @@ button
 
 .item
     margin:
-        bottom: 15px
-        right: 15px
+        bottom: 10px
+        right: 10px
 
 .imgHeight
-    width: 190px
+    width: 180px
 
 .imgWidth
-    width: 390px
+    width: 380px
 
 .item-hover
     width: 100%
@@ -78,7 +73,7 @@ button
     padding: 5px
     right: 0
     text-align: right
-    background-color: rgba(255, 255, 255, 0.5)
+    background-color: rgba(255, 255, 255, 0.7)
     p
         font-size: 1.4em
         color: $black
@@ -192,67 +187,226 @@ button
     top: 0
     right: -25px
 
-@media screen and (min-width: 800px)
+@media screen and (max-width: 1024px)
+    .imgHeight
+        width: 250px
+
+    .imgWidth
+        width: 450px
+
+    .page-title
+        margin-top: 20px
     .margin-container
         width: 100%
+    .page-container
+        width: 100%
+    .page-list
+        width: 100%
+        margin-right: 0
+        &.active
+            .question
+                button:hover
+                    border: 2px solid $pink
+                    color: $pink
     .question
-        width: 300px
+        width: 220px
+        height: auto
         p
-            font-size: 5em
+            font-weight: bolt
         button
             margin-bottom: 5px
-            font-size: 2em
             border: 2px solid black
             padding:
                 left: 5px
                 right: 5px
-    .page-list
-        &.active
-            .question
-                button:hover
-                    border: 3px solid $pink
-                    color: $pink
+    
 
-@media screen and (min-width: 1024px)
-    .margin-container
-        width: 1000px
-    .question
-        min-width: 190px
-        width: 250px
-        p
-            font-size: 4em
-        button
-            border: none
-            font-size: 1.5em
-            padding: 0
-    .page-list
-        &.active
-            .question
-                button:hover
-                    border: none
+    .notice-width
+        width: 100% !important
 
-@media screen and (min-width: 1800px )
-    .margin-container
-        width: 1600px
-    .page-container
-        width: 1650px
-    .page-list
-        width: 1610px
-    .question
-        min-width: 250px
-        width: 300px
-        p
-            font-size: 5em
-        button
-            font-size: 2.5em
-            border: none
-            padding: 0
+    .notice
+        background: none
+        width: 100%
+        padding: 
+            top: 50px
+            bottom: 10px
+            left: 10px
+            right: 10px
+        position: relative
+        .notice-image
+            width: 100%
+            img
+                width: 95%
+        .notice-info
+            width: 100%
+            height: auto
+            display: inline-block
+            background-color: none
+            overflow: none
+            .notice-title
+                font-size: 2em
+            .notice-author
+                text-transform: capitalize
+                font-size: 2em
+            .notice-other-info
+                font-size: 1em
+            .notice-ths-autr
+                margin-top: 10px
+                p
+                    text-align: justify
+                    overflow: none
+        .notice-close
+            top: 10px
+            right: 0
+            left: 10px
+
+@media screen and (max-width: 768px)
     .imgHeight
-        width: 290px
+        width: 250px
+
     .imgWidth
-        width: 490px
+        width: 450px
+
+    .page-title
+        margin-top: 20px
+    .margin-container
+        width: 100%
+    .page-container
+        width: 100%
     .page-list
+        width: 100%
+        margin-right: 0
         &.active
             .question
                 button:hover
-                    border: none
+                    border: 2px solid $pink
+                    color: $pink
+    .question
+        width: 220px
+        height: auto
+        p
+            font-weight: bolt
+        button
+            margin-bottom: 5px
+            border: 2px solid black
+            padding:
+                left: 5px
+                right: 5px
+    
+
+    .notice-width
+        width: 100% !important
+
+    .notice
+        background: none
+        width: 100%
+        padding: 
+            top: 50px
+            bottom: 10px
+            left: 10px
+            right: 10px
+        position: relative
+        .notice-image
+            width: 100%
+            img
+                width: 95%
+        .notice-info
+            width: 100%
+            height: auto
+            display: inline-block
+            background-color: none
+            overflow: none
+            .notice-title
+                font-size: 2em
+            .notice-author
+                text-transform: capitalize
+                font-size: 2em
+            .notice-other-info
+                font-size: 1em
+            .notice-ths-autr
+                margin-top: 10px
+                p
+                    text-align: justify
+                    overflow: none
+        .notice-close
+            top: 10px
+            right: 0
+            left: 10px
+
+@media screen and (max-width: 480px)
+    .imgHeight, .imgWidth
+        width: 100%
+
+    .page-title
+        margin-top: 20px
+    .margin-container
+        width: 100%
+    .page-container
+        width: 100%
+    .page-list
+        width: 100%
+        background: none
+        margin-right: 0
+        &.active
+            .question
+                button:hover
+                    border: 2px solid $pink
+                    color: $pink
+    .question
+        width: 100%
+        height: auto
+        p
+            font-size: 2.5em
+            font-weight: bolt
+        button
+            margin-bottom: 5px
+            font-size: 1.5em
+            border: 2px solid black
+            padding:
+                left: 5px
+                right: 5px
+    .item-hover
+        p
+            font-size: 2em
+    .item-domain
+        font-size: 2em
+
+    .notice-width
+        width: 100% !important
+
+    .notice
+        background: none
+        width: 100%
+        padding: 
+            top: 50px
+            bottom: 10px
+            left: 10px
+            right: 10px
+        position: relative
+        .notice-image
+            width: 100%
+            img
+                width: 95%
+        .notice-info
+            width: 100%
+            height: auto
+            display: inline-block
+            background-color: none
+            overflow: none
+            .notice-title
+                font-size: 2em
+            .notice-author
+                text-transform: capitalize
+                font-size: 2em
+            .notice-other-info
+                font-size: 1em
+            .notice-ths-autr
+                margin-top: 10px
+                p
+                    text-align: justify
+                    overflow: none
+        .notice-close
+            top: 10px
+            right: 0
+            left: 10px
+     

@@ -1,295 +1,323 @@
 var $page = $(".page-container");
 var simpleWidth = $page.width();
+var pageList = $(".page-list")[0].offsetWidth;
 
 // for retour
 var i=0;
 var search = [];
 var numQuestion = 0;
 
-$(document).ready(function(){
-    $('.loader').css("display", "-webkit-flex");
-    var fisrtSearch = $(".title-page a").text();
-    search.push(fisrtSearch);
 
-    var $container = $('.page-list');
-    $container.addClass("active");
-    $container.imagesLoaded(function(){
-        $container.find("img").each(function(){
-            if(  $(this)[0].naturalHeight > $(this)[0].naturalWidth ){
-                $(this).addClass("imgHeight");
-            } else {
-                $(this).addClass("imgWidth");
-            }
-        });
-        // initialize Masonry after all images have loaded
-        $container.imagesLoaded( function() {
-            $container.masonry({
-                isAnimated: true,
-                gutter: 10,
-                columnWidth: 10,
-                itemSelector: '.item',
-            });
-        });
-        $('.loader').css("display", "none");
-        $container.animate({
-            opacity: 1,
-        }, 1000);
-    });
+jQuery(function($){
+	$('.loader').css("display", "-webkit-flex");
+	var fisrtSearch = $(".title-page a").text();
+	search.push(fisrtSearch);
+
+	var $container = $('.page-list');
+	$container
+		.addClass("active")
+		.imagesLoaded(function(){
+
+			setMasonry($container);
+
+			$('.loader').css("display", "none");
+
+			$container.animate({
+				opacity: 1,
+			}, 1000);
+
+		});
 });
 
-// add to favorite
-$(document).on("click", ".page-list.active .session", function(){
-    $.ajax({
-        url: Routing.generate('add_favorite_notice'),
-        dataType: "json",
-        data: {
-            param: $(this).val()
-        },
-        success: function(message){
-            console.log(message);
-        }
-    });
+$(document)
+	.on("click", ".page-list.active .session", function(){// ADD NOTICE IN FAVORIS
 
-});
+		$.ajax({
+			url: Routing.generate('add_favorite_notice'),
+			dataType: "json",
+			data: {
+				param: $(this).val()
+			},
+			success: function(message){
+				console.log(message);
+			}
+		});
+		
+	})
+	.on({ // HOVER TOO CHANGE PICTO FOR SEE
+		mouseenter: function(){
 
-// image hover
-// $(document).on({
-//     mouseenter: function() {
-//         $img = $(this);
-//         $.ajax({
-//             url: Routing.generate('notice_hover'),
-//             dataType: "json",
-//             data: {
-//                 id: $img.attr("alt")
-//             },
-//             complete: function(data){
-//                 var image = /^[^;]*/i.exec(data.responseJSON[0].video);
-//                 var response = " auteur : "+data.responseJSON[0].autr+"<br />"
-//                     +'<img src="http://www.culture.gouv.fr/Wave/image/joconde'+image[0]+'"/>';
-//                 $('.notice-hover').html(response);
-//             }
-//         });
-//     },
-//     mouseleave: function() {
-//         $('.notice-hover').text("");
-//     }
-// }, '.page-list.active img');
+			var $button = $(this).find('i');
+			$button
+				.removeClass("picto_oeil")
+				.addClass("picto_oeil_hover");
 
-// Bouton see
-$(document).on({
-    mouseenter: function() {
-        var $button = $(this).find('i');
-        $button.removeClass("picto_oeil");
-        $button.addClass("picto_oeil_hover");
-    },
-    mouseleave: function() {
-        var $button = $(this).find('i');
-        $button.removeClass("picto_oeil_hover");
-        $button.addClass("picto_oeil");
-    }
-}, '.page-list.active .see');
+		},
+		mouseleave: function(){
 
-// Button Go to Notice
+			var $button = $(this).find('i');
+			$button
+				.removeClass("picto_oeil_hover")
+				.addClass("picto_oeil");
 
-// Bouton session
-$(document).on({
-    mouseenter: function() {
-        var $button = $(this).find('i');
-        $button.removeClass("picto_ajouter");
-        $button.addClass("picto_ajouter_hover");
-    },
-    mouseleave: function() {
-        var $button = $(this).find('i');
-        $button.removeClass("picto_ajouter_hover");
-        $button.addClass("picto_ajouter");
-    }
-}, '.page-list.active .session');
-   
-// BUTTON SEE NOTICE
-$(document).on("click", ".page-list.active .see", function(){
-    var result = $(this).val();
-    console.log(result);
-    $.ajax({
-        url: Routing.generate('notice_id'),
-        dataType: "json",
-        data: {
-            param: result
-        },
-        complete: function(content){
-            var response = content.responseJSON.content;
-            $(".loader-notice").html(response);
-            $(".loader-notice").animate({
-                    opacity: 1,
-                    top: 0,
-            }, 1000);
-        }
-    });
-});
+		}
+	}, '.page-list.active .see')
+	.on({// HOVER TOO CHANGE PICTO FOR SESSION
+		mouseenter: function()
+		{
+			var $button = $(this).find('i');
+			$button
+				.removeClass("picto_ajouter")
+				.addClass("picto_ajouter_hover");
+		},
+		mouseleave: function() {
+			var $button = $(this).find('i');
+			$button
+				.removeClass("picto_ajouter_hover")
+				.addClass("picto_ajouter");
+		}
+	}, '.page-list.active .session')
+	.on("click", ".page-list.active .see", function(){// CLICK TO SEE NOTICE
 
-// CLOSE NOTICE
-$(document).on("click", ".notice-close", function(){
-    $(".loader-notice").animate({
-            opacity: 0,
-            top: "-100%",
-    }, 1000);
-});
+		var result = $(this).val();
+		$('.loader').css("display", "-webkit-flex");
+		$.ajax({
+			url: Routing.generate('notice_id'),
+			dataType: "json",
+			data: {
+				param: result
+			},
+			complete: function(content){
+				var response = content.responseJSON.content;
+				$(".loader-notice").html(response);
+				$('.loader').css("display", "none");
+				$(".loader-notice").animate({
+						opacity: 1,
+						left: 0,
+				}, 1000);
+			}
+		});
 
-// NEW QUESTION 
-$(document).on("click", ".page-list.active .btn-question", function(){
-    // change question
-    var result = $(this).val();
-    var splitResponse = result.split(",");
-    var newQuestion = splitResponse[0];
-    var none = splitResponse[1];
+	})
+	.on("click", ".notice-close", function(){// CLICK TO CLOSE NOTICE
 
-    // add compte for question -------------
+		$(".loader-notice").animate({
+				opacity: 0,
+				left: "-100%",
+		}, 1000);
 
-    var index = $('.page-list').index($('.page-list.active'))
-    //numQuestion++;
-    console.log(numQuestion);
-    if( none == "none" || none == "no") {        
-        $.ajax({
-            url: Routing.generate('change_question'),
-            dataType: "json",
-            data: {
-                numQuestion: newQuestion
-            },
-            complete: function(question){
-                $('.page-list.active .question').fadeOut(500,function(){
-                    var responseQuestion = question.responseJSON.question;
-                    var splitResponse = responseQuestion.split(",");
-                    var newQuestion = splitResponse[0];
-                    var typeQuestion = splitResponse[1];
-                    var nbQuestion = splitResponse[2];
-                    var response = '<p>'+newQuestion+' ?</p><button class="btn-question" value="'+typeQuestion+','+nbQuestion+',yes">oui</button><button class="btn-question" value="'+nbQuestion+',no">non</button><button class="btn-question" value="'+nbQuestion+',none">ne sais pas</button>'
-                    if(nbQuestion > (index+1)) response += '<button class="btn-question" value="'+(nbQuestion-2)+',no">question précendte</button>'
-                    $('.page-list.active .question').html(response);
-                    $('.page-list.active .question').fadeIn(500);
-                    $('.page-list.active .question').css('display', 'inline')
-                    $('.page-list.active').masonry({
-                        isAnimated: true,
-                        gutter: 10,
-                        columnWidth: 10,
-                        itemSelector: '.item',
-                    });
-                });
-            }
-        });
-    } else {
-        $('.loader').css("display", "-webkit-flex");
-        var nbDiv = $('.page-list').length;
+	})
+	.on("click", ".page-list.active .btn-question", function(){// CLICK TO CHANGE QUESTION
 
-        var newSearch = $(this).val();
-        var splitResponse = newSearch.split(",");
-        var newQuestion = splitResponse[0];
-        var nbQuestion = splitResponse[1];
-        
-        if(nbDiv-index !== 1) {
-            $('.page-list.active').nextAll('div').remove();
-            i = index;
-            search = search.slice(0,index+1);
-        }
+		//Get value for new question
+		var result = $(this).val();
+		var splitResponse = result.split(",");
+		var newQuestion = splitResponse[0];
+		var none = splitResponse[1];
 
-        search.push(newQuestion);
+		// add compte for question -------------
 
-        $.ajax({
-            url: Routing.generate('change_question_good'),
-            dataType: "json",
-            data: {
-                answer: search,
-                nb: nbQuestion
-            },
-            complete: function(content){
-                var $page = $(".page-container");
-                newWidth = $page.width()+simpleWidth+5;
-                $page.css("width", newWidth);
-                var div = $('<div class="page-list"></div>');
-                $page.append(div);
+		var index = $('.page-list').index($('.page-list.active'))
+		//numQuestion++;
+	
+		if( none == "none" || none == "no") {
 
-                i++;
-                
-                var $container = $(".page-list:last-child");
-                
-                var response = content.responseJSON.content;
+			$.ajax({
+				url: Routing.generate('change_question'),
+				dataType: "json",
+				data: {
+					numQuestion: newQuestion
+				},
+				complete: function(question){
 
-                var searchTitle = $(".title-page").html();
-                var splitsearch = searchTitle.split(".");
+					$('.page-list.active .question').fadeOut(500,function(){
+						var responseQuestion = question.responseJSON.question;
+						var splitResponse = responseQuestion.split(",");
+						var newQuestion = splitResponse[0];
+						var typeQuestion = splitResponse[1];
+						var nbQuestion = splitResponse[2];
+						var response = '<p>'+newQuestion+' ?</p><button class="btn-question" value="'+typeQuestion+','+nbQuestion+',yes">oui</button><button class="btn-question" value="'+nbQuestion+',no">non</button><button class="btn-question" value="'+nbQuestion+',none">ne sais pas</button>';
 
-                var newSearchTitle = "";
-                for (var i = 0; i < search.length-1; i++) {
-                    if(i!==0) newSearchTitle +="."
-                    newSearchTitle += splitsearch[i];
-                };
+						if(nbQuestion > (index+1)) response += '<button class="btn-question" value="'+(nbQuestion-2)+',no">question précendte</button>';
+						$('.page-list.active .question').html(response);
+						$('.page-list.active .question').fadeIn(500);
+						$('.page-list.active .question').css('display', 'inline');
 
-                newSearchTitle += ".<a href='#' value='-"+i*simpleWidth+"'>"+newQuestion+"</a>";
+						$('.page-list.active').masonry({
+							isAnimated: true,
+							gutter: 10,
+							columnWidth: 10,
+							itemSelector: '.item',
+						});
 
-                $(".title-page").html(newSearchTitle);
+					});
 
-                $container.html(response);
+				}
+			});
+		} else {
 
-                $container.imagesLoaded(function(){
-                    $container.find("img").each(function(){
-                        if( $(this)[0].naturalHeight > $(this)[0].naturalWidth ){
-                            $(this).addClass("imgHeight");
-                        } else {
-                            $(this).addClass("imgWidth");
-                        }
-                    });
+			$('.loader').css("display", "-webkit-flex");
+			var nbDiv = $('.page-list').length;
 
-                    $container.imagesLoaded( function() {
-                        $container.masonry({
-                            isAnimated: true,
-                            gutter: 10,
-                            columnWidth: 10,
-                            itemSelector: '.item',
-                        });
-                    });
-                });
+			var newSearch = $(this).val();
+			var splitResponse = newSearch.split(",");
+			var newQuestion = splitResponse[0];
+			var nbQuestion = splitResponse[1];
+			
+			if( nbDiv-index !== 1 ) {
 
-                var newLeft = $page.position().left-simpleWidth;
+				$('.page-list.active').nextAll('div').remove();
+				i = index;
+				search = search.slice(0,index+1);
 
-                $('.loader').css("display", "none");
+			};
 
-                $(".page-list.active").animate({
-                    opacity: 0.5,
-                }, 1000);
+			search.push(newQuestion);
 
-                $('.page-list').removeClass('active');
-                $container.addClass('active');
+			$.ajax({
+				url: Routing.generate('change_question_good'),
+				dataType: "json",
+				data: {
+					answer: search,
+					nb: nbQuestion
+				},
+				complete: function(content){
 
-                $page.animate({
-                    left: newLeft,
-                }, 1000);
+					var $page = $(".page-container");
+					newWidth = $page.width()+simpleWidth+5+$('.page-list')[0].offsetLeft;
+					$page.css("width", newWidth);
+					var div = $('<div class="page-list"></div>');
+					$page.append(div);
 
-                $container.animate({
-                    opacity: 1,
-                }, 1000);
+					i++;
+					
+					var $container = $(".page-list:last-child");
+					
+					var response = content.responseJSON.content;
 
-                $(".page-list:nth-last-child(2)").animate({
-                    opacity: 0.5,
-                }, 1000);
-            }
-        });
-    }
-});
+					var searchTitle = $(".title-page").html();
+					var splitsearch = searchTitle.split(".");
 
-$(document).on("click", ".title-page a", function(){
-    var transition = $(this).attr("value");
+					var newSearchTitle = "";
 
-    $page.animate({
-        left: transition,
-    }, 1000);
+					for ( var i = 0; i < search.length-1; i++ ) {
 
-    $(".page-list.active").animate({
-        opacity: 0.5,
-    }, 1000);
+						if(i!==0) newSearchTitle +=".";
+						newSearchTitle += splitsearch[i];
+					};
 
-    $('.page-list').removeClass('active');
+					newSearchTitle += ".<a href='#' value='-"+i*simpleWidth+"'>"+newQuestion+"</a>";
 
-    var aIdx = $('.title-page a').index($(this));
-    $('.page-list').eq(aIdx).addClass('active');
+					$(".title-page").html(newSearchTitle);
 
-    $(".page-list.active").animate({
-        opacity: 1,
-    }, 1000);
-});
+					$container.html(response);
+
+					$container.imagesLoaded(function(){
+
+						$container.find("img").each(function(){
+
+							if( $(this)[0].naturalHeight > $(this)[0].naturalWidth ){
+
+								$(this).addClass("imgHeight");
+
+							} else {
+
+								$(this).addClass("imgWidth");
+
+							}
+
+						});
+
+						$container.imagesLoaded(function(){
+
+							$container.masonry({
+								isAnimated: true,
+								gutter: 10,
+								columnWidth: 10,
+								itemSelector: '.item',
+							});
+
+						});
+
+					});
+
+					var newLeft = $page.position().left-simpleWidth;
+
+					$('.loader').css("display", "none");
+
+					$(".page-list.active").animate({
+						opacity: 0.5,
+					}, 1000);
+
+					$('.page-list').removeClass('active');
+					$container.addClass('active');
+
+					$page.animate({
+						left: newLeft,
+					}, 1000);
+
+					$container.animate({
+						opacity: 1,
+					}, 1000);
+
+					$(".page-list:nth-last-child(2)").animate({
+						opacity: 0.5,
+					}, 1000);
+
+					$('.page-list').css("width", pageList);
+				}
+			});
+		}
+	})
+	.on("click", ".title-page a", function(){
+
+		var transition = $(this).attr("value");
+
+		$page.animate({
+			left: transition,
+		}, 1000);
+
+		$(".page-list.active").animate({
+			opacity: 0.5,
+		}, 1000);
+
+		$('.page-list').removeClass('active');
+
+		var aIdx = $('.title-page a').index($(this));
+		$('.page-list').eq(aIdx).addClass('active');
+
+		$(".page-list.active").animate({
+			opacity: 1,
+		}, 1000);
+
+	});
+
+function setMasonry(className){
+
+	className
+		.find("img")
+		.each(function(){
+
+			if( $(this)[0].naturalHeight > $(this)[0].naturalWidth ){
+
+				$(this).addClass("imgHeight");
+			
+			} else {
+
+				$(this).addClass("imgWidth");
+			
+			};
+
+		})
+		.imagesLoaded(function(){
+			
+			className.masonry({
+				isAnimated: true,
+				gutter: 10,
+				columnWidth: 10,
+				itemSelector: '.item',
+			});
+
+		});
+
+}	

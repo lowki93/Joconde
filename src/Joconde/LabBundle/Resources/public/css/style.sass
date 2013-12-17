@@ -1,3 +1,4 @@
+
 @import variable
 @import reset
 @import bootstrap/lib/mixins
@@ -57,6 +58,7 @@ i
 
 /* ---------- LOADER NOTICE --------- */
 .loader-notice
+    z-index: 10
     display: -webkit-flex
     opacity: 0
     width: 100%
@@ -71,8 +73,9 @@ i
     -webkit-justify-content: center
     align-items: center
     justify-content: center
-    background-color: rgba(255, 255, 255, 0.6)
-    top: -100%
+    background-color: rgba(255, 255, 255, 0.9)
+    left: -100%
+    top: 0
 
 /* ---------- CONTAINER --------- */
 .container
@@ -100,6 +103,7 @@ i
 
 /* ---------- PAGE --------- */
 .header
+    position: relative
     width: 100%
     padding:
         top: 10px
@@ -127,5 +131,24 @@ i
         right: 10px
 
 .page
-    width: 100%
     position: relative
+
+@media screen and (max-width: 1024px)
+    .header, .page
+        width: 100%
+
+@media screen and (max-width: 768px)
+    .header, .page
+        width: 100%
+    .header
+        img
+            height: 30px
+        p
+            width: 100%
+
+@media screen and (max-width: 480px)
+    .header, .page
+        width: 100%
+
+    .mp-menu
+        width: 280px

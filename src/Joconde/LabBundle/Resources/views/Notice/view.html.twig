@@ -28,7 +28,7 @@
             </div>
             <div class="notice-ths-autr"><p></p></div>
         </div>
-        <img src="{{ asset('bundles/jocondelab/images/picto_close.png') }}" width="20px" class="notice-close" />
+        <button><i class="notice-close picto_close" ></i></button>
 </div>
 
 <script>
@@ -40,19 +40,23 @@
 
     $container.imagesLoaded(function(){
         $container.find(".image-for-notice").each(function(){
-            console.log("height : "+$(this)[0].naturalHeight+" , width : "+$(this)[0].naturalWidth);
-            if( $(this)[0].naturalHeight > $(this)[0].naturalWidth ){ 
+            if(window.innerWidth < 520) {
+                $(this).addClass("imgHeight");
             } else {
-                $container.addClass("notice-width");
-                var imgWidth = $container.width() - $containerInfo.width() - 20;
-                $containerImg.css("width", imgWidth);
+                if( $(this)[0].naturalHeight > $(this)[0].naturalWidth ){ 
+                } else {
+                    $container.addClass("notice-width");
+                    var imgWidth = $container.width() - $containerInfo.width() - 20;
+                    $containerImg.css("width", imgWidth);
+                }
+
+                var infoHeight = $(this)[0].height;
+                $containerInfo.css('height', infoHeight);
+                var $containerThsP = $(".notice .notice-info .notice-ths-autr p");
+                var thsHeight = $containerInfo.height() - $containerTitl.height();
+                $containerThs.css("height", thsHeight);
+                $containerThsP.css("height", thsHeight);
             }
-            var infoHeight = $(this)[0].height;
-            $containerInfo.css('height', infoHeight);
-            var $containerThsP = $(".notice .notice-info .notice-ths-autr p");
-            var thsHeight = $containerInfo.height() - $containerTitl.height();
-            $containerThs.css("height", thsHeight);
-            $containerThsP.css("height", thsHeight);
         });
     });
     {% for term in notice.terms %}

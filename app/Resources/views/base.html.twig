@@ -17,6 +17,7 @@
                    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
             {% endstylesheets %}
         {% endblock %}
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1">
         {% javascripts
             'jquery/jquery.js'
         %}
@@ -51,6 +52,60 @@
                 context.fillStyle = "#FFF";
                 context.fill();
                 context.stroke();
+
+                if( ($(".margin-container").length > 0 ) && search.length !== 0 ){
+                    
+                    var $page = $(".page-container");
+
+                    if(window.innerWidth > 1024) {
+
+                        $page.css("width", "1000px");
+
+                    } else {
+
+                        $page.css("width", window.innerWidth);
+
+                    }
+                    
+                    var simpleWidth = $page[0].offsetWidth;
+                    var pageList = $(".page-list")[0].offsetWidth;
+                    var index = $('.page-list').index($('.page-list.active'))
+
+                    var nbPageList = $('.page-list').length;
+
+                    var $page = $(".page-container");
+                    newWidth = nbPageList*(simpleWidth+3);
+
+                    $page.css("width", newWidth);
+                    $(".page-list").css("width",simpleWidth);
+                    $page.css("left", -(index*simpleWidth)-5);
+
+                    if( window.innerWidth <= 480) {
+
+                        $('.page-list').find("img").each(function(){
+
+                            if( $(this)[0].naturalHeight > $(this)[0].naturalWidth ){
+
+                                $(this).css("width", "100%");
+
+                            }
+                        });
+
+                    }
+
+                    // change val for title search
+                    var newSearchTitle = "";
+
+                    for (var i = 0; i < search.length; i++) {
+
+                        newSearchTitle += "<a href='#' value='-"+i*simpleWidth+"'>"+search[i]+"</a>";
+
+                        if( i !== search.length-1 ) newSearchTitle += ".";
+                    };
+
+                    $(".title-page").html(newSearchTitle);
+
+                }
             }
         </script>
     </head>
