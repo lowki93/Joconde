@@ -28,52 +28,108 @@
             </div>
             <div class="notice-ths-autr"><p></p></div>
         </div>
-        <button><i class="notice-close picto_close" ></i></button>
+        <button class="close"><i class="notice-close picto_close" ></i></button>
 </div>
 
 <script>
-    var $container = $(".notice");
-    var $containerImg = $(".notice .notice-image");
-    var $containerInfo = $(".notice .notice-info");
-    var $containerTitl = $(".notice .notice-info .notice-info-titl");
-    var $containerThs = $(".notice .notice-info .notice-ths-autr");
+    setNotice();
+    function setNotice(){
 
-    $container.imagesLoaded(function(){
-        $container.find(".image-for-notice").each(function(){
-            if(window.innerWidth < 520) {
-                $(this).addClass("imgHeight");
-            } else {
-                if( $(this)[0].naturalHeight > $(this)[0].naturalWidth ){ 
-                } else {
-                    $container.addClass("notice-width");
-                    var imgWidth = $container.width() - $containerInfo.width() - 20;
-                    $containerImg.css("width", imgWidth);
-                }
+        var $container = $(".notice");
+        var $containerImg = $(".notice .notice-image");
+        var $containerInfo = $(".notice .notice-info");
+        var $containerTitl = $(".notice .notice-info .notice-info-titl");
+        var $containerThs = $(".notice .notice-info .notice-ths-autr");
 
-                var infoHeight = $(this)[0].height;
-                $containerInfo.css('height', infoHeight);
-                var $containerThsP = $(".notice .notice-info .notice-ths-autr p");
-                var thsHeight = $containerInfo.height() - $containerTitl.height();
-                $containerThs.css("height", thsHeight);
-                $containerThsP.css("height", thsHeight);
-            }
-        });
-    });
-    {% for term in notice.terms %}
+        $container.imagesLoaded(function(){
 
-        if (1 === {{term.thesaurus.id}}) {
-            if("anonyme" !== '{{term.label}}'){
-                console.log("{{term.dbpediaUri}}");
-                $.getJSON( "http://fr.dbpedia.org/sparql?default-graph-uri=&query=select distinct ?abstract where {<{{term.dbpediaUri}}> dbpedia-owl:abstract ?abstract.filter(lang(?abstract) = 'fr').} LIMIT 100&format=json&timeout=0&debug=on", function(data) {
-                    var items = [];
-                    $.each( data.results.bindings[0].abstract, function( key, val ) {
-                        if(key == "value") {
-                            items.push( ""+val+"" );
+            $container
+                .find(".image-for-notice")
+                    .each(function(){
+                        
+                        // if( ((window.innerWidth < 1025 && ((window.orientation == 90) || (window.orientation == -90))) || (window.innerWidth < 1025 || (window.orientation == 90) || (window.orientation == -90))) || window.innerWidth < 1024){
+                        if( ( (window.innerWidth < 1024) ) || (window.innerWidth < 1025 && ((window.orientation == 90) || (window.orientation == -90))) ){
+
+                            if((window.innerWidth > 480) && (window.innerWidth > 768)){
+                                if( $(this)[0].naturalHeight > $(this)[0].naturalWidth ){
+
+                                    var naturalHeightImg = $(this)[0].naturalHeight;
+                                    var naturalWidthImg = $(this)[0].naturalWidth;
+                                    var imgHeight = $container.height();
+                                    var imgWidth = (imgHeight/naturalHeightImg)*naturalWidthImg;
+
+                                    $( this ).css("height", imgHeight-30);
+                                    $( this ).css("width", imgWidth);
+                                    $containerImg.css("height", imgHeight);
+                                    $containerImg.css("width", imgWidth);
+
+                                    $containerInfo.css('height', imgHeight-30);
+                                    $containerInfo.css('width', $container.width()-imgWidth-5);
+
+                                    var $containerThsP = $(".notice .notice-info .notice-ths-autr p");
+                                    var thsHeight = $containerInfo.height() - $containerTitl.height();
+                                    $containerThs.css("height", thsHeight);
+                                    $containerThsP.css("height", thsHeight);
+
+                                } else {
+
+                                    $containerImg.css("width", $container.width());
+                                    $containerInfo.css("width", $container.width());
+                                };
+
+                            } else {
+                                $containerImg.css("width", $container.width());
+                                $containerInfo.css("width", $container.width());
+                            };
+
+                        } else {
+
+                            if( $(this)[0].naturalHeight < $(this)[0].naturalWidth ){ 
+
+                                $container.addClass("notice-width");
+                                var imgWidth = $container.width() - $containerInfo.width() - 20;
+                                $containerImg.css("width", imgWidth);
+
+                            }
+
+                            var infoHeight = $(this)[0].height;
+                            $containerInfo.css('height', infoHeight);
+
+                            var $containerThsP = $(".notice .notice-info .notice-ths-autr p");
+                            var thsHeight = $containerInfo.height() - $containerTitl.height();
+                            $containerThs.css("height", thsHeight);
+                            $containerThsP.css("height", thsHeight);
+
                         }
                     });
-                    $(".notice-ths-autr p").html(items);
-                });
+        });
+
+        {% for term in notice.terms %}
+
+            if (1 === {{term.thesaurus.id}}) {
+
+                if("anonyme" !== '{{term.label}}'){
+
+                    $.getJSON( "http://fr.dbpedia.org/sparql?default-graph-uri=&query=select distinct ?abstract where {<{{term.dbpediaUri}}> dbpedia-owl:abstract ?abstract.filter(lang(?abstract) = 'fr').} LIMIT 100&format=json&timeout=0&debug=on", function(data){
+
+                        var items = [];
+                        $.each( data.results.bindings[0].abstract, function( key, val ){
+
+                            if(key == "value") {
+
+                                items.push( ""+val+"" );
+
+                            }
+
+                        });
+
+                        $(".notice-ths-autr p").html(items);
+
+                    });
+
+                }
+                
             }
-        }
-    {% endfor %}
+        {% endfor %}
+    }
 </script>

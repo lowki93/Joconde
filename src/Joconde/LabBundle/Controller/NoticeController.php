@@ -44,7 +44,7 @@ class NoticeController extends Controller
 
                     $notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($pieces, $terms, $nbTerm);
 
-                     $question = $this->get('flash.session_notice_manager')->setQuestion($search);
+                    $question = $this->get('flash.session_notice_manager')->setQuestion($search);
                 } else {
                     $search = strtolower($search);
 

@@ -220,7 +220,12 @@ $(document)
 
                     $container.html(response);
 
-                    setMasonry($container);
+                    $container
+                        .imagesLoaded(function(){
+
+                            setMasonry($container);
+
+                        });
 
                     var newLeft = $page.position().left-simpleWidth;
 
@@ -273,26 +278,26 @@ $(document)
 
     });
 
-function setMasonry(className){
+function setMasonry($className){
 
-    className
+    $className
         .find("img")
         .each(function(){
+            console.log($(this));
+            if( $(this).height() > $(this).width() ){
 
-            if( $(this)[0].naturalHeight > $(this)[0].naturalWidth ){
-
-                $(this).addClass("imgHeight");
+                $(this).addClass("imgHeight");console.log("width : "+$(this)[0].naturalWidth+" , height : "+$(this)[0].naturalHeight+" , imgHeight");
             
             } else {
 
-                $(this).addClass("imgWidth");
+                $(this).addClass("imgWidth");console.log("width : "+$(this)[0].naturalWidth+" , height : "+$(this)[0].naturalHeight+" , imgWidth");
             
             };
 
         })
         .imagesLoaded(function(){
-            
-            className.masonry({
+
+            $className.masonry({
                 isAnimated: true,
                 gutter: 10,
                 columnWidth: 10,

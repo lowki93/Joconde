@@ -1,40 +1,57 @@
-$(document).ready(function() {
-    $(".search").focus();
+jQuery(function($){
 
-    $(".search").autocomplete({
-        minLength: 3,
-        source: function(request, response) {
-            $.ajax({
-                url: '/search_ajax',
-                dataType: "json",
-                data: {
-                    param:  $('.search').val()
-                },
-                success: function(data){
-                    response( $.map( data, function( object ) {
-                        if(object.label != null){
-                            return {
-                                label: object.label,
-                                value: object.label
+    $(".search")
+        .focus()
+        .autocomplete({
+            minLength: 3,
+            source: function(request, response) {
+                $.ajax({
+                    url: '/search_ajax',
+                    dataType: "json",
+                    data: {
+                        param:  $('.search').val()
+                    },
+                    success: function(data){
+
+                        response( $.map( data, function(object){
+
+                            if(object.label != null){
+
+                                return {
+
+                                    label: object.label,
+                                    value: object.label
+
+                                }
+
+                            } else {
+
+                                return {
+
+                                    label: object.titr,
+                                    value: object.titr
+
+                                }   
+
                             }
-                        }
-                        else{
-                            return {
-                                label: object.titr,
-                                value: object.titr
-                            }   
-                        }
-                    }));
-                },
-                open: function() {
-                    $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
-                },
-                close: function() {
-                    $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
-                }
-            });
-        }
-    });
+
+                        }));
+                    },
+                    open: function(){
+
+                        $( this )
+                            .removeClass( "ui-corner-all" )
+                            .addClass( "ui-corner-top" );
+                    },
+                    close: function() {
+                        
+                        $( this )
+                            .removeClass( "ui-corner-top" )
+                            .addClass( "ui-corner-all" );
+                    }
+                });
+            }
+        });
 });
 
 $("form").submit(function(){

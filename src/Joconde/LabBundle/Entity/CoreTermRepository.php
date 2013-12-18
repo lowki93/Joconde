@@ -13,7 +13,7 @@ class CoreTermRepository extends EntityRepository {
             ->where($qb->expr()->like("lower(ct.label)", ':s'))
             ->setMaxResults(5)
             ->setParameter('s' , '%'.$search.'%');
-
+        // echo $qb->getQuery()->getDql();
         return $noticeTerm = $qb->getQuery()->getResult();
     }  
 

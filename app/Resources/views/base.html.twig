@@ -53,6 +53,23 @@
                 context.fill();
                 context.stroke();
 
+                if( parseInt($('.loader-notice').css("left")) == 0 ) {
+
+                    var $page = $(".page-container");
+
+                    if(window.innerWidth > 1024) {
+
+                        $page.css("width", "1000px");
+
+                    } else {
+
+                        $page.css("width", window.innerWidth);
+
+                    };
+
+                    setNotice();
+                };
+
                 if( ($(".margin-container").length > 0 ) && search.length !== 0 ){
                     
                     var $page = $(".page-container");
@@ -65,7 +82,7 @@
 
                         $page.css("width", window.innerWidth);
 
-                    }
+                    };
                     
                     var simpleWidth = $page[0].offsetWidth;
                     var pageList = $(".page-list")[0].offsetWidth;
@@ -79,19 +96,6 @@
                     $page.css("width", newWidth);
                     $(".page-list").css("width",simpleWidth);
                     $page.css("left", -(index*simpleWidth)-5);
-
-                    if( window.innerWidth <= 480) {
-
-                        $('.page-list').find("img").each(function(){
-
-                            if( $(this)[0].naturalHeight > $(this)[0].naturalWidth ){
-
-                                $(this).css("width", "100%");
-
-                            }
-                        });
-
-                    }
 
                     // change val for title search
                     var newSearchTitle = "";
@@ -136,11 +140,11 @@
                 </nav>
                 <div class="scroller">
                     <div class="header">
-                        <a href="#" id="trigger">
+                        <a href="#" id="trigger" class="menu">
                             <i class="picto_menu"></i>
                         </a>
                         <p class="title-page">{% block search %}{% endblock %}</p>
-                        {% block logo %}<img src="{{ asset('bundles/jocondelab/images/logo1.png') }}" alt="logo" height="50px"/>{% endblock %}
+                        {% block logo %}<a href="{{ path('joconde_lab_homepage') }}"><img src="{{ asset('bundles/jocondelab/images/logo1.png') }}" alt="logo" height="50px"/></a>{% endblock %}
                     </div>
                     <div class="page">
                         {% block body %}{% endblock %}
