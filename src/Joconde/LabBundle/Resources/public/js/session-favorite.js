@@ -333,7 +333,7 @@ var notification = {
 	show: function($className,$classMessage,left){
 
 		$className.show();
-		$classMessage.attr('style','display: inline-flex !important');
+		$classMessage.attr('style','display: -webkit-flex !important');
 
 		$className
 			.animate({
@@ -349,7 +349,7 @@ var notification = {
 		setTimeout(function(){
 
 			$className.hide();
-			$classMessage.hide();
+			$classMessage.attr('style','display: none !important');
 
 		}, 3000);
 

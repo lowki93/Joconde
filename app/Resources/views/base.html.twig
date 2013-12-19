@@ -49,7 +49,17 @@
 				drop.height = height;
 
 				context.beginPath();
-				context.arc((window.innerWidth/2),(window.innerHeight/2),150 ,0,Math.PI*2,false);
+
+				if( window.innerWidth < 480 ) {
+
+					context.arc((window.innerWidth/2),(window.innerHeight/2),85 ,0,Math.PI*2,false);
+
+				} else {
+
+					context.arc((window.innerWidth/2),(window.innerHeight/2),150 ,0,Math.PI*2,false);
+
+				};
+				
 				context.strokeStyle = "#ff5572";
 				context.fillStyle = "#FFF";
 				context.fill();
