@@ -100,6 +100,7 @@ $(document)
 				param: result
 			},
 			complete: function(content){
+
 				var response = content.responseJSON.content;
 				$(".loader-notice").html(response);
 

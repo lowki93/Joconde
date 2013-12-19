@@ -2100,10 +2100,10 @@ class CoreNotice
     /**
      * Add noticeImage
      *
-     * @param \Joconde\LabBundle\Entity\CoreNoticemage $noticeImage
+     * @param \Joconde\LabBundle\Entity\CoreNoticeimage $noticeImage
      * @return CoreNotice
      */
-    public function addNoticeImage(\Joconde\LabBundle\Entity\CoreNoticemage $noticeImage)
+    public function addNoticeImage(\Joconde\LabBundle\Entity\CoreNoticeimage $noticeImage)
     {
         $this->noticeImage[] = $noticeImage;
     
@@ -2113,9 +2113,9 @@ class CoreNotice
     /**
      * Remove noticeImage
      *
-     * @param \Joconde\LabBundle\Entity\CoreNoticemage $noticeImage
+     * @param \Joconde\LabBundle\Entity\CoreNoticeimage $noticeImage
      */
-    public function removeNoticeImage(\Joconde\LabBundle\Entity\CoreNoticemage $noticeImage)
+    public function removeNoticeImage(\Joconde\LabBundle\Entity\CoreNoticeimage $noticeImage)
     {
         $this->noticeImage->removeElement($noticeImage);
     }

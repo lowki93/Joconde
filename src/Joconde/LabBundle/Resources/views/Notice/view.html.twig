@@ -41,8 +41,7 @@
             $container
                 .find(".image-for-notice")
                     .each(function(){
-                        
-                        // if( ((window.innerWidth < 1025 && ((window.orientation == 90) || (window.orientation == -90))) || (window.innerWidth < 1025 || (window.orientation == 90) || (window.orientation == -90))) || window.innerWidth < 1024){
+
                         if( ( (window.innerWidth < 1024) ) || (window.innerWidth < 1025 && ((window.orientation == 90) || (window.orientation == -90))) ){
 
                             if((window.innerWidth > 480) && (window.innerWidth > 768)){
@@ -78,6 +77,9 @@
                             };
 
                         } else {
+
+                            $containerImg.css("width", 385 );
+                            $containerInfo.css('width', 385 );
 
                             if( $(this)[0].naturalHeight < $(this)[0].naturalWidth ){ 
 

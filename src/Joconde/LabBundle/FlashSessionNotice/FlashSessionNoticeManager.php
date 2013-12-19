@@ -42,10 +42,13 @@ class FlashSessionNoticeManager
 	public function deleteOneFavoris($id)
 	{   
 		$favoris = $this->session->get('favoris');
+
 		if( in_array($id, (array)$favoris) ){
 
 			$place = array_search($id, $favoris);
 			unset ($favoris[$place]);
+			$favoris = array_merge($favoris);
+
 			$favoris = $this->session->set('favoris', $favoris);
 
 		};
@@ -85,8 +88,6 @@ class FlashSessionNoticeManager
 
 	public function getQuestion($nbQuestion)
 	{   
-		//die("nb : ".$nbQuestion);
-		// $this->nbQuestion = $nbQuestion;
 		$this->tabQuest = $this->getSessionQuestion();
 		return $this->tabQuest[(int)$nbQuestion];
 	}

@@ -231,10 +231,16 @@ class NoticeController extends Controller
 		if($request->isXmlHttpRequest())
 		{
 			$id = $request->query->get('param');
+
 			$this->get('flash.session_notice_manager')->deleteOneFavoris($id);
 			$favorite = $this->get('flash.session_notice_manager')->getFavoris();
-			$em = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice');
-			-$notices = $em->findById($favorite);
+			if($favorite === 0 ) {
+				$em = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice');
+				$notices = $em->findById($favorite);
+			} else {
+				$notices = 0;
+			};	
+
 			$response["message"]="good";
 			$response["content"] = $this->renderView('JocondeLabBundle:Notice:ajax.list.html.twig',
 								array('question' => "",
