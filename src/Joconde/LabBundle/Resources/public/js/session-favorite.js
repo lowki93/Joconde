@@ -132,7 +132,6 @@ $(document)
 		// add compte for question -------------
 
 		var index = $('.page-list').index($('.page-list.active'))
-		//numQuestion++;
 	
 		if( none == "none" || none == "no") {
 
