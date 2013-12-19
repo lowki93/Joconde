@@ -260,7 +260,6 @@ $(document)
 
 					$('.page-list').css("width", pageList);
 
-					console.log(search);
 				}
 			});
 		}

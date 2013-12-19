@@ -1,34 +1,29 @@
-{#     <h1>terms</h1>
-    {% for term in notice.terms %}
-        {{term.label}} ----> {{term.thesaurus.label}} ----> dbpedia : {{term.dbpediaUri}} <br /><br /><br />
-    {% endfor %}
- #}
 <div class="notice">
-        <div class="notice-image">
-            {% for image in notice.noticeImage|slice(0,1) %}
-                <img src="http://www.culture.gouv.fr/Wave/image/joconde{{image.relativeUrl}}" class="image-for-notice"/>
-            {% else %}
-                il n'y a pas d'images
-            {% endfor %}
-        </div>
-        <div class="notice-info">
-            <div class="notice-info-titl">
-                <p class="notice-title">{% set lieu = notice.titr | lower | split(';') %}{{lieu | join(",")}}</p>
-                {% set authors = notice.autr | split(';') %}
-                {% for author in authors | slice(0,1)%}
-                    {% set aut = author | split('(') %}
-                    {% for autdef in aut | slice(0,1)%}
-                        <p class="notice-author">{{ autdef | lower }}</p>
-                    {% endfor %}
+    <div class="notice-image">
+        {% for image in notice.noticeImage|slice(0,1) %}
+            <img src="http://www.culture.gouv.fr/Wave/image/joconde{{image.relativeUrl}}" class="image-for-notice"/>
+        {% else %}
+            il n'y a pas d'images
+        {% endfor %}
+    </div>
+    <div class="notice-info">
+        <div class="notice-info-titl">
+            <p class="notice-title">{% set lieu = notice.titr | lower | split(';') %}{{lieu | join(",")}}</p>
+            {% set authors = notice.autr | split(';') %}
+            {% for author in authors | slice(0,1)%}
+                {% set aut = author | split('(') %}
+                {% for autdef in aut | slice(0,1)%}
+                    <p class="notice-author">{{ autdef | lower }}</p>
                 {% endfor %}
-                <hr />
-                <p class="notice-other-info">technique : {% set technique = notice.tech | split(';') %}{{technique | join(",")}}</p>
-                <p class="notice-other-info" >lieu d'exposition : {% set lieu = notice.loca | split(';') %}{{lieu | join(",")}}</p>
-                <p class="notice-other-info" >période : {% set technique = notice.peri | split(';') %}{{technique | join(",")}}</p>
-            </div>
-            <div class="notice-ths-autr"><p></p></div>
+            {% endfor %}
+            <hr />
+            <p class="notice-other-info">technique : {% set technique = notice.tech | split(';') %}{{technique | join(",")}}</p>
+            <p class="notice-other-info" >lieu d'exposition : {% set lieu = notice.loca | split(';') %}{{lieu | join(",")}}</p>
+            <p class="notice-other-info" >période : {% set technique = notice.peri | split(';') %}{{technique | join(",")}}</p>
         </div>
-        <button class="close"><i class="notice-close picto_close" ></i></button>
+        <div class="notice-ths-autr"><p></p></div>
+    </div>
+    <button class="close"><i class="notice-close picto_close" ></i></button>
 </div>
 
 <script>
