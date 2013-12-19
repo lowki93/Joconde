@@ -101,6 +101,8 @@ $(document)
 			},
 			complete: function(content){
 
+				$(".loader-notice").css("display", "-webkit-flex");
+
 				var response = content.responseJSON.content;
 				$(".loader-notice").html(response);
 
@@ -119,6 +121,12 @@ $(document)
 		$(".loader-notice").animate({
 				opacity: 0,
 				left: "-100%",
+		}, 1000);
+
+		setTimeout(function(){
+
+			$(".loader-notice").css("display", "none")
+
 		}, 1000);
 
 	})

@@ -32,6 +32,7 @@
 
         var $container = $(".notice");
         var $containerImg = $(".notice .notice-image");
+        var $img = $(".notice .notice-image img");
         var $containerInfo = $(".notice .notice-info");
         var $containerTitl = $(".notice .notice-info .notice-info-titl");
         var $containerThs = $(".notice .notice-info .notice-ths-autr");
@@ -80,6 +81,9 @@
 
                             $containerImg.css("width", 385 );
                             $containerInfo.css('width', 385 );
+                            $img
+                                .css("width", "100%")
+                                .css("height", "100%");
 
                             if( $(this)[0].naturalHeight < $(this)[0].naturalWidth ){ 
 
