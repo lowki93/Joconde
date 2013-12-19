@@ -162,7 +162,7 @@ class NoticeController extends Controller
                 $result["message"]="good";
                 return new JsonResponse($result);
             } catch (\Exception $e){
-                $result["message"]="deja en session";
+                $result["message"]="bad";
                 return new JsonResponse($result);
             }
         }

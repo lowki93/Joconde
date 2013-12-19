@@ -1,181 +1,187 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}Joconde{% endblock %}</title>
-        <link rel="icon" type="image/x-icon" href="{{ asset('bundles/jocondelab/images/favicon.png') }}" />
-        {% stylesheets
-            '@JocondeLabBundle/Resources/public/css/jquery-ui.css'
-            '@JocondeLabBundle/Resources/public/css/component.css'
-        %}
-            <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
-        {% endstylesheets %}
-        {% block stylesheets %}
-            {% stylesheets
-                'bundles/jocondelab/css/style.sass'
-                filter="cssrewrite,sass" output='css/style.css' %}
-                   <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
-            {% endstylesheets %}
-        {% endblock %}
-        <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-        {% javascripts
-            'jquery/jquery.js'
-        %}
-            <script src="{{ asset_url }}"></script>
-        {% endjavascripts %}
-        <script type="text/javascript">
-            function resize_canvas(){
-                var $canvas = $('.myCanvas');
-                var loaderImg = $('.loaderImg');
+	<head>
+		<meta charset="UTF-8" />
+		<title>{% block title %}Joconde{% endblock %}</title>
+		<link rel="icon" type="image/x-icon" href="{{ asset('bundles/jocondelab/images/favicon.png') }}" />
+		{% stylesheets
+			'@JocondeLabBundle/Resources/public/css/jquery-ui.css'
+			'@JocondeLabBundle/Resources/public/css/component.css'
+		%}
+			<link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+		{% endstylesheets %}
+		{% block stylesheets %}
+			{% stylesheets
+				'bundles/jocondelab/css/style.sass'
+				filter="cssrewrite,sass" output='css/style.css' %}
+				   <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+			{% endstylesheets %}
+		{% endblock %}
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+		{% javascripts
+			'jquery/jquery.js'
+		%}
+			<script src="{{ asset_url }}"></script>
+		{% endjavascripts %}
+		<script type="text/javascript">
+			function resize_canvas(){
+				$('.notification').css("right", -($('.notification').width()));
 
-                var width = window.innerWidth;
-                var height = window.innerHeight;
+				var $canvas = $('.myCanvas');
+				var loaderImg = $('.loaderImg');
 
-                var left = (window.innerWidth/2)-(loaderImg.width()/2);
-                var top = (window.innerHeight/2)-(loaderImg.height()/2);
+				var width = window.innerWidth;
+				var height = window.innerHeight;
 
-                $canvas.css("width", width+"px");
-                $canvas.css("height", height+"px");
+				var left = (window.innerWidth/2)-(loaderImg.width()/2);
+				var top = (window.innerHeight/2)-(loaderImg.height()/2);
 
-                loaderImg.css("left", left+"px");
-                loaderImg.css("top", top+"px");
+				$canvas.css("width", width+"px");
+				$canvas.css("height", height+"px");
 
-                var drop = document.querySelector(".myCanvas" );
-                var context = drop.getContext('2d');
+				loaderImg.css("left", left+"px");
+				loaderImg.css("top", top+"px");
 
-                drop.width = width;
-                drop.height = height;
+				var drop = document.querySelector(".myCanvas" );
+				var context = drop.getContext('2d');
 
-                context.beginPath();
-                context.arc((window.innerWidth/2),(window.innerHeight/2),150 ,0,Math.PI*2,false);
-                context.strokeStyle = "#ff5572";
-                context.fillStyle = "#FFF";
-                context.fill();
-                context.stroke();
+				drop.width = width;
+				drop.height = height;
 
-                if( parseInt($('.loader-notice').css("left")) == 0 ) {
+				context.beginPath();
+				context.arc((window.innerWidth/2),(window.innerHeight/2),150 ,0,Math.PI*2,false);
+				context.strokeStyle = "#ff5572";
+				context.fillStyle = "#FFF";
+				context.fill();
+				context.stroke();
 
-                    var $page = $(".page-container");
+				if( parseInt($('.loader-notice').css("left")) == 0 ) {
 
-                    if(window.innerWidth > 1024) {
+					var $page = $(".page-container");
 
-                        $page.css("width", "1000px");
+					if(window.innerWidth > 1024) {
 
-                    } else {
+						$page.css("width", "1000px");
 
-                        $page.css("width", window.innerWidth);
+					} else {
 
-                    };
+						$page.css("width", window.innerWidth);
 
-                    setNotice();
-                };
+					};
 
-                if( ($(".margin-container").length > 0 ) && search.length !== 0 ){
-                    
-                    var $page = $(".page-container");
+					setNotice();
+				};
 
-                    if(window.innerWidth > 1024) {
+				if( ($(".margin-container").length > 0 ) && search.length !== 0 ){
+					
+					var $page = $(".page-container");
 
-                        $page.css("width", "1000px");
+					if(window.innerWidth > 1024) {
 
-                    } else {
+						$page.css("width", "1000px");
 
-                        $page.css("width", window.innerWidth);
+					} else {
 
-                    };
-                    
-                    var simpleWidth = $page[0].offsetWidth;
-                    var pageList = $(".page-list")[0].offsetWidth;
-                    var index = $('.page-list').index($('.page-list.active'))
+						$page.css("width", window.innerWidth);
 
-                    var nbPageList = $('.page-list').length;
+					};
+					
+					var simpleWidth = $page[0].offsetWidth;
+					var pageList = $(".page-list")[0].offsetWidth;
+					var index = $('.page-list').index($('.page-list.active'))
 
-                    var $page = $(".page-container");
-                    newWidth = nbPageList*(simpleWidth+3);
+					var nbPageList = $('.page-list').length;
 
-                    $page.css("width", newWidth);
-                    $(".page-list").css("width",simpleWidth);
-                    $page.css("left", -(index*simpleWidth)-5);
+					var $page = $(".page-container");
+					newWidth = nbPageList*(simpleWidth+3);
 
-                    // change val for title search
-                    var newSearchTitle = "";
+					$page.css("width", newWidth);
+					$(".page-list").css("width",simpleWidth);
+					$page.css("left", -(index*simpleWidth)-5);
 
-                    for (var i = 0; i < search.length; i++) {
+					// change val for title search
+					var newSearchTitle = "";
 
-                        newSearchTitle += "<a href='#' value='-"+i*simpleWidth+"'>"+search[i]+"</a>";
+					for (var i = 0; i < search.length; i++) {
 
-                        if( i !== search.length-1 ) newSearchTitle += ".";
-                    };
+						newSearchTitle += "<a href='#' value='-"+i*simpleWidth+"'>"+search[i]+"</a>";
 
-                    $(".title-page").html(newSearchTitle);
+						if( i !== search.length-1 ) newSearchTitle += ".";
+					};
 
-                }
-            }
-        </script>
-    </head>
-    <body onresize="resize_canvas()" >
-        <div class="container">
-            <div class="mp-pusher" id="mp-pusher">
-                <nav id="mp-menu" class="mp-menu">
-                    <div class="mp-level">
-                        <p>MENU</p>
-                        <ul>
-                            <li>
-                                <a href="{{path('joconde_lab_homepage')}}" class="menu-newsearch">
-                                    <i class="picto_newrecherche"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{path('favorite_notice')}}" class="menu-selection">
-                                    <i class="picto_selection"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="menu-apropos">
-                                    <i class="picto_apropos"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-                <div class="scroller">
-                    <div class="header">
-                        <a href="#" id="trigger" class="menu">
-                            <i class="picto_menu"></i>
-                        </a>
-                        <p class="title-page">{% block search %}{% endblock %}</p>
-                        {% block logo %}<a href="{{ path('joconde_lab_homepage') }}"><img src="{{ asset('bundles/jocondelab/images/logo1.png') }}" alt="logo" height="50px"/></a>{% endblock %}
-                    </div>
-                    <div class="page">
-                        {% block body %}{% endblock %}
-                    </div>
-                    {% block hoverNotice %}{% endblock %}
-                </div>
-            </div>
-        </div>
-        <div class="loader">
-            <canvas class="myCanvas">
-            </canvas>
-            <div class="loaderImg">
-                <img src="{{ asset('bundles/jocondelab/images/loader.gif') }}" alt="loader"/>
-                <p>Chargement en cours</p>
-            </div>
-        </div>
-        <div class="loader-notice">
-        </div>
-        <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
-        <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
-        {% javascripts
-            '@JocondeLabBundle/Resources/public/js/jquery-ui.js'
-            '@JocondeLabBundle/Resources/public/js/modernizr.custom.js'
-            '@JocondeLabBundle/Resources/public/js/classie.js'
-            '@JocondeLabBundle/Resources/public/js/mlpushmenu.js'
-            '@JocondeLabBundle/Resources/public/js/masonry.js'
-            '@JocondeLabBundle/Resources/public/js/imageLoad.js'
-            '@JocondeLabBundle/Resources/public/js/main.js'
-        %}
-            <script src="{{ asset_url }}"></script>
-        {% endjavascripts %}
-        {% block javascripts %}{% endblock %}
-    </body>
+					$(".title-page").html(newSearchTitle);
+
+				}
+			}
+		</script>
+	</head>
+	<body onresize="resize_canvas()" >
+		<div class="container">
+			<div class="mp-pusher" id="mp-pusher">
+				<nav id="mp-menu" class="mp-menu">
+					<div class="mp-level">
+						<p>MENU</p>
+						<ul>
+							<li>
+								<a href="{{path('joconde_lab_homepage')}}" class="menu-newsearch">
+									<i class="picto_newrecherche"></i>
+								</a>
+							</li>
+							<li>
+								<a href="{{path('favorite_notice')}}" class="menu-selection">
+									<i class="picto_selection"></i>
+								</a>
+							</li>
+							<li>
+								<a href="#" class="menu-apropos">
+									<i class="picto_apropos"></i>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</nav>
+				<div class="scroller">
+					<div class="header">
+						<a href="#" id="trigger" class="menu">
+							<i class="picto_menu"></i>
+						</a>
+						<p class="title-page">{% block search %}{% endblock %}</p>
+						{% block logo %}<a href="{{ path('joconde_lab_homepage') }}"><img src="{{ asset('bundles/jocondelab/images/logo1.png') }}" alt="logo" height="50px"/></a>{% endblock %}
+					</div>
+					<div class="page">
+						{% block body %}{% endblock %}
+					</div>
+					{% block hoverNotice %}{% endblock %}
+				</div>
+			</div>
+		</div>
+		<div class="loader">
+			<canvas class="myCanvas">
+			</canvas>
+			<div class="loaderImg">
+				<img src="{{ asset('bundles/jocondelab/images/loader.gif') }}" alt="loader"/>
+				<p>Chargement en cours</p>
+			</div>
+		</div>
+		<div class="notification">
+			<div class="bad"><i class="picto_ajoute_deja"></i><p>deja dans votre sélection</p></div>
+			<div class="good"><i class="picto_ajoute_ok"></i><p>ajouté dans votre sélection</p></div>
+		</div>
+		<div class="loader-notice">
+		</div>
+		<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+		<script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+		{% javascripts
+			'@JocondeLabBundle/Resources/public/js/jquery-ui.js'
+			'@JocondeLabBundle/Resources/public/js/modernizr.custom.js'
+			'@JocondeLabBundle/Resources/public/js/classie.js'
+			'@JocondeLabBundle/Resources/public/js/mlpushmenu.js'
+			'@JocondeLabBundle/Resources/public/js/masonry.js'
+			'@JocondeLabBundle/Resources/public/js/imageLoad.js'
+			'@JocondeLabBundle/Resources/public/js/main.js'
+		%}
+			<script src="{{ asset_url }}"></script>
+		{% endjavascripts %}
+		{% block javascripts %}{% endblock %}
+	</body>
 </html>

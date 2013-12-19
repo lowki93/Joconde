@@ -10,313 +10,348 @@ var numQuestion = 0;
 
 jQuery(function($){
 
-    loader.show();
+	loader.show();
 
-    var fisrtSearch = $(".title-page a").text();
-    search.push(fisrtSearch);
+	var fisrtSearch = $(".title-page a").text();
+	search.push(fisrtSearch);
 
-    var $container = $('.page-list');
-    $container
-        .addClass("active")
-        .imagesLoaded(function(){
+	var $container = $('.page-list');
+	$container
+		.addClass("active")
+		.imagesLoaded(function(){
 
-            setMasonry($container);
+			setMasonry($container);
 
-            loader.hide();
+			loader.hide();
 
-            $container.animate({
-                opacity: 1,
-            }, 1000);
+			$container.animate({
+				opacity: 1,
+			}, 1000);
 
-        });
+		});
 });
 
 $(document)
-    .on("click", ".page-list.active .session", function(){// ADD NOTICE IN FAVORIS
+	.on("click", ".page-list.active .session", function(){// ADD NOTICE IN FAVORIS
 
-        $.ajax({
-            url: Routing.generate('add_favorite_notice'),
-            dataType: "json",
-            data: {
-                param: $(this).val()
-            },
-            success: function(message){
-                console.log(message);
-            }
-        });
-        
-    })
-    .on({ // HOVER TOO CHANGE PICTO FOR SEE
-        mouseenter: function(){
+		$.ajax({
+			url: Routing.generate('add_favorite_notice'),
+			dataType: "json",
+			data: {
+				param: $(this).val()
+			},
+			success: function(message){
 
-            var $button = $(this).find('i');
-            $button
-                .removeClass("picto_oeil")
-                .addClass("picto_oeil_hover");
+				if( message.message == "good" ) var $classMessage = $(".good");
+				if( message.message == "bad" ) var $classMessage = $(".bad");
+				
+				var $notif = $('.notification');
+				var notifWidth = $notif.width();
+				
+				notification.show($notif,$classMessage,notifWidth);
 
-        },
-        mouseleave: function(){
+			}
+		});
+		
+	})
+	.on({ // HOVER TOO CHANGE PICTO FOR SEE
+		mouseenter: function(){
 
-            var $button = $(this).find('i');
-            $button
-                .removeClass("picto_oeil_hover")
-                .addClass("picto_oeil");
+			var $button = $(this).find('i');
+			$button
+				.removeClass("picto_oeil")
+				.addClass("picto_oeil_hover");
 
-        }
-    }, '.page-list.active .see')
-    .on({// HOVER TOO CHANGE PICTO FOR SESSION
-        mouseenter: function()
-        {
-            var $button = $(this).find('i');
-            $button
-                .removeClass("picto_ajouter")
-                .addClass("picto_ajouter_hover");
-        },
-        mouseleave: function() {
-            var $button = $(this).find('i');
-            $button
-                .removeClass("picto_ajouter_hover")
-                .addClass("picto_ajouter");
-        }
-    }, '.page-list.active .session')
-    .on("click", ".page-list.active .see", function(){// CLICK TO SEE NOTICE
+		},
+		mouseleave: function(){
 
-        var result = $(this).val();
+			var $button = $(this).find('i');
+			$button
+				.removeClass("picto_oeil_hover")
+				.addClass("picto_oeil");
 
-        loader.show();
+		}
+	}, '.page-list.active .see')
+	.on({// HOVER TOO CHANGE PICTO FOR SESSION
+		mouseenter: function()
+		{
+			var $button = $(this).find('i');
+			$button
+				.removeClass("picto_ajouter")
+				.addClass("picto_ajouter_hover");
+		},
+		mouseleave: function() {
+			var $button = $(this).find('i');
+			$button
+				.removeClass("picto_ajouter_hover")
+				.addClass("picto_ajouter");
+		}
+	}, '.page-list.active .session')
+	.on("click", ".page-list.active .see", function(){// CLICK TO SEE NOTICE
 
-        $.ajax({
-            url: Routing.generate('notice_id'),
-            dataType: "json",
-            data: {
-                param: result
-            },
-            complete: function(content){
-                var response = content.responseJSON.content;
-                $(".loader-notice").html(response);
+		var result = $(this).val();
 
-                loader.hide();
+		loader.show();
 
-                $(".loader-notice").animate({
-                        opacity: 1,
-                        left: 0,
-                }, 1000);
-            }
-        });
+		$.ajax({
+			url: Routing.generate('notice_id'),
+			dataType: "json",
+			data: {
+				param: result
+			},
+			complete: function(content){
+				var response = content.responseJSON.content;
+				$(".loader-notice").html(response);
 
-    })
-    .on("click", ".notice-close", function(){// CLICK TO CLOSE NOTICE
+				loader.hide();
 
-        $(".loader-notice").animate({
-                opacity: 0,
-                left: "-100%",
-        }, 1000);
+				$(".loader-notice").animate({
+						opacity: 1,
+						left: 0,
+				}, 1000);
+			}
+		});
 
-    })
-    .on("click", ".page-list.active .btn-question", function(){// CLICK TO CHANGE QUESTION
+	})
+	.on("click", ".notice-close", function(){// CLICK TO CLOSE NOTICE
 
-        //Get value for new question
-        var result = $(this).val();
-        var splitResponse = result.split(",");
-        var newQuestion = splitResponse[0];
-        var none = splitResponse[1];
+		$(".loader-notice").animate({
+				opacity: 0,
+				left: "-100%",
+		}, 1000);
 
-        // add compte for question -------------
+	})
+	.on("click", ".page-list.active .btn-question", function(){// CLICK TO CHANGE QUESTION
 
-        var index = $('.page-list').index($('.page-list.active'))
-        //numQuestion++;
-    
-        if( none == "none" || none == "no") {
+		//Get value for new question
+		var result = $(this).val();
+		var splitResponse = result.split(",");
+		var newQuestion = splitResponse[0];
+		var none = splitResponse[1];
 
-            $.ajax({
-                url: Routing.generate('change_question'),
-                dataType: "json",
-                data: {
-                    numQuestion: newQuestion
-                },
-                complete: function(question){
+		// add compte for question -------------
 
-                    $('.page-list.active .question').fadeOut(500,function(){
-                        var responseQuestion = question.responseJSON.question;
-                        var splitResponse = responseQuestion.split(",");
-                        var newQuestion = splitResponse[0];
-                        var typeQuestion = splitResponse[1];
-                        var nbQuestion = splitResponse[2];
-                        var response = '<p>'+newQuestion+' ?</p><button class="btn-question" value="'+typeQuestion+','+nbQuestion+',yes">oui</button><button class="btn-question" value="'+nbQuestion+',no">non</button><button class="btn-question" value="'+nbQuestion+',none">ne sais pas</button>';
+		var index = $('.page-list').index($('.page-list.active'))
+		//numQuestion++;
+	
+		if( none == "none" || none == "no") {
 
-                        if(nbQuestion > (index+1)) response += '<button class="btn-question" value="'+(nbQuestion-2)+',no">question précendte</button>';
-                        $('.page-list.active .question').html(response);
-                        $('.page-list.active .question').fadeIn(500);
-                        $('.page-list.active .question').css('display', 'inline');
+			$.ajax({
+				url: Routing.generate('change_question'),
+				dataType: "json",
+				data: {
+					numQuestion: newQuestion
+				},
+				complete: function(question){
 
-                        $('.page-list.active').masonry({
-                            isAnimated: true,
-                            gutter: 10,
-                            columnWidth: 10,
-                            itemSelector: '.item',
-                        });
+					$('.page-list.active .question').fadeOut(500,function(){
+						var responseQuestion = question.responseJSON.question;
+						var splitResponse = responseQuestion.split(",");
+						var newQuestion = splitResponse[0];
+						var typeQuestion = splitResponse[1];
+						var nbQuestion = splitResponse[2];
+						var response = '<p>'+newQuestion+' ?</p><button class="btn-question" value="'+typeQuestion+','+nbQuestion+',yes">oui</button><button class="btn-question" value="'+nbQuestion+',no">non</button><button class="btn-question" value="'+nbQuestion+',none">ne sais pas</button>';
 
-                    });
+						if(nbQuestion > (index+1)) response += '<button class="btn-question" value="'+(nbQuestion-2)+',no">question précendte</button>';
+						$('.page-list.active .question').html(response);
+						$('.page-list.active .question').fadeIn(500);
+						$('.page-list.active .question').css('display', 'inline');
 
-                }
-            });
-        } else {
+						$('.page-list.active').masonry({
+							isAnimated: true,
+							gutter: 10,
+							columnWidth: 10,
+							itemSelector: '.item',
+						});
 
-            loader.show();
+					});
 
-            var nbDiv = $('.page-list').length;
+				}
+			});
+		} else {
 
-            var newSearch = $(this).val();
-            var splitResponse = newSearch.split(",");
-            var newQuestion = splitResponse[0];
-            var nbQuestion = splitResponse[1];
-            
-            if( nbDiv-index !== 1 ) {
+			loader.show();
 
-                $('.page-list.active').nextAll('div').remove();
-                i = index;
-                search = search.slice(0,index+1);
+			var nbDiv = $('.page-list').length;
 
-            };
+			var newSearch = $(this).val();
+			var splitResponse = newSearch.split(",");
+			var newQuestion = splitResponse[0];
+			var nbQuestion = splitResponse[1];
+			
+			if( nbDiv-index !== 1 ) {
 
-            search.push(newQuestion);
+				$('.page-list.active').nextAll('div').remove();
+				i = index;
+				search = search.slice(0,index+1);
 
-            $.ajax({
-                url: Routing.generate('change_question_good'),
-                dataType: "json",
-                data: {
-                    answer: search,
-                    nb: nbQuestion
-                },
-                complete: function(content){
+			};
 
-                    var $page = $(".page-container");
-                    newWidth = $page.width()+simpleWidth+5+$('.page-list')[0].offsetLeft;
-                    $page.css("width", newWidth);
-                    var div = $('<div class="page-list"></div>');
-                    $page.append(div);
+			search.push(newQuestion);
 
-                    i++;
-                    
-                    var $container = $(".page-list:last-child");
-                    
-                    var response = content.responseJSON.content;
+			$.ajax({
+				url: Routing.generate('change_question_good'),
+				dataType: "json",
+				data: {
+					answer: search,
+					nb: nbQuestion
+				},
+				complete: function(content){
 
-                    var searchTitle = $(".title-page").html();
-                    var splitsearch = searchTitle.split(".");
+					var $page = $(".page-container");
+					newWidth = $page.width()+simpleWidth+5+$('.page-list')[0].offsetLeft;
+					$page.css("width", newWidth);
+					var div = $('<div class="page-list"></div>');
+					$page.append(div);
 
-                    var newSearchTitle = "";
+					i++;
+					
+					var $container = $(".page-list:last-child");
+					
+					var response = content.responseJSON.content;
 
-                    for ( var i = 0; i < search.length-1; i++ ) {
+					var searchTitle = $(".title-page").html();
+					var splitsearch = searchTitle.split(".");
 
-                        if(i!==0) newSearchTitle +=".";
-                        newSearchTitle += splitsearch[i];
+					var newSearchTitle = "";
 
-                    };
+					for ( var i = 0; i < search.length-1; i++ ) {
 
-                    newSearchTitle += ".<a href='#' value='-"+i*simpleWidth+"'>"+newQuestion+"</a>";
+						if(i!==0) newSearchTitle +=".";
+						newSearchTitle += splitsearch[i];
 
-                    $(".title-page").html(newSearchTitle);
+					};
 
-                    $container.html(response);
+					newSearchTitle += ".<a href='#' value='-"+i*simpleWidth+"'>"+newQuestion+"</a>";
 
-                    $container
-                        .imagesLoaded(function(){
+					$(".title-page").html(newSearchTitle);
 
-                            setMasonry($container);
+					$container.html(response);
 
-                        });
+					$container
+						.imagesLoaded(function(){
 
-                    var newLeft = $page.position().left-simpleWidth;
+							setMasonry($container);
 
-                    loader.hide();
+						});
 
-                    $(".page-list.active").animate({
-                        opacity: 0.5,
-                    }, 1000);
+					var newLeft = $page.position().left-simpleWidth;
 
-                    $('.page-list').removeClass('active');
-                    $container.addClass('active');
+					loader.hide();
 
-                    $page.animate({
-                        left: newLeft,
-                    }, 1000);
+					$(".page-list.active").animate({
+						opacity: 0.5,
+					}, 1000);
 
-                    $container.animate({
-                        opacity: 1,
-                    }, 1000);
+					$('.page-list').removeClass('active');
+					$container.addClass('active');
 
-                    $(".page-list:nth-last-child(2)").animate({
-                        opacity: 0.5,
-                    }, 1000);
+					$page.animate({
+						left: newLeft,
+					}, 1000);
 
-                    $('.page-list').css("width", pageList);
-                }
-            });
-        }
-    })
-    .on("click", ".title-page a", function(){
+					$container.animate({
+						opacity: 1,
+					}, 1000);
 
-        var transition = $(this).attr("value");
+					$(".page-list:nth-last-child(2)").animate({
+						opacity: 0.5,
+					}, 1000);
 
-        $page.animate({
-            left: transition,
-        }, 1000);
+					$('.page-list').css("width", pageList);
+				}
+			});
+		}
+	})
+	.on("click", ".title-page a", function(){
 
-        $(".page-list.active").animate({
-            opacity: 0.5,
-        }, 1000);
+		var transition = $(this).attr("value");
 
-        $('.page-list').removeClass('active');
+		$page.animate({
+			left: transition,
+		}, 1000);
 
-        var aIdx = $('.title-page a').index($(this));
-        $('.page-list').eq(aIdx).addClass('active');
+		$(".page-list.active").animate({
+			opacity: 0.5,
+		}, 1000);
 
-        $(".page-list.active").animate({
-            opacity: 1,
-        }, 1000);
+		$('.page-list').removeClass('active');
 
-    });
+		var aIdx = $('.title-page a').index($(this));
+		$('.page-list').eq(aIdx).addClass('active');
+
+		$(".page-list.active").animate({
+			opacity: 1,
+		}, 1000);
+
+	});
 
 function setMasonry($className){
 
-    $className
-        .find("img")
-        .each(function(){
-            console.log($(this));
-            if( $(this).height() > $(this).width() ){
+	$className
+		.find("img")
+		.each(function(){
 
-                $(this).addClass("imgHeight");console.log("width : "+$(this)[0].naturalWidth+" , height : "+$(this)[0].naturalHeight+" , imgHeight");
-            
-            } else {
+			if( $(this).height() > $(this).width() ){
 
-                $(this).addClass("imgWidth");console.log("width : "+$(this)[0].naturalWidth+" , height : "+$(this)[0].naturalHeight+" , imgWidth");
-            
-            };
+				$(this).addClass("imgHeight");
 
-        })
-        .imagesLoaded(function(){
+			} else {
 
-            $className.masonry({
-                isAnimated: true,
-                gutter: 10,
-                columnWidth: 10,
-                itemSelector: '.item',
-            });
+				$(this).addClass("imgWidth");
+			
+			};
 
-        });
+		})
+		.imagesLoaded(function(){
+
+			$className.masonry({
+				isAnimated: true,
+				gutter: 10,
+				columnWidth: 10,
+				itemSelector: '.item',
+			});
+
+		});
 
 }
 
 var loader = {
-    show: function(){
+	show: function(){
 
-        $('.loader').css("display", "-webkit-flex");
+		$('.loader').css("display", "-webkit-flex");
 
-    },
-    hide: function(){
+	},
+	hide: function(){
 
-        $('.loader').css("display", "none");
+		$('.loader').css("display", "none");
 
-    }
+	}
+}
+
+var notification = {
+	show: function($className,$classMessage,left){
+
+		$className.show();
+		$classMessage.attr('style','display: inline-flex !important');
+
+		$className
+			.animate({
+				opacity: 1,
+				right: 0,
+			}, 1000)
+			.delay( 1000 )
+			.animate({
+				opacity: 0,
+				right: -left,
+			}, 1000)
+		
+		setTimeout(function(){
+
+			$className.hide();
+			$classMessage.hide();
+
+		}, 3000);
+
+	}
 }
