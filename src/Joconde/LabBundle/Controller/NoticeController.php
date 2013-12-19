@@ -205,6 +205,29 @@ class NoticeController extends Controller
         }
     }
 
+    public function deleteOneAction()
+    {
+        $request = $this->container->get('request');
+
+        if($request->isXmlHttpRequest())
+        {
+            $id = $request->query->get('param');
+            $this->get('flash.session_notice_manager')->deleteOneFavoris($id);
+            $favorite = $this->get('flash.session_notice_manager')->getFavoris();
+            $em = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice');
+            $notices = $em->findById($favorite);
+            $response["message"]="good";
+            $response["content"] = $this->renderView('JocondeLabBundle:Notice:ajax.list.html.twig',
+                                array('question' => "",
+                                    'notices' => $notices,
+                                    'search' => '',
+                                    'Favoris' => 'favoris'));
+
+            return new JsonResponse($response);
+        }
+
+    }
+
     public function favoriteAction()
     {
         $favorite = $this->get('flash.session_notice_manager')->getFavoris();

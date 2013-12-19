@@ -58,6 +58,14 @@ delete_all:
     options:
         expose: true
 
+delete_one:
+    pattern:   /delete_one
+    defaults:  { _controller: JocondeLabBundle:Notice:deleteOne }
+    requirements:
+        _method: GET
+    options:
+        expose: true
+
 favorite_notice:
     pattern:  /a-voir-plus-tard
     defaults: { _controller: JocondeLabBundle:Notice:favorite }

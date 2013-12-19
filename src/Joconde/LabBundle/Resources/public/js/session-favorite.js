@@ -288,33 +288,87 @@ $(document)
 	.on("click", ".delete-all", function(){
 		
 		$.ajax({
-				url: Routing.generate('delete_all'),
-				dataType: "json",
-				data: {
-					param: 0,
-				},
-				complete: function(response){
+			url: Routing.generate('delete_all'),
+			dataType: "json",
+			data: {
+				param: 0,
+			},
+			complete: function(response){
 
-					var message = response.responseJSON.message;
+				var message = response.responseJSON.message;
 
-					if( message == "good" ) {
+				if( message == "good" ) {
 
-						var response = response.responseJSON.content;
+					var response = response.responseJSON.content;
 
-						$('.page-list.active').fadeOut(500,function(){
+					$('.page-list.active').fadeOut(500,function(){
 
-							$('.page-list.active ').html(response);
-							$('.page-list.active ').fadeIn(500);
+						$('.page-list.active').html(response);
+						$('.page-list.active ')
+							.imagesLoaded(function(){
 
-						});
-					}
+								setMasonry($('.page-list.active '));
+
+							});
+
+						$('.page-list.active').fadeIn(500);
+
+					});
+
+					var $classMessage = $(".good-delete-all");
+					
+					var $notif = $('.notification');
+					var notifWidth = $notif.width();
+					
+					notification.show($notif,$classMessage,notifWidth);
+
 				}
-			});
+			}
+		});
 
 	})
 	.on("click", ".delete-one", function(){
 		
-		
+		var id = $(this).val();
+		$.ajax({
+			url: Routing.generate('delete_one'),
+			dataType: "json",
+			data: {
+				param: id,
+			},
+			complete: function(response){
+
+				var message = response.responseJSON.message;
+
+				if( message == "good" ) {
+
+					var response = response.responseJSON.content;
+
+					$('.page-list.active').fadeOut(500,function(){
+
+						$('.page-list.active ').masonry('destroy');
+						$('.page-list.active ').html(response);
+
+						$('.page-list.active ')
+							.imagesLoaded(function(){
+
+								setMasonry($('.page-list.active '));
+
+							});
+						
+						$('.page-list.active ').fadeIn(500);
+
+					});
+
+					var $classMessage = $(".good-delete-one");
+					
+					var $notif = $('.notification');
+					var notifWidth = $notif.width();
+					
+					notification.show($notif,$classMessage,notifWidth);
+				}
+			}
+		});
 
 	});
 
@@ -324,7 +378,7 @@ function setMasonry($className){
 		.find("img")
 		.each(function(){
 
-			if( $(this).height() > $(this).width() ){
+			if( $(this)[0].naturalHeight > $(this)[0].naturalWidth ){
 
 				$(this).addClass("imgHeight");
 
@@ -363,7 +417,7 @@ var loader = {
 
 var notification = {
 	show: function($className,$classMessage,left){
-
+		
 		$className.show();
 		$classMessage.attr('style','display: -webkit-flex !important');
 
