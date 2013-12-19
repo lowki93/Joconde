@@ -13,228 +13,222 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 class NoticeController extends Controller
 {
+	
+	public function indexAction(Request $request)
+	{
+		$form = $this->createForm(new SearchType());
 
-    public function getQuestion($i)
-    {
-        $question = array("est-ce une tableau,tableau", "est-ce un peinture,peinture", "ce tableau représente-t-il mona lisa,mona lisa");
-        return $question[$i];
-    }
+		if($request->isMethod('POST')){
+			$form->handleRequest($request);
 
-    public function indexAction(Request $request)
-    {
-        $form = $this->createForm(new SearchType());
+			if($form -> isValid()){
+				$term = $form->getData();
+				$search = $term['search'];
 
-        if($request->isMethod('POST')){
-            $form->handleRequest($request);
+				$pieces = explode(" ", $search);
+				if(count($pieces) > 1) {
+					$terms = array();
+					foreach ($pieces as $search) {
+						$result = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus(strtolower($search));
+						$newResult = array_merge($result,array(array('label' => "titr")));
+						array_push($terms,$newResult);
+					}
 
-            if($form -> isValid()){
-                $term = $form->getData();
-                $search = $term['search'];
+					$nbTerm = count($terms);
 
-                $pieces = explode(" ", $search);
-                if(count($pieces) > 1) {
-                    $terms = array();
-                    foreach ($pieces as $search) {
-                        $result = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus(strtolower($search));
-                        $newResult = array_merge($result,array(array('label' => "titr")));
-                        array_push($terms,$newResult);
-                    }
+					$notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($pieces, $terms, $nbTerm);
 
-                    $nbTerm = count($terms);
+					$question = $this->get('flash.session_notice_manager')->setQuestion($search);
+				} else {
+					$search = strtolower($search);
 
-                    $notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($pieces, $terms, $nbTerm);
+					$terms = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus($search);
 
-                    $question = $this->get('flash.session_notice_manager')->setQuestion($search);
-                } else {
-                    $search = strtolower($search);
+					$nbTerm = count($terms);
 
-                    $terms = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus($search);
+					$notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($search, $terms, $nbTerm);
 
-                    $nbTerm = count($terms);
+					$question = $this->get('flash.session_notice_manager')->setQuestion($search);
+				}
 
-                    $notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($search, $terms, $nbTerm);
+				return $this->render('JocondeLabBundle:Notice:list.html.twig',
+					array('question' => $question,
+						'notices' => $notices,
+						'search' => $pieces));
+			} 
+		}
+		return $this->render('JocondeLabBundle:Notice:index.html.twig', array(
+			'form' => $form->createView()
+		));
+	}
 
-                    $question = $this->get('flash.session_notice_manager')->setQuestion($search);
-                }
-
-                return $this->render('JocondeLabBundle:Notice:list.html.twig',
-                    array('question' => $question,
-                        'notices' => $notices,
-                        'search' => $pieces));
-            } 
-        }
-        return $this->render('JocondeLabBundle:Notice:index.html.twig', array(
-            'form' => $form->createView()
-        ));
-    }
-
-    public function autocompleteAjaxAction()
-    {
-        $request = $this->container->get('request');
+	public function autocompleteAjaxAction()
+	{
+		$request = $this->container->get('request');
  
-        if($request->isXmlHttpRequest())
-        {
-            // get title sent ($_GET)
-            $term = $request->query->get('param');
+		if($request->isXmlHttpRequest())
+		{
+			// get title sent ($_GET)
+			$term = $request->query->get('param');
  
-            $autocompleteTerms = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreTerm')->findByTerm($term);
-            $autocompleteTitle = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByTitle($term);
+			$autocompleteTerms = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreTerm')->findByTerm($term);
+			$autocompleteTitle = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByTitle($term);
 
-            $autocompleteTerms = array_merge($autocompleteTerms, $autocompleteTitle);
+			$autocompleteTerms = array_merge($autocompleteTerms, $autocompleteTitle);
 
-            return new JsonResponse($autocompleteTerms);
-        }
-    }
+			return new JsonResponse($autocompleteTerms);
+		}
+	}
 
-    public function noticeHoverAction()
-    {
-        $request = $this->container->get('request');
+	public function noticeHoverAction()
+	{
+		$request = $this->container->get('request');
  
-        if($request->isXmlHttpRequest())
-        {
-            // get title sent ($_GET)
-            $id = $request->query->get('id');
+		if($request->isXmlHttpRequest())
+		{
+			// get title sent ($_GET)
+			$id = $request->query->get('id');
 
-            $em = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice');
-            $notice = $em->findByNoticeId($id);
+			$em = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice');
+			$notice = $em->findByNoticeId($id);
 
-            return new JsonResponse($notice);
-        }
-    }
+			return new JsonResponse($notice);
+		}
+	}
 
-    
-    public function newQuestionAction()
-    {
-        $request = $this->container->get('request');
+	
+	public function newQuestionAction()
+	{
+		$request = $this->container->get('request');
  
-        if($request->isXmlHttpRequest())
-        {
-            // get title sent ($_GET)
-            $numQuestion = $request->query->get('numQuestion');
-            $result["question"] = $this->get('flash.session_notice_manager')->getQuestion($numQuestion);
+		if($request->isXmlHttpRequest())
+		{
+			// get title sent ($_GET)
+			$numQuestion = $request->query->get('numQuestion');
+			$result["question"] = $this->get('flash.session_notice_manager')->getQuestion($numQuestion);
 
-            return new JsonResponse($result);
-        }
-    }
+			return new JsonResponse($result);
+		}
+	}
 
-    public function goodQuestionAction()
-    {
-        $request = $this->container->get('request');
+	public function goodQuestionAction()
+	{
+		$request = $this->container->get('request');
  
-        if($request->isXmlHttpRequest())
-        {
-            $answer = $request->query->get('answer');
-            $nbQuestion = $request->query->get('nb');
+		if($request->isXmlHttpRequest())
+		{
+			$answer = $request->query->get('answer');
+			$nbQuestion = $request->query->get('nb');
 
-            $terms = array();
-            foreach ($answer as $search) {
-                $result = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus(strtolower($search));
-                $newResult = array_merge($result,array(array('label' => "titr")));
-                array_push($terms,$newResult);
-            }
+			$terms = array();
+			foreach ($answer as $search) {
+				$result = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus(strtolower($search));
+				$newResult = array_merge($result,array(array('label' => "titr")));
+				array_push($terms,$newResult);
+			}
 
-            $nbTerm = count($terms);
+			$nbTerm = count($terms);
 
-            $notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($answer, $terms, $nbTerm);
+			$notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($answer, $terms, $nbTerm);
 
-            $question = $this->get('flash.session_notice_manager')->getQuestion($nbQuestion);
+			$question = $this->get('flash.session_notice_manager')->getQuestion($nbQuestion);
 
-            $response['content'] = $this->renderView('JocondeLabBundle:Notice:ajax.list.html.twig',
-                                    array('question' => $question,
-                                        'notices' => $notices,
-                                        'search' => ''));
+			$response['content'] = $this->renderView('JocondeLabBundle:Notice:ajax.list.html.twig',
+									array('question' => $question,
+										'notices' => $notices,
+										'search' => ''));
 
 
-            return new JsonResponse($response);
-        }
-    }
+			return new JsonResponse($response);
+		}
+	}
 
-    public function addfavoriteAction()
-    {
-        $request = $this->container->get('request');
+	public function addfavoriteAction()
+	{
+		$request = $this->container->get('request');
  
-        if($request->isXmlHttpRequest())
-        {
-            // get title sent ($_GET)
-            $id = $request->query->get('param');
-            try {
-                $this->get('flash.session_notice_manager')->setFavoris($id);
-                $result["message"]="good";
-                return new JsonResponse($result);
-            } catch (\Exception $e){
-                $result["message"]="bad";
-                return new JsonResponse($result);
-            }
-        }
-    }
+		if($request->isXmlHttpRequest())
+		{
+			// get title sent ($_GET)
+			$id = $request->query->get('param');
+			try {
+				$this->get('flash.session_notice_manager')->setFavoris($id);
+				$result["message"]="good";
+				return new JsonResponse($result);
+			} catch (\Exception $e){
+				$result["message"]="bad";
+				return new JsonResponse($result);
+			}
+		}
+	}
 
-    public function noticeAction()
-    {
-        $request = $this->container->get('request');
+	public function noticeAction()
+	{
+		$request = $this->container->get('request');
  
-        if($request->isXmlHttpRequest())
-        {
-            // get title sent ($_GET)
-            $id = $request->query->get('param');
-            $em = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice');
-            $notice = $em->find($id);
+		if($request->isXmlHttpRequest())
+		{
+			// get title sent ($_GET)
+			$id = $request->query->get('param');
+			$em = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice');
+			$notice = $em->find($id);
 
-            $response['content'] = $this->renderView('JocondeLabBundle:Notice:view.html.twig', array("notice" => $notice));
+			$response['content'] = $this->renderView('JocondeLabBundle:Notice:view.html.twig', array("notice" => $notice));
 
-            return new JsonResponse($response);
-        }
-    }
+			return new JsonResponse($response);
+		}
+	}
 
-    public function deleteAllAction()
-    {
-        $request = $this->container->get('request');
+	public function deleteAllAction()
+	{
+		$request = $this->container->get('request');
  
-        if($request->isXmlHttpRequest())
-        {
-            $id = $request->query->get('param');
-            $this->get('flash.session_notice_manager')->deleteAllFavoris();
-            $notices = 0;
-            $response["message"]="good";
-            $response["content"] = $this->renderView('JocondeLabBundle:Notice:ajax.list.html.twig',
-                                array('question' => "",
-                                    'notices' => $notices,
-                                    'search' => '',
-                                    'Favoris' => 'favoris'));
+		if($request->isXmlHttpRequest())
+		{
+			$id = $request->query->get('param');
+			$this->get('flash.session_notice_manager')->deleteAllFavoris();
+			$notices = 0;
+			$response["message"]="good";
+			$response["content"] = $this->renderView('JocondeLabBundle:Notice:ajax.list.html.twig',
+								array('question' => "",
+									'notices' => $notices,
+									'search' => '',
+									'Favoris' => 'favoris'));
 
-            return new JsonResponse($response);
-        }
-    }
+			return new JsonResponse($response);
+		}
+	}
 
-    public function deleteOneAction()
-    {
-        $request = $this->container->get('request');
+	public function deleteOneAction()
+	{
+		$request = $this->container->get('request');
 
-        if($request->isXmlHttpRequest())
-        {
-            $id = $request->query->get('param');
-            $this->get('flash.session_notice_manager')->deleteOneFavoris($id);
-            $favorite = $this->get('flash.session_notice_manager')->getFavoris();
-            $em = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice');
-            $notices = $em->findById($favorite);
-            $response["message"]="good";
-            $response["content"] = $this->renderView('JocondeLabBundle:Notice:ajax.list.html.twig',
-                                array('question' => "",
-                                    'notices' => $notices,
-                                    'search' => '',
-                                    'Favoris' => 'favoris'));
+		if($request->isXmlHttpRequest())
+		{
+			$id = $request->query->get('param');
+			$this->get('flash.session_notice_manager')->deleteOneFavoris($id);
+			$favorite = $this->get('flash.session_notice_manager')->getFavoris();
+			$em = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice');
+			-$notices = $em->findById($favorite);
+			$response["message"]="good";
+			$response["content"] = $this->renderView('JocondeLabBundle:Notice:ajax.list.html.twig',
+								array('question' => "",
+									'notices' => $notices,
+									'search' => '',
+									'Favoris' => 'favoris'));
 
-            return new JsonResponse($response);
-        }
+			return new JsonResponse($response);
+		}
 
-    }
+	}
 
-    public function favoriteAction()
-    {
-        $favorite = $this->get('flash.session_notice_manager')->getFavoris();
+	public function favoriteAction()
+	{
+		$favorite = $this->get('flash.session_notice_manager')->getFavoris();
 
-        $em = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice');
-        $notices = $em->findById($favorite);
+		$em = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice');
+		$notices = $em->findById($favorite);
 
-        return $this->render('JocondeLabBundle:Notice:favorite.html.twig', array("notices" => $notices));
-    }
+		return $this->render('JocondeLabBundle:Notice:favorite.html.twig', array("notices" => $notices));
+	}
 }
