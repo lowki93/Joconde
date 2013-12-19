@@ -16,8 +16,8 @@ class FlashSessionNoticeManager
 	public function __construct($session)
 	{
 		$this->session = $session;
-		$this->jocondeQuest = array("est-ce un tableau,tableau,1", "est-ce un peinture,peinture,2", "ce tableau représente-t-il mona lisa,mona lisa,3", "est-ce l'oeuvre que vous recherchez");
-		$this->saintPaul = array("peinture,peinture,1","animaux,animaux,2","homme,homme,3","19e,19e,4","hopital,hopital,5","van gogh,van gogh,6");
+		$this->jocondeQuest = array("est-ce un tableau,tableau,1", "est-ce un peinture,peinture,2", "ce tableau représente -t-il mona lisa,mona lisa,3", "est-ce l'oeuvre que vous recher-chez");
+		$this->saintPaul = array("y a-t-il des animaux représen-tés,animaux,1","Figure-t-il un homme sur la peinture,homme,2","est-ce une oeuvre du 19e,19e,3","hopital,hopital,5","van gogh,van gogh,6");
 		$this->rubis  = array("peinture,peinture,1","personnes,personne,2","animaux,animal,3","ciel,ciel,4","cosmos,cosmos,5","etoile,etoile,6","tatin,tatin robert,7",);
 		$this->default = array("est-ce l'oeuvre que vous cherchez");
 		$this->testQuest = array('test');
@@ -47,7 +47,7 @@ class FlashSessionNoticeManager
 			$place = array_search($id, $favoris);
 			unset ($favoris[$place]);
 			$favoris = $this->session->set('favoris', $favoris);
-			
+
 		};
 	}
 
@@ -69,7 +69,7 @@ class FlashSessionNoticeManager
 			$this->session->set('question', $this->jocondeQuest);
 			$this->tabQuest = $this->jocondeQuest;
 			return $this->tabQuest[0];
-		} else if($question == "arbre") {
+		} else if($question == "arbre peinture") {
 			$this->session->set('question', $this->saintPaul);
 			$this->tabQuest = $this->saintPaul;
 			return $this->tabQuest[0];

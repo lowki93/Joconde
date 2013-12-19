@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 class NoticeController extends Controller
 {
-	
+	// Function for search
 	public function indexAction(Request $request)
 	{
 		$form = $this->createForm(new SearchType());
@@ -25,7 +25,10 @@ class NoticeController extends Controller
 				$term = $form->getData();
 				$search = $term['search'];
 
+				$searchForQuestion = $search;
+
 				$pieces = explode(" ", $search);
+
 				if(count($pieces) > 1) {
 					$terms = array();
 					foreach ($pieces as $search) {
@@ -38,7 +41,8 @@ class NoticeController extends Controller
 
 					$notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($pieces, $terms, $nbTerm);
 
-					$question = $this->get('flash.session_notice_manager')->setQuestion($search);
+					$question = $this->get('flash.session_notice_manager')->setQuestion($searchForQuestion);
+
 				} else {
 					$search = strtolower($search);
 
@@ -121,15 +125,36 @@ class NoticeController extends Controller
 			$nbQuestion = $request->query->get('nb');
 
 			$terms = array();
+			$newsSearch = array();
+
 			foreach ($answer as $search) {
-				$result = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus(strtolower($search));
-				$newResult = array_merge($result,array(array('label' => "titr")));
-				array_push($terms,$newResult);
-			}
+		
+				$pieces = explode(" ", $search);
+	
+				if(count($pieces) > 1) {
+
+					foreach ($pieces as $myKeys) {
+
+						$result = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus(strtolower($myKeys));
+						$newResult = array_merge($result,array(array('label' => "titr")));
+						array_push($terms,$newResult);
+						array_push($newsSearch,$myKeys);
+					}
+
+				} else {
+
+					$result = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus(strtolower($search));
+					$newResult = array_merge($result,array(array('label' => "titr")));
+					array_push($terms,$newResult);
+					array_push($newsSearch,$search);
+
+				};
+
+			};
 
 			$nbTerm = count($terms);
 
-			$notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($answer, $terms, $nbTerm);
+			$notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($newsSearch, $terms, $nbTerm);
 
 			$question = $this->get('flash.session_notice_manager')->getQuestion($nbQuestion);
 

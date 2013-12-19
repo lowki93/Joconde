@@ -259,6 +259,8 @@ $(document)
 					}, 1000);
 
 					$('.page-list').css("width", pageList);
+
+					console.log(search);
 				}
 			});
 		}
