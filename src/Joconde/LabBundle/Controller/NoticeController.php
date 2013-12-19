@@ -183,9 +183,26 @@ class NoticeController extends Controller
 
             return new JsonResponse($response);
         }
-        // $em = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice');
-        // $notice = $em->find($id);
-        // return $this->render('JocondeLabBundle:Notice:view.html.twig', array("notice" => $notice));
+    }
+
+    public function deleteAllAction()
+    {
+        $request = $this->container->get('request');
+ 
+        if($request->isXmlHttpRequest())
+        {
+            $id = $request->query->get('param');
+            $this->get('flash.session_notice_manager')->deleteAllFavoris();
+            $notices = 0;
+            $response["message"]="good";
+            $response["content"] = $this->renderView('JocondeLabBundle:Notice:ajax.list.html.twig',
+                                array('question' => "",
+                                    'notices' => $notices,
+                                    'search' => '',
+                                    'Favoris' => 'favoris'));
+
+            return new JsonResponse($response);
+        }
     }
 
     public function favoriteAction()

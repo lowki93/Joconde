@@ -50,6 +50,14 @@ notice_id:
     options:
         expose: true
 
+delete_all:
+    pattern:   /delete_all_selection
+    defaults:  { _controller: JocondeLabBundle:Notice:deleteAll }
+    requirements:
+        _method: GET
+    options:
+        expose: true
+
 favorite_notice:
     pattern:  /a-voir-plus-tard
     defaults: { _controller: JocondeLabBundle:Notice:favorite }

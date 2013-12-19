@@ -39,6 +39,12 @@ class FlashSessionNoticeManager
         return $this->session->get('favoris');
     }
 
+    public function deleteAllFavoris()
+    {
+        $favoris[] = null;
+        $favoris = $this->session->set('favoris', $favoris);
+    }
+
     public function getSessionQuestion()
     {
         return $this->session->get('question');

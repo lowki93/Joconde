@@ -167,6 +167,7 @@ $(document)
 
 				}
 			});
+
 		} else {
 
 			loader.show();
@@ -282,6 +283,38 @@ $(document)
 		$(".page-list.active").animate({
 			opacity: 1,
 		}, 1000);
+
+	})
+	.on("click", ".delete-all", function(){
+		
+		$.ajax({
+				url: Routing.generate('delete_all'),
+				dataType: "json",
+				data: {
+					param: 0,
+				},
+				complete: function(response){
+
+					var message = response.responseJSON.message;
+
+					if( message == "good" ) {
+
+						var response = response.responseJSON.content;
+
+						$('.page-list.active').fadeOut(500,function(){
+
+							$('.page-list.active ').html(response);
+							$('.page-list.active ').fadeIn(500);
+
+						});
+					}
+				}
+			});
+
+	})
+	.on("click", ".delete-one", function(){
+		
+		
 
 	});
 
