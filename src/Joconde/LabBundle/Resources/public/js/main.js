@@ -85,6 +85,22 @@ $(".cherche").hover(function(){
 
 });
 
+$(".delete-all").hover(function(){
+
+    var $button = $(this).find('i');
+    $button
+        .removeClass("picto_corbeille")
+        .addClass("picto_corbeille_hover");
+
+}, function(){
+
+    var $button = $(this).find('i');
+    $button
+        .removeClass("picto_corbeille_hover")
+        .addClass("picto_corbeille");
+
+});
+
 $(document)
     .on({ // HOVER TOO CHANGE PICTO FOR SEE
         mouseenter: function(){
@@ -104,3 +120,21 @@ $(document)
 
         }
     }, '.close')
+    .on({ // HOVER TOO CHANGE PICTO FOR SEE
+        mouseenter: function(){
+
+            var $button = $(this).find('i');
+            $button
+                .removeClass("picto_enlever")
+                .addClass("picto_enlever_hover");
+
+        },
+        mouseleave: function(){
+
+            var $button = $(this).find('i');
+            $button
+                .removeClass("picto_enlever_hover")
+                .addClass("picto_enlever");
+
+        }
+    }, '.delete-one')

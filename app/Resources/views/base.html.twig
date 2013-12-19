@@ -155,7 +155,7 @@
 						<a href="#" id="trigger" class="menu">
 							<i class="picto_menu"></i>
 						</a>
-						<p class="title-page">{% block search %}{% endblock %}</p>
+						{% block search %}{% endblock %}
 						{% block logo %}<a href="{{ path('joconde_lab_homepage') }}"><img src="{{ asset('bundles/jocondelab/images/logo1.png') }}" alt="logo" height="50px"/></a>{% endblock %}
 					</div>
 					<div class="page">

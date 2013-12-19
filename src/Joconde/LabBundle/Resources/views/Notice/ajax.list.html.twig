@@ -35,7 +35,11 @@
                 <button class="btn-favorite see" value="{{notice.id}}">
                     <i class="picto_oeil"></i>
                 </button>
-                {% if Favoris is defined %}{% else %}
+                {% if Favoris is defined %}
+                    <button class="btn-favorite delete-one" value="{{notice.id}}">
+                        <i class="picto_enlever"></i>
+                    </button>
+                {% else %}
                     <button class="btn-favorite session" value="{{notice.id}}">
                         <i class="picto_ajouter"></i>
                     </button>

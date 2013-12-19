@@ -11,15 +11,17 @@
 {% block search %}
     {% if Favoris is defined %}
     {% else %}
-        <a href="#" value="0">{{search|join(" ")}}</a>
+        <p class="title-page">
+            <a href="#" value="0">{{search|join(" ")}}</a>
+        </p>
     {% endif %}
 {% endblock %}
 
 {% block logo %}
     {% if Favoris is defined %}
-         <img src="{{ asset('bundles/jocondelab/images/logo1.png') }}" alt="logo" height="50px"/>
+         <a href="{{ path('joconde_lab_homepage') }}"><img src="{{ asset('bundles/jocondelab/images/logo1.png') }}" alt="logo" height="50px"/></a>
     {% else %}
-        <img src="{{ asset('bundles/jocondelab/images/logo2.png') }}" alt="logo" height="50px"/>
+        <a href="{{ path('joconde_lab_homepage') }}"><img src="{{ asset('bundles/jocondelab/images/logo2.png') }}" alt="logo" height="50px"/></a>
     {% endif %}
 {% endblock %}
 
@@ -27,6 +29,7 @@
     {% if Favoris is defined %}
         <div class="page-title">
             <h3>votre sélection</h3>
+            <button class="btn-favorite delete-all" ><i class="picto_corbeille"></i></button>
         </div>
     {% else %}
     {% endif %}
@@ -37,12 +40,6 @@
                 </div>
             </div>
         </div>
-{% endblock %}
-
-{% block hoverNotice %}
-    {% if Favoris is defined %}{% else %}
-        {# <div class="notice-hover"></div> #}
-    {% endif %}
 {% endblock %}
 
 {% block javascripts %}

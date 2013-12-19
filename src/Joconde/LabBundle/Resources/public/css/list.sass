@@ -12,6 +12,7 @@ button
     margin: 0 auto
 
 .page-title
+    position: relative
     margin: 0 auto
     width: 1000px
     h3
@@ -19,6 +20,10 @@ button
         font-family: 'BebasNeue'
         font-size: 2.5em
         margin-bottom: 10px
+    button
+        position: absolute
+        bottom: 6px
+        right: 0
 
 .page-container
     width: 1000px
@@ -185,7 +190,6 @@ button
     top: 0
     right: -50px
 
-// @media only screen and (max-width: 1024px) and (orientation : landscape)
     .notice-width
         width: 100% !important
     .loader-notice
@@ -245,6 +249,8 @@ button
         left: 10px
 
 @media screen and (max-width: 1024px)
+    .page-title
+        width: 100%
     h3
         margin-left: 5px
 
@@ -321,9 +327,10 @@ button
             left: 10px
 
 @media screen and (max-width: 768px)
+    .page-title
+        width: 100%
     .imgHeight
         width: 250px
-
     .imgWidth
         width: 450px
 
@@ -397,6 +404,8 @@ button
             left: 10px
 
 @media screen and (max-width: 480px)
+    .page-title
+        width: 100%
     .imgHeight, .imgWidth
         width: 100%
 
