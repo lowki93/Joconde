@@ -88,7 +88,7 @@ $black: #555555
 	height: 32px
 
 // picto for notice
-.picto_agrandir_hover, .picto_agrandir, .picto_ajouter_hover, .picto_ajouter, .picto_close_hover, .picto_close, .picto_oeil_hover, .picto_oeil
+.picto_agrandir_hover, .picto_agrandir, .picto_close_hover, .picto_close
 	background: url("/bundles/jocondelab/images/sprites_notice.png") no-repeat
 	display: block
 
@@ -112,25 +112,54 @@ $black: #555555
 	width: 32px
 	height: 32px
 
-.picto_oeil_hover
-	background-position: -76px -28.000015258789062px
-	width: 20px
-	height: 20px
-
-.picto_oeil
-	background-position: -26px -27.000015258789062px
-	width: 20px
-	height: 20px
+.picto_ajouter, .picto_oeil, .picto_oeil_hover, .picto_ajouter_hover
+	background: url("/bundles/jocondelab/images/sprites_notice_mobile.png") no-repeat
+	display: block
 
 .picto_ajouter
-	background-position: -223px -27.000015258789062px
-	width: 20px
-	height: 20px
+	background-position: -116px -18.000015258789062px
+	width: 32px
+	height: 32px
+
+.picto_oeil
+	background-position: -17px -17.000015258789062px
+	width: 32px
+	height: 32px
+
+.picto_oeil_hover
+	background-position: -66px -18.000015258789062px
+	width: 32px
+	height: 32px
 
 .picto_ajouter_hover
-	background-position: -272px -27.000015258789062px
-	width: 20px
-	height: 20px
+	background-position: -165px -19.000015258789062px
+	width: 32px
+	height: 32px
+
+.picto_corbeille, .picto_corbeille_hover, .picto_enlever_hover, .picto_enlever
+	background: url("/bundles/jocondelab/images/sprites_corbeille_mobile.png") no-repeat
+	display: block
+
+.picto_corbeille
+	background-position: -16px -15px
+	width: 32px
+	height: 32px
+
+.picto_corbeille_hover
+	background-position: -66px -18.000003814697266px
+	width: 32px
+	height: 32px
+
+.picto_enlever_hover
+	background-position: -165px -16px
+	width: 32px
+	height: 32px
+
+.picto_enlever
+	background-position: -116px -16px
+	width: 32px
+	height: 32px
+
 
 @media screen and (max-width: 1024px)
 	.picto_ajouter, .picto_oeil, .picto_oeil_hover, .picto_ajouter_hover, .picto_close_hover, .picto_close
@@ -167,26 +196,3 @@ $black: #555555
 		width: 32px
 		height: 32px
 
-	.picto_corbeille, .picto_corbeille_hover, .picto_enlever_hover, .picto_enlever
-		background: url("/bundles/jocondelab/images/sprites_corbeille_mobile.png") no-repeat
-		display: block
-
-	.picto_corbeille
-		background-position: -16px -15px
-		width: 32px
-		height: 32px
-
-	.picto_corbeille_hover
-		background-position: -66px -18.000003814697266px
-		width: 32px
-		height: 32px
-
-	.picto_enlever_hover
-		background-position: -165px -16px
-		width: 32px
-		height: 32px
-
-	.picto_enlever
-		background-position: -116px -16px
-		width: 32px
-		height: 32px

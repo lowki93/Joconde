@@ -234,7 +234,8 @@ class NoticeController extends Controller
 
 			$this->get('flash.session_notice_manager')->deleteOneFavoris($id);
 			$favorite = $this->get('flash.session_notice_manager')->getFavoris();
-			if($favorite !== 0 ) {
+			count($favorite);
+			if(count($favorite) !== 0 ) {
 				$em = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice');
 				$notices = $em->findById($favorite);
 			} else {
