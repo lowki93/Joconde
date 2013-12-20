@@ -234,7 +234,7 @@ class NoticeController extends Controller
 
 			$this->get('flash.session_notice_manager')->deleteOneFavoris($id);
 			$favorite = $this->get('flash.session_notice_manager')->getFavoris();
-			count($favorite);
+
 			if(count($favorite) !== 0 ) {
 				$em = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice');
 				$notices = $em->findById($favorite);
@@ -259,8 +259,12 @@ class NoticeController extends Controller
 	{
 		$favorite = $this->get('flash.session_notice_manager')->getFavoris();
 
-		$em = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice');
-		$notices = $em->findById($favorite);
+		if(count($favorite) !== 0 ) {
+			$em = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice');
+			$notices = $em->findById($favorite);
+		} else {
+			$notices = 0;
+		};
 
 		return $this->render('JocondeLabBundle:Notice:favorite.html.twig', array("notices" => $notices));
 	}
