@@ -22,6 +22,7 @@ class NoticeController extends Controller
 			$form->handleRequest($request);
 
 			if($form -> isValid()){
+				// get search
 				$term = $form->getData();
 				$search = $term['search'];
 
@@ -29,9 +30,11 @@ class NoticeController extends Controller
 
 				$pieces = explode(" ", $search);
 
+				// test is an array
 				if(count($pieces) > 1) {
 					$terms = array();
 					foreach ($pieces as $search) {
+						// get term
 						$result = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus(strtolower($search));
 						$newResult = array_merge($result,array(array('label' => "titr")));
 						array_push($terms,$newResult);
@@ -39,26 +42,27 @@ class NoticeController extends Controller
 
 					$nbTerm = count($terms);
 
+					// get notice with is term
 					$notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($pieces, $terms, $nbTerm);
 
 					$question = $this->get('flash.session_notice_manager')->setQuestion($searchForQuestion);
 
 				} else {
 					$search = strtolower($search);
-
+					// get term
 					$terms = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreThesaurus')->findByThesaurus($search);
 
 					$nbTerm = count($terms);
-
+					// get notice
 					$notices = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByNotice($search, $terms, $nbTerm);
 
 					$question = $this->get('flash.session_notice_manager')->setQuestion($search);
 				}
-
+				// test for get an ohter question
 				if(count($notices) == 1 ) {
 					$question = $this->get('flash.session_notice_manager')->getLastQuestion();
 				}
-
+				// return the view
 				return $this->render('JocondeLabBundle:Notice:list.html.twig',
 					array('question' => $question,
 						'notices' => $notices,
@@ -70,15 +74,16 @@ class NoticeController extends Controller
 		));
 	}
 
+	// function for autocompletion
 	public function autocompleteAjaxAction()
 	{
 		$request = $this->container->get('request');
  
 		if($request->isXmlHttpRequest())
 		{
-			// get title sent ($_GET)
+			// get the beginning of your typing
 			$term = $request->query->get('param');
- 
+ 			// get term and titre of notice
 			$autocompleteTerms = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreTerm')->findByTerm($term);
 			$autocompleteTitle = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice')->findByTitle($term);
 
@@ -87,31 +92,14 @@ class NoticeController extends Controller
 			return new JsonResponse($autocompleteTerms);
 		}
 	}
-
-	public function noticeHoverAction()
-	{
-		$request = $this->container->get('request');
- 
-		if($request->isXmlHttpRequest())
-		{
-			// get title sent ($_GET)
-			$id = $request->query->get('id');
-
-			$em = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice');
-			$notice = $em->findByNoticeId($id);
-
-			return new JsonResponse($notice);
-		}
-	}
-
 	
+	// get question if your response is none or no
 	public function newQuestionAction()
 	{
 		$request = $this->container->get('request');
  
 		if($request->isXmlHttpRequest())
 		{
-			// get title sent ($_GET)
 			$numQuestion = $request->query->get('numQuestion');
 			$result["question"] = $this->get('flash.session_notice_manager')->getQuestion($numQuestion);
 
@@ -119,18 +107,21 @@ class NoticeController extends Controller
 		}
 	}
 
+	// get question if yout response is yes
 	public function goodQuestionAction()
 	{
 		$request = $this->container->get('request');
  
 		if($request->isXmlHttpRequest())
-		{
+		{	
+			// get the new search
 			$answer = $request->query->get('answer');
 			$nbQuestion = $request->query->get('nb');
 
 			$terms = array();
 			$newsSearch = array();
 
+			// for all word, it's get term
 			foreach ($answer as $search) {
 		
 				$pieces = explode(" ", $search);
@@ -172,13 +163,14 @@ class NoticeController extends Controller
 		}
 	}
 
+	// add notice in your selection
 	public function addfavoriteAction()
 	{
 		$request = $this->container->get('request');
  
 		if($request->isXmlHttpRequest())
 		{
-			// get title sent ($_GET)
+			// get id of notice 
 			$id = $request->query->get('param');
 			try {
 				$this->get('flash.session_notice_manager')->setFavoris($id);
@@ -191,13 +183,13 @@ class NoticeController extends Controller
 		}
 	}
 
+	// funtcion to get notice
 	public function noticeAction()
 	{
 		$request = $this->container->get('request');
  
 		if($request->isXmlHttpRequest())
 		{
-			// get title sent ($_GET)
 			$id = $request->query->get('param');
 			$em = $this->getDoctrine()->getRepository('JocondeLabBundle:CoreNotice');
 			$notice = $em->find($id);
@@ -208,6 +200,7 @@ class NoticeController extends Controller
 		}
 	}
 
+	// function to delete all yout selection
 	public function deleteAllAction()
 	{
 		$request = $this->container->get('request');
@@ -228,6 +221,7 @@ class NoticeController extends Controller
 		}
 	}
 
+	// function to delete the notice that your choice
 	public function deleteOneAction()
 	{
 		$request = $this->container->get('request');
@@ -259,6 +253,7 @@ class NoticeController extends Controller
 
 	}
 
+	// function to get all your selection
 	public function favoriteAction()
 	{
 		$favorite = $this->get('flash.session_notice_manager')->getFavoris();

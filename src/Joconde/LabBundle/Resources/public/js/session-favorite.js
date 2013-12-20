@@ -8,6 +8,7 @@ var i=0;
 var search = [];
 var numQuestion = 0;
 
+// load mansory if page are totaly load
 jQuery(function($){
 
 	loader.show();
@@ -31,7 +32,7 @@ jQuery(function($){
 
 $(document)
 	.on("click", ".page-list.active .session", function(){// ADD NOTICE IN FAVORIS
-
+		// add the notice with ajax
 		$.ajax({
 			url: Routing.generate('add_favorite_notice'),
 			dataType: "json",
@@ -71,18 +72,21 @@ $(document)
 		}
 	}, '.page-list.active .see')
 	.on({// HOVER TOO CHANGE PICTO FOR SESSION
-		mouseenter: function()
-		{
+		mouseenter: function(){
+
 			var $button = $(this).find('i');
 			$button
 				.removeClass("picto_ajouter")
 				.addClass("picto_ajouter_hover");
+
 		},
-		mouseleave: function() {
+		mouseleave: function(){
+
 			var $button = $(this).find('i');
 			$button
 				.removeClass("picto_ajouter_hover")
 				.addClass("picto_ajouter");
+				
 		}
 	}, '.page-list.active .session')
 	.on("click", ".page-list.active .see", function(){// CLICK TO SEE NOTICE
