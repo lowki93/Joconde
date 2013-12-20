@@ -8,7 +8,11 @@
             <div class="question-button">
                 <button class="btn-question" value="{% for simpleQuestion in newQuestion | slice(1,2)%}{{simpleQuestion}},{% endfor %}yes">oui</button>
                 <button class="btn-question" value="{% for simpleQuestion in newQuestion | slice(2,3)%}{{simpleQuestion}},{% endfor %}no">non</button>
-                <button class="btn-question" value="{% for simpleQuestion in newQuestion | slice(2,3)%}{{simpleQuestion}},{% endfor %}none">ne sais pas</button>
+                {% for simpleQuestion in newQuestion | slice(2,3)%}
+                    {% if simpleQuestion %}
+                        <button class="btn-question" value="{% for simpleQuestion in newQuestion | slice(2,3)%}{{simpleQuestion}},{% endfor %}none">ne sais pas</button>
+                    {% endif %}
+                {% endfor %}
             </div>
         </div>
     {% endif %}

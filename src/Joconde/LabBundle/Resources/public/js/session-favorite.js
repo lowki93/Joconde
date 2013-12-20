@@ -24,9 +24,7 @@ jQuery(function($){
 
 			loader.hide();
 
-			$container.animate({
-				opacity: 1,
-			}, 1000);
+			animation.opacity($container,1);
 
 		});
 });
@@ -107,21 +105,15 @@ $(document)
 				$(".loader-notice").html(response);
 
 				loader.hide();
+				animation.loader($(".loader-notice"),1,0);
 
-				$(".loader-notice").animate({
-						opacity: 1,
-						left: 0,
-				}, 1000);
 			}
 		});
 
 	})
 	.on("click", ".notice-close", function(){// CLICK TO CLOSE NOTICE
 
-		$(".loader-notice").animate({
-				opacity: 0,
-				left: "-100%",
-		}, 1000);
+		animation.loader($(".loader-notice"),0,"-100%");
 
 		setTimeout(function(){
 
@@ -137,11 +129,10 @@ $(document)
 		var splitResponse = result.split(",");
 		var newQuestion = splitResponse[0];
 		var none = splitResponse[1];
+		var goNotice = splitResponse[2];
 
-		// add compte for question -------------
+		var index = $('.page-list').index($('.page-list.active')) 
 
-		var index = $('.page-list').index($('.page-list.active'))
-	
 		if( none == "none" || none == "no") {
 
 			$.ajax({
@@ -158,19 +149,16 @@ $(document)
 						var newQuestion = splitResponse[0];
 						var typeQuestion = splitResponse[1];
 						var nbQuestion = splitResponse[2];
-						var response = '<p>'+newQuestion+' ?</p><button class="btn-question" value="'+typeQuestion+','+nbQuestion+',yes">oui</button><button class="btn-question" value="'+nbQuestion+',no">non</button><button class="btn-question" value="'+nbQuestion+',none">ne sais pas</button>';
+						var response = '<p>'+newQuestion+' ?</p><button class="btn-question" value="'+typeQuestion+','+nbQuestion+',yes">oui</button><button class="btn-question" value="'+nbQuestion+',no">non</button>';
+
+						if (typeQuestion !== "recherche") response += '<button class="btn-question" value="'+nbQuestion+',none">ne sais pas</button>';
 
 						if(nbQuestion > (index+1)) response += '<button class="btn-question" value="'+(nbQuestion-2)+',no">question précendte</button>';
 						$('.page-list.active .question').html(response);
 						$('.page-list.active .question').fadeIn(500);
 						$('.page-list.active .question').css('display', 'inline');
 
-						$('.page-list.active').masonry({
-							isAnimated: true,
-							gutter: 10,
-							columnWidth: 10,
-							itemSelector: '.item',
-						});
+						ajustMasonry($('.page-list.active'));
 
 					});
 
@@ -179,120 +167,114 @@ $(document)
 
 		} else {
 
-			loader.show();
+			if( newQuestion == "recherche" ) {
 
-			var nbDiv = $('.page-list').length;
+				$('.page-list.active .question').remove();
+				ajustMasonry($('.page-list.active'));
 
-			var newSearch = $(this).val();
-			var splitResponse = newSearch.split(",");
-			var newQuestion = splitResponse[0];
-			var nbQuestion = splitResponse[1];
-			
-			if( nbDiv-index !== 1 ) {
+			} else {
 
-				$('.page-list.active').nextAll('div').remove();
-				i = index;
-				search = search.slice(0,index+1);
+				loader.show();
 
-			};
+				var nbDiv = $('.page-list').length;
 
-			search.push(newQuestion);
+				var newSearch = $(this).val();
+				var splitResponse = newSearch.split(",");
+				var newQuestion = splitResponse[0];
+				var nbQuestion = splitResponse[1];
+				
+				if( nbDiv-index !== 1 ) {
 
-			$.ajax({
-				url: Routing.generate('change_question_good'),
-				dataType: "json",
-				data: {
-					answer: search,
-					nb: nbQuestion
-				},
-				complete: function(content){
+					$('.page-list.active').nextAll('div').remove();
+					i = index;
+					search = search.slice(0,index+1);
 
-					var $page = $(".page-container");
-					newWidth = $page.width()+simpleWidth+5+$('.page-list')[0].offsetLeft;
-					$page.css("width", newWidth);
-					var div = $('<div class="page-list"></div>');
-					$page.append(div);
+				};
 
-					i++;
-					
-					var $container = $(".page-list:last-child");
-					
-					var response = content.responseJSON.content;
+				search.push(newQuestion);
 
-					var searchTitle = $(".title-page").html();
-					var splitsearch = searchTitle.split(".");
+				$.ajax({
+					url: Routing.generate('change_question_good'),
+					dataType: "json",
+					data: {
+						answer: search,
+						nb: nbQuestion
+					},
+					complete: function(content){
 
-					var newSearchTitle = "";
+						var $page = $(".page-container");
+						newWidth = $page.width()+simpleWidth+5+$('.page-list')[0].offsetLeft;
+						$page.css("width", newWidth);
+						var div = $('<div class="page-list"></div>');
+						$page.append(div);
 
-					for ( var i = 0; i < search.length-1; i++ ) {
+						i++;
+						
+						var $container = $(".page-list:last-child");
+						
+						var response = content.responseJSON.content;
 
-						if(i!==0) newSearchTitle +=".";
-						newSearchTitle += splitsearch[i];
+						var searchTitle = $(".title-page").html();
+						var splitsearch = searchTitle.split(".");
 
-					};
+						var newSearchTitle = "";
 
-					newSearchTitle += ".<a href='#' value='-"+i*simpleWidth+"'>"+newQuestion+"</a>";
+						for ( var i = 0; i < search.length-1; i++ ) {
 
-					$(".title-page").html(newSearchTitle);
+							if(i!==0) newSearchTitle +=".";
+							newSearchTitle += splitsearch[i];
 
-					$container.html(response);
+						};
 
-					$container
-						.imagesLoaded(function(){
+						newSearchTitle += ".<a href='#' value='-"+i*simpleWidth+"'>"+newQuestion+"</a>";
 
-							setMasonry($container);
+						$(".title-page").html(newSearchTitle);
 
-						});
+						$container.html(response);
 
-					var newLeft = $page.position().left-simpleWidth;
+						$container
+							.imagesLoaded(function(){
 
-					loader.hide();
+								setMasonry($container);
 
-					$(".page-list.active").animate({
-						opacity: 0.5,
-					}, 1000);
+							});
 
-					$('.page-list').removeClass('active');
-					$container.addClass('active');
+						var newLeft = $page.position().left-simpleWidth;
 
-					$page.animate({
-						left: newLeft,
-					}, 1000);
+						loader.hide();
 
-					$container.animate({
-						opacity: 1,
-					}, 1000);
+						animation.opacity($(".page-list.active"),0.5);
 
-					$(".page-list:nth-last-child(2)").animate({
-						opacity: 0.5,
-					}, 1000);
+						$('.page-list').removeClass('active');
+						$container.addClass('active');
 
-					$('.page-list').css("width", pageList);
+						animation.left($page,newLeft);
+						animation.opacity($container,1);
+						animation.opacity($(".page-list:nth-last-child(2)"),0.5);
 
-				}
-			});
+						$('.page-list').css("width", pageList);
+
+					}
+				});
+
+			}
+
 		}
 	})
 	.on("click", ".title-page a", function(){
 
 		var transition = $(this).attr("value");
 
-		$page.animate({
-			left: transition,
-		}, 1000);
+		animation.left($page,transition);
 
-		$(".page-list.active").animate({
-			opacity: 0.5,
-		}, 1000);
+		animation.opacity($(".page-list.active"),0.5);
 
 		$('.page-list').removeClass('active');
 
 		var aIdx = $('.title-page a').index($(this));
 		$('.page-list').eq(aIdx).addClass('active');
 
-		$(".page-list.active").animate({
-			opacity: 1,
-		}, 1000);
+		animation.opacity($(".page-list.active"),1);
 
 	})
 	.on("click", ".delete-all", function(){
@@ -415,6 +397,42 @@ function setMasonry($className){
 
 		});
 
+}
+
+function ajustMasonry($className){
+
+	$className.masonry({
+		isAnimated: true,
+		gutter: 10,
+		columnWidth: 10,
+		itemSelector: '.item',
+	});
+
+}
+
+var animation = {
+	opacity: function($className,opacity){
+
+		$className.animate({
+			opacity: opacity,
+		}, 1000);
+
+	},
+	left: function($className,left){
+
+		$className.animate({
+			left: left,
+		}, 1000);
+
+	},
+	loader: function($className,opacity,left){
+
+		$className.animate({
+				opacity: opacity,
+				left: left,
+		}, 1000);
+
+	}
 }
 
 var loader = {

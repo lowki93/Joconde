@@ -12,7 +12,7 @@ class FlashSessionNoticeManager
 	public $tabQuest;
 	public $jocondeQuest, $saintPaul, $botticelli, $default;
 	public $nbQuestion;
-	public $oeuvre = "est-ce l'oeuvre que vous recher-chez";
+	public $oeuvre = "est-ce l'oeuvre que vous recher-chez,recherche";
 
 	public function __construct($session)
 	{
