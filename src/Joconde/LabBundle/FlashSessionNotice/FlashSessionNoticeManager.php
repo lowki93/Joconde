@@ -19,7 +19,7 @@ class FlashSessionNoticeManager
 		$this->session = $session;
 		$this->jocondeQuest = array("est-ce un tableau,tableau,1", "est-ce un peinture,peinture,2", "ce tableau représente -t-il mona lisa,mona lisa,3", $this->oeuvre.",4","Figure-t-il un homme sur la peinture,homme,5");
 		$this->saintPaul = array("y a-t-il des animaux représen-tés,animaux,1","Figure-t-il un homme sur la peinture,homme,2","est-ce une oeuvre du 19e,19e,3","y a-t-il un hopital représenté,hopital,4",$this->oeuvre.",5","est-ce un peinture,peinture,6");
-		$this->botticelli = array("est-ce une allégorie de l'automne,allégorie,1",$this->oeuvre,.",2","est-ce une peinture,peinture,3");
+		$this->botticelli = array("est-ce une allégorie de l'automne,allégorie,1",$this->oeuvre.",2","est-ce une peinture,peinture,3");
 		$this->default = array("est-ce une sculpture,scupture,1","est-ce une peinture,peinture,2");
 	}
 
@@ -67,6 +67,8 @@ class FlashSessionNoticeManager
 
 	public function setQuestion($question)
 	{
+		$question = strtolower($question);
+
 		$this->session->remove('question');
 		if($question == "16e") {
 			$this->session->set('question', $this->jocondeQuest);
