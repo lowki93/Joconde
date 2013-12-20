@@ -360,7 +360,7 @@ $(document)
 					var $notif = $('.notification');
 					var notifWidth = $notif.width();
 					
-					if( selection == 1 ) $(".delete-all").hide();
+					if( selection == 0 ) $(".delete-all").hide();
 
 					notification.show($notif,$classMessage,notifWidth);
 				}
