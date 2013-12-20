@@ -55,6 +55,10 @@ class NoticeController extends Controller
 					$question = $this->get('flash.session_notice_manager')->setQuestion($search);
 				}
 
+				if(count($notices) == 1 ) {
+					$question = $this->get('flash.session_notice_manager')->getLastQuestion();
+				}
+
 				return $this->render('JocondeLabBundle:Notice:list.html.twig',
 					array('question' => $question,
 						'notices' => $notices,

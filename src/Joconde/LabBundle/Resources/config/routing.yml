@@ -69,3 +69,9 @@ delete_one:
 favorite_notice:
     pattern:  /a-voir-plus-tard
     defaults: { _controller: JocondeLabBundle:Notice:favorite }
+
+a_propos:
+    pattern:  /a-propos
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template: 'JocondeLabBundle:Notice:propos.html.twig'

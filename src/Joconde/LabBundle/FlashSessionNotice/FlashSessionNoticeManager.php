@@ -10,7 +10,7 @@ class FlashSessionNoticeManager
 
 	private $session;
 	public $tabQuest;
-	public $jocondeQuest, $saintPaul, $botticelli, $default;
+	public $jocondeQuest, $saintPaul, $botticelli, $default, $last;
 	public $nbQuestion;
 	public $oeuvre = "est-ce l'oeuvre que vous recher-chez,recherche";
 
@@ -21,6 +21,7 @@ class FlashSessionNoticeManager
 		$this->saintPaul = array("y a-t-il des animaux représen-tés,animaux,1","Figure-t-il un homme sur la peinture,homme,2","est-ce une oeuvre du 19e,19e,3","y a-t-il un hopital représen-té,hopital,4",$this->oeuvre.",5","est-ce un peinture,peinture,6");
 		$this->botticelli = array("est-ce une allégorie de l'automne,allégorie,1",$this->oeuvre.",2","est-ce une peinture,peinture,3");
 		$this->default = array("est-ce une sculpture,scupture,1","est-ce une peinture,peinture,2");
+		$this->last = array($this->oeuvre.",1","est-ce un peinture,peinture,2");
 	}
 
 	public function setFavoris($id)
@@ -92,5 +93,12 @@ class FlashSessionNoticeManager
 	{   
 		$this->tabQuest = $this->getSessionQuestion();
 		return $this->tabQuest[(int)$nbQuestion];
+	}
+
+	public function getLastQuestion()
+	{
+		$this->session->set('question', $this->last);
+		$this->tabQuest = $this->last;
+		return $this->tabQuest[0];
 	}
 } 

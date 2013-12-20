@@ -1,0 +1,47 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+    {% stylesheets
+        '@JocondeLabBundle/Resources/Public/css/a-propos.sass'
+        filter="cssrewrite,sass" output='css/a-propos.css' %}
+           <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block logo %}
+    <a href="{{ path('joconde_lab_homepage') }}"><img src="{{ asset('bundles/jocondelab/images/logo2.png') }}" alt="logo" height="50px"/></a>
+{% endblock %}
+
+{% block body %}
+    <div class="page-title">
+        <h3>a propos</h3>
+    </div>
+        <div class="margin-container">
+            <div class="page-container">
+                <div class="a-propos-info1">
+                    <h3 class="title-a-propos">Jocondelab</h3>
+                    <p>
+                        Joconde Lab est un projet expérimental de tagging sémantique appliqué au corpus de la base Joconde du ministère de la Culture et de la Communication, constitué de plus de 400 000 notices d’oeuvres des musées de France.<br /><br />Cette approche, qui prolonge la preuve de concept HDA-Lab (<a href="http://hdalab.iri-research.org/hdalab/">http://hdalab.iri-research.org/hdalab</a>), consiste à appliquer des liens conformes aux technologies du Web sémantique entre les mots-clés documentaires de la base Joconde et les entrées de DBpedia en français. L’un des principaux objectifs de ce liage consiste à internationaliser l’accès à Joconde par ces mots-clés. Les liens avec Dbpédia permettent en effet, d’obtenir automatiquement des équivalents de ces mots-clés dans diverses langues.<br /><br />Le projet Joconde-Lab est dirigé par la délégation générale à la langue française et aux langues de France en collaboration avec le service des musées de France et le département des programmes numériques. La plate-forme est développée par l’Institut de Recherche et d’Innovation (IRI).<br /><br />Le chantier est en cours et devrait s’achever au cours du  premier semestre 2014.
+                    </p>
+                </div>
+                <div class="a-propos-info2">
+                    <h3 class="title-a-propos">Contact :</h3>
+                    <div class="block-adress">
+                       <p>Service des Musées de France Bureau de la diffusion numérique des collections</p>
+                        <p>6, rue des Pyramides<br />
+                        75041 PARIS Cedex 01</p>
+                    </div>
+                    <div class="block-adress">
+                        <p>Beaux-arts et arts décoratifs :</p>
+                        <p>Jeannette Ivain - Courriel<br />
+                        Tél : 01 40 15 34 77 - Tlc : 01 40 15 34 50</p>
+                    </div>
+                    <div class="block-adress">
+                        <p>Espace professionnel :</p>
+                        <p>Carine Prunet - Courriel<br />
+                        Tél : 01 40 15 35 55 - Tlc : 01 40 15 34 50</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

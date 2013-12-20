@@ -1,0 +1,55 @@
+@import list
+
+/* ---------- APROPOS --------- */
+.page-container
+    p
+        font-family: 'Helvetica'
+        font-weight: 100
+
+.title-a-propos
+    font-family: 'AGaramondProItalic'
+    color: $pink
+    font-size: 2em
+    margin-bottom: 15px
+    padding: 20px
+
+.a-propos-info1
+    width: 59%
+    height: 100%
+    display: inline-block
+    vertical-align: top
+    text-align: justify
+    padding: 20px
+
+.a-propos-info2
+    background: url("/bundles/jocondelab/images/fond_rouge.png")
+    width: 39%
+    height: 100%
+    display: inline-block
+    vertical-align: top
+    padding:
+        left: 20px
+        right: 20px
+
+.block-adress
+    background-color: #fff
+    padding: 10px
+    p:nth-child(1)
+        font-family: 'AGaramondProItalic'
+        color: $pink
+        font-size: 1.3em
+    margin-bottom: 30px
+
+@media screen and (max-width: 768px)
+    .a-propos-info1
+        width: 100%
+        display: inline-block
+
+    .a-propos-info2
+        width: 100%
+        display: inline-block
+
+a
+    color: $grey
+    &:hover
+        color: $pink
