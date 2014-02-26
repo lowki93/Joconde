@@ -1,15 +1,11 @@
 <?php
 
 namespace Joconde\LabBundle\Controller;
-
+ 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Joconde\LabBundle\Form\SearchType;
-use Joconde\LabBundle\FlashSessionNotice;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 class NoticeController extends Controller
 {
@@ -263,7 +259,7 @@ class NoticeController extends Controller
 			$notices = $em->findById($favorite);
 		} else {
 			$notices = 0;
-		};
+		}
 
 		return $this->render('JocondeLabBundle:Notice:favorite.html.twig', array("notices" => $notices));
 	}
